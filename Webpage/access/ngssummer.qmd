@@ -1,0 +1,137 @@
+---
+layout: webpage
+title: Course days 2024 - access on GenomeDK
+parent: Access
+has_children: false
+nav_order: 2
+hide:
+  - footer
+  - toc
+---
+
+For the course days we are using containers on GenomeDK to execute the analysis. A container includes jupyterlab (interface for coding) and the necessary packages to run all the code. GenomeDK comes with `singularity`, which can import and execute containers (made with Docker in this case) and is able to ensure full reproducibility of the analysis.
+
+:::{.callout-warning title="Technical prerequisites"}
+
+- if you do not yet have an account on GenomeDK, please get one [Click on this link to get to the account request.](https://console.genome.au.dk/user-requests/create/) and follow the instructions for the 2-factor authentication.
+
+- you need to have (or be part of) an active project on GenomeDK. For this course, you will be already assigned a project folder, so no worries.
+
+- In Windows and the Powershell command line, commands might need `.exe` at the end, such as `ssh.exe` instead of `ssh`. Newer versions of Windows do not require that, though.
+
+:::
+
+## Singularity container
+
+**1.** Log into the cluster using the command line, and substituting `USERNAME` with your actual user name:
+
+```{.bash}
+ssh USERNAME@login.genome.au.dk
+```
+
+and be sure to run those two commands to remove space-filling cache data, which can make everything slower after a few times you run tutorials
+
+```{.bash}
+rm -rf ~/.apptainer/cache/*
+rm -rf ~/.singularity/cache/*
+```
+
+**2.** Get into a folder inside the course project
+
+```{.bash}
+cd ngssummer2024/`whoami`
+```
+
+
+:::{.callout-warning}
+
+You need to do this step only once!
+
+:::
+
+**3.**  Activate `tmux`: this will make things run in backround. If you lose your internet connection, the course material will still be up and running when the connection is back on your pc! Use the command 
+
+
+```{.bash}
+tmux
+```
+
+The command line will change a bit its aspect. Now it's time to get a few resources to run all the material. We suggest one CPU and 32GB of RAM for the first three modules, and 2 CPUs and 64GB of RAM for the single-cell analysis. For the first configuration suggested, for example, you get resources using 
+
+```{.bash}
+srun --mem=32g --cores=1 --time=4:0:0  --account=ngssummer2024 --pty /bin/bash
+```
+
+:::{.callout-note}
+
+You can also choose for how long you want the resources to be available to you. **Asking for more resources means waiting for longer time in a queue before they are assigned.** 
+
+In the example above `time` is 4 hours. After this time, whatever you are doing will be closed, so be sure to save your work in progress.
+
+:::
+
+**4.**  execute the container with 
+
+```{.bash}
+singularity exec course.sif /bin/bash
+```
+
+Note that the command line shows now `Apptainer>` on its left. We are *inside* the container and the tools we need are now available into it.
+
+**5.** Now we need to run a configuration script, which will setup the last details and execute jupyterlab. If a folder called `Data` exists, it will not be downloaded again (also meaning that you can use our container with your own data folder for your own analysis in future)
+
+```{.bash}
+git config --global http.sslVerify false
+wget -qO-  https://raw.githubusercontent.com/hds-sandbox/NGS_summer_course_Aarhus/docker/scripts/courseMaterial.sh | bash
+```
+
+
+**6.** You will see a lot of messages, which is normal. At the end of the messages, you are provided two links looking as in the image below. Write down the node name and the user id highlighted in the circles.
+
+![](../images/nodeAndUsername.png){width=600px}
+
+
+Wrote down node and ID? Last step is to create a tunnel between your computer and genomeDK to be able to see jupyterlab in your browser. Now you need to **use the node name and the user id** you wrote down before! **Open a new terminal window** on your laptop and write
+
+```{.bash}
+ssh -L USERID:NODENAME:USERID USERNAME@login.genome.au.dk
+```
+
+where you substitute `USERID` and `NODENAME` as you wrote down before, and then USERNAME is your account name on GenomeDK. For example `ssh -L 6835:s21n81:6835 samuele@login.genome.au.dk` according to the figure above for a user with name `samuele`.
+
+**7.** Open your browser and go to the address http://127.0.0.1:USERID/lab, where you need your user id again instead of USERID. For example `http://127.0.0.1:6835/lab` from the figure above. Jupyterlab opens in your browser.
+
+
+**8.** Now you are ready to use JupyterLab for coding. Use the file browser (on the left-side) to find the folder `Notebooks`. Select one of the four tutorials of the course. You will see that the notebook opens on the right-side pane. Read the text of the tutorial and execute each code cell starting from the first. You will see results showing up directly on the notebook!
+
+![](../images/startNotebook.gif)
+
+:::{.callout-tip}
+
+Right click on a notebook or a saved results file, and use the download option to save it locally on your computer.
+
+:::
+
+### What if my internet connection drops?
+
+Now worries, `tmux` kept your material up and running. You only need a new terminal window to run the tunneling
+
+```{.bash}
+ssh -L USERID:NODENAME:USERID USERNAME@login.genome.au.dk
+```
+
+as you did before, so you can continue working.
+
+:::{.callout-tip}
+
+Press the up-arrow key in the terminal to see the last command you used, such as the tunneling command, and press enter to use it again
+
+:::
+
+
+### Recovering the material from your previous session
+
+Do you want to work again on the course material, or recover some analysis? Everything is saved in the folder you were working in. Next time, follow the whole procedure again (without step number **3.**) and you can be up and running the course in no time.
+
+
+

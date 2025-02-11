@@ -5,3 +5,9 @@ Webpage/docs
 Webpage/developold
 Webpage/mkdocsold.yml
 .ipynb_checkpoints
+*.DS_Store
+/.quarto/
+_site
+site_libs
+*_files
+.ipynb_checkpoints

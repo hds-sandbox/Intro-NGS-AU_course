@@ -1,0 +1,88 @@
+---
+format: 
+    html:
+        toc: false
+        page-layout: full
+date-modified: last-modified
+bibliography: resources/references.bib
+---
+
+<style>
+  body {
+    background-image: url("images/NGSwallpaperOpaque.png");
+    background-size: cover;
+    background-repeat: repeat;
+  }
+</style>
+
+# Introduction to Next Generation Sequencing data {.centered}
+
+::: {style="text-align: center;"}
+Computing and didactical support from the [Danish Health Data Science Sandbox](https://hds-sandbox.github.io/)
+:::
+
+This course introduces you to NGS data (short-reads and long-reads) alignment, variant analysis, bulk-RNA analysis and single-cell RNA analysis.
+
+## Course material
+
+The material for this course is organized in four separated jupyter notebooks in both `bash`, `python` and `R` where you will benefit of an interactive coding setup on `jupyterlab`.
+
+### First exercise: alignment on Galaxy
+
+The first exercise lesson is executed with the web interface [usegalaxy.org](https://usegalaxy.org/). Click on `1.Galaxy Exercise` in the menu `Exercises` to get started)
+
+### Following exercises
+
+The following exercise lessons will work on a computing environment with `jupyterlab`. Use the menu `Access` and the drop-down menu selecting the computing environment you need (danish clusters `uCloud` and `GenomeDK`, your PC, or another cluster).
+
+## Compiled exercises
+
+if you need to have a look at the exercises as a reference, then the menu `Exercises` contains all the compiled exercises on `jupyterlab` in a document format, from which you can also copy-paste the code.
+
+&nbsp;
+
+---------------------------
+
+&nbsp;
+
+:::{.callout-note icon="False" title="Course overview"}
+
+- **Abstract:** After the course, you will be able to apply bioinformatics methods for analyzing genomes and transcriptomes using NGS data. This includes knowledge of the existing types of genome data, how they can be displayed and analyzed, the current methods for genome assembly and analysis, their accuracy and how they can be used.
+
+- **Prerequisites:** This is an introductory course that needs a basic understanding of the biology behind sequencing, and just basic programming experience would help.
+
+- **Syllabus:**
+
+    - Describe key challenges in the analysis of NGS data
+
+    - Explain the theoretical foundation for methods that use NGS for assembly and analysis of genomes
+
+    - Discuss the bioinformatic methods for genome analysis and hypothesize what drives the outcome of the methods
+
+    - Review original literature within the subjects and relate the discussed topics to analysis scenarios
+
+    - Apply bioinformatics tools within the selected application areas and reflect on the results, formulating your own conclusion in the proposed tasks
+
+- **Time:** 20 hours (for reading through the code, executing it, answering questions). The material fits 4-5 days of lessons.
+
+- **Supporting Materials:**
+
+    - jupyter notebooks for interactive coding
+    - lecture slides from the instructor (`Slides` button in the menu)
+
+- **Course authors**
+
+    - [Mikkel H Schierup](https://pure.au.dk/portal/da/persons/mikkel-heide-schierup(aa7cd7f5-b8cf-4781-b6a6-be522a7b335c).html){.md-button}
+
+    - [Stig U Andersen](https://pure.au.dk/portal/da/persons/stig-uggerhoej-andersen(dbcd376b-110b-489a-8f6d-85dd2268277d).html){.md-button}
+
+    - [Samuele Soraggi](https://www.linkedin.com/in/samuelesoraggi/){.md-button}
+
+- **License:** [Course Content is licensed under Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/)
+
+- **Citation:** If you use any of this material for your research, please cite this course with the DOI below, and acknowledge the Health Data Science Sandbox project of the Novo Nordisk Foundation (grant number NNF20OC0063268). It is of great help to support the project. [![DOI](https://zenodo.org/badge/468293635.svg)](https://zenodo.org/badge/latestdoi/468293635)
+
+- **Contact:** Samuele Soraggi (samuele at birc.au.dk) for technical issues in using the material.
+:::
+
+

@@ -1,0 +1,51 @@
+project:
+  type: website
+
+website:
+  title: 'Introduction to NGS data analysis'
+  google-analytics: 
+    tracking-id: "G-EXW13D5861"
+    anonymize-ip: true
+  open-graph:
+    locale: en_US
+    site-name: Introduction to NGS data analysis
+  navbar:
+    logo: /images/NGSlogo.png
+    left:
+      - href: index.qmd
+        text: Home
+      - href: slides.qmd
+        text: Slides
+      - text: Access
+        menu:
+          - href: access/ngssummer.qmd
+            text: Summer School
+          - href: access/UCloud.qmd
+            text: UCloud
+          - href: access/genomedk.qmd
+            text: GenomeDK
+      - text: Tutorials
+        menu:
+          - href: galaxy/galaxy.qmd
+            text: Alignment with Galaxy
+          - href: nb/01_raw_data_alignment.ipynb
+            text: Alignment
+          - href: nb/02_VCF_variant_calling_analysis.ipynb
+            text: Variant analysis
+          - href: nb/03_bulk_RNA_analysis.ipynb
+            text: bulkRNA analysis
+          - href: nb/04_scRNAseq_analysis.ipynb
+            text: scRNA analysis
+    right: 
+      - icon: github
+        href: https://github.com/hds-sandbox
+        aria-label: GitHub
+
+format:
+  html:
+    theme: 
+      light: [materia, css/materialight.scss]
+      dark: darkly
+    toc: true
+    include-in-header:
+      - file: "resources/bioschema.html"
