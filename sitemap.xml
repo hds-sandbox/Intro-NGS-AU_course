@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/access/index.html</loc>
-    <lastmod>2024-08-20T08:39:14.102Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/otherHPC.html</loc>
+    <lastmod>2025-02-11T10:54:20.443Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/access/genomedk.html</loc>
-    <lastmod>2024-08-20T08:39:14.102Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/index.html</loc>
+    <lastmod>2025-02-11T10:54:20.443Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/access/otherHPC.html</loc>
-    <lastmod>2024-08-20T08:39:14.102Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/genomedk.html</loc>
+    <lastmod>2025-02-11T10:54:20.443Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/galaxy/galaxy.html</loc>
-    <lastmod>2024-08-20T08:39:14.102Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/galaxy/galaxy.html</loc>
+    <lastmod>2025-02-11T10:54:20.443Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/about/about.html</loc>
-    <lastmod>2024-08-20T08:39:14.102Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/index.html</loc>
+    <lastmod>2025-02-11T10:54:20.515Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/nb/03_bulk_RNA_analysis.html</loc>
-    <lastmod>2024-08-20T08:39:14.186Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/nb/02_VCF_variant_calling_analysis.html</loc>
+    <lastmod>2025-02-11T10:54:20.515Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/nb/02_VCF_variant_calling_analysis.html</loc>
-    <lastmod>2024-08-20T08:39:14.186Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/nb/04_scRNAseq_analysis.html</loc>
+    <lastmod>2025-02-11T10:54:20.710Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/nb/01_raw_data_alignment.html</loc>
-    <lastmod>2024-08-20T08:39:14.186Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/about/about.html</loc>
+    <lastmod>2025-02-11T10:54:20.443Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/nb/04_scRNAseq_analysis.html</loc>
-    <lastmod>2024-08-20T08:39:14.402Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/nb/03_bulk_RNA_analysis.html</loc>
+    <lastmod>2025-02-11T10:54:20.515Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/slides.html</loc>
-    <lastmod>2024-08-20T08:39:14.430Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/nb/01_raw_data_alignment.html</loc>
+    <lastmod>2025-02-11T10:54:20.515Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/galaxy/images/galaxy.html</loc>
-    <lastmod>2024-08-20T08:39:14.106Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/slides.html</loc>
+    <lastmod>2025-02-11T10:54:20.735Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/index.html</loc>
-    <lastmod>2024-08-20T08:39:14.186Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/galaxy/images/galaxy.html</loc>
+    <lastmod>2025-02-11T10:54:20.446Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/access/UCloud.html</loc>
-    <lastmod>2024-08-20T08:39:14.102Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/ngssummer.html</loc>
+    <lastmod>2025-02-11T10:54:20.443Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/NGS_summer_course_Aarhus/access/ngssummer.html</loc>
-    <lastmod>2024-08-20T08:39:14.102Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/UCloud.html</loc>
+    <lastmod>2025-02-11T10:54:20.443Z</lastmod>
   </url>
 </urlset>

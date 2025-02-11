@@ -1,1 +1,1 @@
-Sitemap: https://hds-sandbox.github.io/NGS_summer_course_Aarhus/sitemap.xml
+Sitemap: https://hds-sandbox.github.io/Intro-NGS-AU_course/sitemap.xml
