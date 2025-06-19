@@ -29,10 +29,10 @@ website:
           - href: galaxy/galaxy.qmd
             text: Alignment with Galaxy
           - href: nb/01_raw_data_alignment.ipynb
-            text: Alignment
+            text: Alignment with bash
           - href: nb/02_VCF_variant_calling_analysis.ipynb
             text: Variant analysis
-          - href: nb/03_bulk_RNA_analysis.ipynb
+          - href: nb/03_bulk_RNA_analysis_edgeR.ipynb
             text: bulkRNA analysis
           - href: nb/04_scRNAseq_analysis.ipynb
             text: scRNA analysis
@@ -49,3 +49,6 @@ format:
     toc: true
     include-in-header:
       - file: "resources/bioschema.html"
+
+resources: 
+  - "resources/bioschema.html"
