@@ -212,12 +212,12 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 
 <meta property="og:title" content="Raw data alignment – Introduction to NGS data analysis">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://hds-sandbox.github.io/Intro-NGS-AU_course/nb/images/kernelchoice.png">
+<meta property="og:image" content="https://hds-sandbox.github.io/Intro-NGS-AU_course/nb/images/white_clover.png">
 <meta property="og:site_name" content="Introduction to NGS data analysis">
 <meta property="og:locale" content="en_US">
 <meta property="og:image:alt" content="Kernel Choice">
-<meta property="og:image:height" content="344">
-<meta property="og:image:width" content="571">
+<meta property="og:image:height" content="527">
+<meta property="og:image:width" content="1418">
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -440,14 +440,14 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
   </li>  
         <li>
     <a class="dropdown-item" href="../nb/01_raw_data_alignment.html">
- <span class="dropdown-text">Alignment</span></a>
+ <span class="dropdown-text">Alignment with bash</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../nb/02_VCF_variant_calling_analysis.html">
  <span class="dropdown-text">Variant analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../nb/03_bulk_RNA_analysis.html">
+    <a class="dropdown-item" href="../nb/03_bulk_RNA_analysis_edgeR.html">
  <span class="dropdown-text">bulkRNA analysis</span></a>
   </li>  
         <li>
@@ -490,6 +490,12 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
     </div>
       
     
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">June 19, 2025</p>
+      </div>
+    </div>
       
     </div>
     
@@ -507,8 +513,8 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
   <ul class="collapse">
   <li><a href="#quality-control" id="toc-quality-control" class="nav-link" data-scroll-target="#quality-control">Quality Control</a></li>
   <li><a href="#hifi-data-mapping" id="toc-hifi-data-mapping" class="nav-link" data-scroll-target="#hifi-data-mapping">Hifi data mapping</a></li>
-  </ul></li>
   <li><a href="#rna-seq-mapping" id="toc-rna-seq-mapping" class="nav-link" data-scroll-target="#rna-seq-mapping">RNA-seq mapping</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -536,37 +542,7 @@ Tutorial description
 <li>align HiFi and RNA sequencing data with dedicated tools such as <code>MiniMap2</code> and <code>STAR</code></li>
 <li>analyze the quality the alignment with <code>qualimap</code></li>
 </ul>
-</div>
-</div>
 <p>The output of this notebook will be used for the Variant calling analysis and the bulk RNA-sequencing analysis. If you do not want to run this notebook, you can alternatively use <a href="https://usegalaxy.org/">the free interactive tool Galaxy</a> to perform the alignment steps. We have uploaded the data on Galaxy, and the manual to perform the exercise is found <a href="https://hds-sandbox.github.io/NGS_summer_course_Aarhus/">at the course webpage</a>.</p>
-<p>The present tutorial, like the rest of the course material, is available at our <a href="https://github.com/hds-sandbox/NGS_summer_course_Aarhus">open-source github repository</a>.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="A few introductory points to run this notebook (click to show)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-A few introductory points to run this notebook (click to show)
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<ul>
-<li>To use this notebook, use the <code>NGS (python)</code> kernel that contains the packages. Choose it by selecting <code>Kernel -&gt; Change Kernel</code> in the menu on top of the window.</li>
-</ul>
-<figure class="figure">
-<img src="images/kernelchoice.png" width="500" alt="Kernel Choice" class="center figure-img">
-</figure>
-<ul>
-<li>In this notebook you will use only bash commands as you would do in the command line (this is why you read <code>%%bash</code> at the beginning of each piece of code). Those commands can be replicated in the command line, but we thought of integrating them in a notebook to make the tutorial understandable. The bash commands can also be marked with an <code>!</code> sign at the beginning of the line</li>
-<li>On some computers, you might see the result of the commands once they are done running. This means you will wait some time while the computer is crunching, and only afterwards you will see the result of the command you have executed</li>
-<li>You can run the code in each cell by clicking on the run cell button, or by pressing <kbd> Shift </kbd> + <kbd> Enter </kbd>. When the code is done running, a small green check sign will appear on the left side</li>
-<li>You need to run the cells in sequential order, please do not run a cell until the one above finished running and do not skip any cells</li>
-<li>Each cell contains a short description of the code and the output you should get. Please try not to focus on understanding the code for each command in too much detail, but rather try to focus on the output</li>
-<li>You can create new code cells by pressing <kbd> + </kbd> in the Menu bar above.</li>
-</ul>
-</div>
 </div>
 </div>
 <section id="biological-background" class="level1">
@@ -601,13 +577,15 @@ A few introductory points to run this notebook (click to show)
 <p>Visualize the Webpage generated by MultiQC.</p>
 <p>Hint: You can find a <code>Help</code> button that offers additional information about the plots for each panel. Focus on the following panels: “Per base sequence quality”, “Per sequence quality scores”…. (“Per base sequence content” always gives a <code>FAIL</code> for RNA-seq data).</p>
 <ul>
-<li>What do you notice with respect to the sequence quality scores?</li>
-<li>Are there any other quality issues worth noting?</li>
+<li>Look at the sequence quality scores: is there a marked difference between HiFi and illumina data?</li>
+<li>Is there anything off in the GC content? Why?</li>
 </ul>
 </section>
 <section id="hifi-data-mapping" class="level2">
 <h2 class="anchored" data-anchor-id="hifi-data-mapping">Hifi data mapping</h2>
-<p>We map the PacBio Hifi reads (<code>Hifi_reads_white_clover.fastq</code>) to the white clover reference sequence (Contig1&amp;2) using <code>minimap2</code>. We run two mapping rounds, using two different preset options (<code>-x</code> in the command) for the technology: * PacBio/Oxford Nanopore read to reference mapping: <code>map-pb</code> * Long assembly to reference mapping. Divergence is below 20%” settings <code>asm20</code>. Next, we create reports of the mapping results by running <code>QualiMap</code> on the two obtained SAM files.</p>
+<p>We map the PacBio Hifi reads (<code>Hifi_reads_white_clover.fastq</code>) to the white clover reference sequence (Contig1&amp;2) using <code>minimap2</code>. We run two mapping rounds, using two different preset options (<code>-x</code> in the command) for the technology: * PacBio Hifi mapping settings: <code>map-hifi</code>. * Short reads maping settings: <code>sr</code>.</p>
+<p>The <code>map-hifi</code> setting expects long reads and employ algorithms that <strong>handle large insertions, deletions, and other structural variations more effectively</strong>. The scoring and alignment thresholds are adjusted to account for the longer sequence context. The <code>sr</code> setting xpect shorter reads and optimize for quick, efficient alignment of these short sequences. The <strong>focus is on minimizing mismatches and handling the dense packing of short reads</strong>.</p>
+<p>Next, we create reports of the mapping results by running <code>QualiMap</code> on the two obtained SAM files.</p>
 <p>We first need to index the reference fasta files using <code>samtools faidx</code>. This produces files in <code>.fai</code> format containing informations about length of the reference sequence, offset for the quality scores, name of the reference sequence. <a href="http://www.htslib.org/doc/faidx.html">Click here</a> for a detailed overview.</p>
 <div id="f2f77036-3263-4147-9726-c28608a4ba9b" class="cell" data-tags="[]">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
@@ -625,37 +603,37 @@ A few introductory points to run this notebook (click to show)
 <div id="78f8d72a-ea2a-4540-916b-a3dee7b9df1e" class="cell" data-tags="[]">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p results<span class="op">/</span>HIFI_alignment<span class="op">/</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>minimap2 <span class="op">-</span>a <span class="op">-</span>x <span class="bu">map</span><span class="op">-</span>pb <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_mappb.sam <span class="op">\</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>minimap2 <span class="op">-</span>a <span class="op">-</span>x <span class="bu">map</span><span class="op">-</span>hifi <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_maphifi.sam <span class="op">\</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                            reference_data<span class="op">/</span>DNA_Contig1_2.fasta <span class="op">\</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                            ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>Hifi_reads_white_clover.fastq </span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>minimap2 <span class="op">-</span>a <span class="op">-</span>x asm20 <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_asm20.sam <span class="op">\</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>minimap2 <span class="op">-</span>a <span class="op">-</span>x sr <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_sr.sam <span class="op">\</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                            reference_data<span class="op">/</span>DNA_Contig1_2.fasta <span class="op">\</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                            ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>Hifi_reads_white_clover.fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><code>samtools sort</code> is used to sort the alignment with left-to-right coordinates. The output is in <code>.bam</code> format, with <code>.sam</code> files in input (Note that you could have gotten <code>.bam</code> files from <code>minimap2</code> with a specific option).</p>
 <div id="04fed3e0-2e63-42d3-8a93-4d0dcf99433b" class="cell" data-tags="[]">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>samtools sort results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_mappb.sam <span class="op">\</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_mappb.sort.bam</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>samtools sort results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_maphifi.sam <span class="op">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_maphifi.sort.bam</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>samtools sort results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_asm20.sam <span class="op">\</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_asm20.sort.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>samtools sort results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_sr.sam <span class="op">\</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_sr.sort.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><code>samtools index</code> creates the index for the <code>bam</code> file, stored in <code>.bai</code> format. The index file lets programs access any position into the aligned data without reading the whole file, which would take too much time.</p>
 <div id="283ca1e5-b973-40c0-9170-552e50a6c73c" class="cell" data-tags="[]">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>samtools index results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_mappb.sort.bam</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>samtools index results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_asm20.sort.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>samtools index results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_maphifi.sort.bam</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>samtools index results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_sr.sort.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Run quality control on both files</p>
 <div id="a715b1d4-91e6-479e-a6db-f63f0494eaeb" class="cell" data-tags="[]">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>qualimap bamqc <span class="op">-</span>bam results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_mappb.sort.bam <span class="op">\</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                 <span class="op">-</span>outdir results<span class="op">/</span>qualimap_output<span class="op">/</span>PacBio_clover_alignment_1_2_mappb</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>qualimap bamqc <span class="op">-</span>bam results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_maphifi.sort.bam <span class="op">\</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                 <span class="op">-</span>outdir results<span class="op">/</span>qualimap_output<span class="op">/</span>PacBio_clover_alignment_1_2_maphifi</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>qualimap bamqc <span class="op">-</span>bam results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_asm20.sort.bam <span class="op">\</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                 <span class="op">-</span>outdir results<span class="op">/</span>qualimap_output<span class="op">/</span>PacBio_clover_alignment_1_2_asm20</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>qualimap bamqc <span class="op">-</span>bam results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_sr.sort.bam <span class="op">\</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                 <span class="op">-</span>outdir results<span class="op">/</span>qualimap_output<span class="op">/</span>PacBio_clover_alignment_1_2_sr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>For easier comparison, we can again collapse the two reports into a single one using <code>MultiQC</code>, in the same way we did for putting together the other reports from <code>fastQC</code>.</p>
 <div id="12b23703-4a35-4fef-989e-5d9f9eba02e4" class="cell" data-tags="[]">
@@ -665,16 +643,16 @@ A few introductory points to run this notebook (click to show)
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>multiqc <span class="op">--</span>outdir results<span class="op">/</span>qualimap_output results<span class="op">/</span>qualimap_output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now you can visualize the report generated, which is in <code>results/qualimap_output/multiqc_report.html</code>.</p>
-<p>Next, we map the white clover PacBio Hifi reads to contig1 and contig2 separately, using the setting you selected at the previous step (let’s say <code>map-pb</code> was chosen, but you are free to change this setting in the commands). As the two contigs represent the two white clover subgenomes, this mapping will allow you to see the two subgenome haplotypes and call subgenome SNPs.</p>
+<p>Next, we map the white clover PacBio Hifi reads to contig1 and contig2 separately, using the setting you selected at the previous step (let’s say <code>map-hifi</code> was chosen, but you are free to change this setting in the commands). As the two contigs represent the two white clover subgenomes, this mapping will allow you to see the two subgenome haplotypes and call subgenome SNPs.</p>
 <div id="aa14c53f-56ea-4216-929d-1678eea2eaf5" class="cell" data-tags="[]">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>minimap2 <span class="op">-</span>a <span class="op">-</span>x <span class="bu">map</span><span class="op">-</span>pb <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1.sam <span class="op">\</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>minimap2 <span class="op">-</span>a <span class="op">-</span>x <span class="bu">map</span><span class="op">-</span>hifi <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1.sam <span class="op">\</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                            reference_data<span class="op">/</span>DNA_Contig1.fasta <span class="op">\</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                            ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>Hifi_reads_white_clover.fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="bf1882ee-41e5-4413-9c48-b35a5821bc34" class="cell" data-tags="[]">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>minimap2 <span class="op">-</span>a <span class="op">-</span>x <span class="bu">map</span><span class="op">-</span>pb <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_2.sam <span class="op">\</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>minimap2 <span class="op">-</span>a <span class="op">-</span>x <span class="bu">map</span><span class="op">-</span>hifi <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_2.sam <span class="op">\</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                            reference_data<span class="op">/</span>DNA_Contig2.fasta <span class="op">\</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                            ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>Hifi_reads_white_clover.fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -705,9 +683,16 @@ A few introductory points to run this notebook (click to show)
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#run multiqc</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>multiqc <span class="op">--</span>outdir results<span class="op">/</span>qualimap_output results<span class="op">/</span>qualimap_output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="alert-success">
-<font size="+2"> <b> Task: IGV visualization and Questions </b> </font>
+<div class="callout callout-style-default callout-tip callout-titled" title="Task: IGV visualization and Questions">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
+<div class="callout-title-container flex-fill">
+Task: IGV visualization and Questions
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Now you can inspect the alignment files in <code>IGV</code>.</p>
 <ul>
 <li><p>First, you will need to download the reference fasta sequence in <code>../Data/Clover_Data/DNA_Contig1_2.fasta</code> and import it into IGV. You can do the same for the files <code>DNA_Contig1.fasta</code> and <code>DNA_Contig2.fasta</code> that you might need later. In IGV, this is done with the menu <code>Genomes --&gt; Load Genome from file</code> menu and by selecting the relevant fasta file. Then, choose the reference you need from the drop-down menu (see figure below). <img src="./images/IGVref.png" class="img-fluid"> You will not yet see much, but you can choose one of the two subgenomes (contig 1 or 2) and double click on a chromosome position to inspect the reference sequence. The next step will visualize the mapped files on IGV.</p></li>
@@ -718,15 +703,17 @@ A few introductory points to run this notebook (click to show)
 <li>What do you observe when comparing the two BAM files?</li>
 <li>Have a look at the polymorphic regions in IGV. Are they true polymorphisms?</li>
 </ul>
-<p>Add to the visualization the third alignment <code>PacBio_clover_alignment_1_2_mappb.sort.bam</code> in IGV.</p>
+<p>Add to the visualization the third alignment <code>PacBio_clover_alignment_1_2_maphifi.sort.bam</code> in IGV.</p>
 <ul>
 <li>Why do you see fluctuations in coverage and large regions without any apparent subgenome SNPs?</li>
 <li>What are the major differences between the stats for the reads mapped to Contigs1&amp;2 versus contig1 and contig2? What is your interpretation of the differences?</li>
 </ul>
+</div>
+</div>
+<hr>
 </section>
-</section>
-<section id="rna-seq-mapping" class="level1">
-<h1>RNA-seq mapping</h1>
+<section id="rna-seq-mapping" class="level2">
+<h2 class="anchored" data-anchor-id="rna-seq-mapping">RNA-seq mapping</h2>
 <p>In the <code>../Data</code> folder you will find 24 RNA-seq libraries, 12 <code>S10</code> libraries and 12 <code>Tienshan</code> libraries. Each library is paired-end, which is denoted by <code>R1</code> and <code>R2</code> at the end of two files having the same name, such as <code>S10_1_1.R1.fastq</code> and <code>S10_1_1.R2.fastq</code>. We will align each library separately and then merge the alignments to create two final samples for <code>S10</code> and <code>Tienshan</code>.</p>
 <p>First, we need to create a genome file for the reference fasta file of contigs <code>1</code> and <code>2</code>. This is done with <code>STAR</code>, using the option <code>--runMode genomeGenerate</code>. We also need to convert the gene annotation from <code>gff</code> to <code>gtf</code> format with <code>gffread</code> to allow counting gene transcripts. <code>STAR</code> is a very complex tool with many options, so it is always useful to <a href="https://physiology.med.cornell.edu/faculty/skrabanek/lab/angsd/lecture_notes/STARmanual.pdf">have a reference manual</a>.</p>
 <div id="f92315a0-5f7d-4884-8140-75101dd430c8" class="cell" data-tags="[]">
@@ -841,11 +828,12 @@ Wrapping up
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In this exercise, you learnt to align various types of data after performing quality control for raw data. We looked at some of the options for the aligners and at how to use some of the basic samtools manipulation programs. The outputs from the RNA alignments will be used for the VCF file analysis in the next notebook, and the RNA alignments will be use for the bulk RNA data analysis.</p>
+<p>In this exercise, you learned to align various types of data after performing quality control for raw data. We looked at some of the options for the aligners and at how to use some of the basic samtools manipulation programs. The outputs from the RNA alignments will be used for the VCF file analysis in the next notebook, and the RNA alignments will be use for the bulk RNA data analysis.</p>
 </div>
 </div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
