@@ -546,7 +546,7 @@ Tutorial description
 </div>
 </div>
 <p>Import the necessary Python libraries:</p>
-<div id="cell-3" class="cell" data-tags="[]">
+<div id="cell-3" class="cell" data-tags="[]" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> allel</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -555,11 +555,11 @@ Tutorial description
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Some of the commands used in the course are functions we implement to simplify reading the code of this course. Mostly, those are commands requiring lines of code that would not add anything to your learning curve (management of plots, trivial calculations, few management of the notebook layout). However, you are free to look at the code into the file <code>Scripts/pythonScripts.py</code> and to reuse our code in your own work (citing our course).</p>
-<div id="cell-5" class="cell" data-tags="[]">
+<div id="cell-5" class="cell" data-tags="[]" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>run ..<span class="op">/</span>Scripts<span class="op">/</span>pythonScripts.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Create a folder for the data necessary to VCF data analysis</p>
-<div id="cell-7" class="cell" data-tags="[]">
+<div id="cell-7" class="cell" data-tags="[]" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p Data_for_VCF_analysis</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -577,7 +577,7 @@ Tutorial description
 </ul></li>
 <li><p>using the notebook <code>01_align.ipynb</code>. In that case, you just need to run the command below, linking the data in the <code>results</code> folder into the folder <code>Data_for_VCF_analysis</code>.</p></li>
 </ul>
-<div id="cell-10" class="cell" data-tags="[]">
+<div id="cell-10" class="cell" data-tags="[]" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ln <span class="op">-</span>fs `realpath results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1.sort.bam` Data_for_VCF_analysis<span class="op">/</span>HIFI_contig_1.bam</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ln <span class="op">-</span>fs `realpath results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_2.sort.bam` Data_for_VCF_analysis<span class="op">/</span>HIFI_contig_2.bam</span>
@@ -596,7 +596,7 @@ Tutorial description
 <p>You will be calling <strong>two types of SNPs</strong> in this notebook. First, we will find <strong>subgenome SNPs</strong> using the Hifi reads mapped to white clover Contig1 and Contig2. These are positions in the contigs that are different between the two subgenomes of white clover.</p>
 <p>Secondly, we will find SNPs that differentiate between the sequenced white clover S10 (the reference genome) and Ti genotype, using RNA-seq read mapping.</p>
 <p>Create a folder that will store all the files generated in this notebook.</p>
-<div id="cell-15" class="cell" data-tags="[]">
+<div id="cell-15" class="cell" data-tags="[]" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>mkdir <span class="op">-</span>p results<span class="op">/</span>VCF_Files</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="call-subgenome-snps-using-the-hifi-alignments-and-the-reference-genome" class="level2">
@@ -604,10 +604,21 @@ Tutorial description
 <p>We will use the <code>bcftools</code> software to call SNPs from alignment files. <code>bcftools</code> is a toolkit for variant calling and manipulating VCF files. If you are interested, you can find all the functionalities here http://samtools.github.io/bcftools/bcftools.html#call.</p>
 <p>We mainly need two commands for this step, first <code>bcftools mpileup</code> which takes as input the alignment and the genome reference files, followed by <code>bcftools call</code> to produce VCF files.</p>
 <p>The cell below will generate 3 VCF files stored in the folder <code>results/VCF_Files</code> using the Hifi alignment files uploaded from Galaxy.</p>
-<div id="cell-17" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="67df6a82-cfd8-4741-e48c-2942c440b615" data-tags="[]">
+<div id="cell-17" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="67df6a82-cfd8-4741-e48c-2942c440b615" data-tags="[]" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools mpileup <span class="op">--</span>threads <span class="dv">4</span> <span class="op">-</span>Ou <span class="op">--</span>skip<span class="op">-</span>indels <span class="op">-</span>f ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>DNA_Contig1_2.fasta Data_for_VCF_analysis<span class="op">/</span>HIFI_contig_1.bam <span class="op">|</span> bcftools call <span class="op">-</span>mv <span class="op">-</span>Ov <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1.vcf</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools mpileup <span class="op">--</span>threads <span class="dv">4</span> <span class="op">-</span>Ou <span class="op">--</span>skip<span class="op">-</span>indels <span class="op">-</span>f ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>DNA_Contig1_2.fasta Data_for_VCF_analysis<span class="op">/</span>HIFI_contig_2.bam <span class="op">|</span> bcftools call <span class="op">-</span>mv <span class="op">-</span>Ov <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2.vcf</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools mpileup <span class="op">--</span>threads <span class="dv">4</span> <span class="op">-</span>Ou <span class="op">--</span>skip<span class="op">-</span>indels <span class="op">-</span>f ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>DNA_Contig1_2.fasta Data_for_VCF_analysis<span class="op">/</span>HIFI_contig_1_2.bam <span class="op">|</span> bcftools call <span class="op">-</span>mv <span class="op">-</span>Ov <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_2.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+[mpileup] maximum number of reads per input file set to -d 250
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+[mpileup] maximum number of reads per input file set to -d 250
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+[mpileup] maximum number of reads per input file set to -d 250</code></pre>
+</div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Task:">
 <div class="callout-header d-flex align-content-center">
@@ -631,9 +642,17 @@ Task:
 <section id="call-snps-using-the-two-rna-seq-genotypes-s10-and-ti" class="level2">
 <h2 class="anchored" data-anchor-id="call-snps-using-the-two-rna-seq-genotypes-s10-and-ti">Call SNPs using the two RNA-seq genotypes, S10 and Ti</h2>
 <p>We will repeat the same step as above this time using the RNA-seq alignment files for the two white clover genotypes (S10 and Ti). These commands will produce another two VCF files, stored in the same folder.</p>
-<div id="cell-20" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="6b3396ba-7ab2-4101-f0a9-c1624d053135" data-tags="[]">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools mpileup <span class="op">--</span>threads <span class="dv">4</span> <span class="op">-</span>Ou <span class="op">--</span>skip<span class="op">-</span>indels <span class="op">-</span>f reference_data<span class="op">/</span>DNA_Contig1_2.fasta Data_for_VCF_analysis<span class="op">/</span>RNA_S10_merged.bam <span class="op">|</span> bcftools call <span class="op">-</span>mv <span class="op">-</span>Ov <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_S10_merged.vcf</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools mpileup <span class="op">--</span>threads <span class="dv">4</span> <span class="op">-</span>Ou <span class="op">--</span>skip<span class="op">-</span>indels <span class="op">-</span>f reference_data<span class="op">/</span>DNA_Contig1_2.fasta Data_for_VCF_analysis<span class="op">/</span>RNA_TI_merged.bam <span class="op">|</span> bcftools call <span class="op">-</span>mv <span class="op">-</span>Ov <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-20" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="6b3396ba-7ab2-4101-f0a9-c1624d053135" data-tags="[]" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools mpileup <span class="op">--</span>threads <span class="dv">4</span> <span class="op">-</span>Ou <span class="op">--</span>skip<span class="op">-</span>indels <span class="op">-</span>f reference_data<span class="op">/</span>DNA_Contig1_2.fasta Data_for_VCF_analysis<span class="op">/</span>RNA_S10_merged.bam <span class="op">|</span> bcftools call <span class="op">-</span>mv <span class="op">-</span>Ov <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_S10_merged.vcf</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools mpileup <span class="op">--</span>threads <span class="dv">4</span> <span class="op">-</span>Ou <span class="op">--</span>skip<span class="op">-</span>indels <span class="op">-</span>f reference_data<span class="op">/</span>DNA_Contig1_2.fasta Data_for_VCF_analysis<span class="op">/</span>RNA_TI_merged.bam <span class="op">|</span> bcftools call <span class="op">-</span>mv <span class="op">-</span>Ov <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+[mpileup] maximum number of reads per input file set to -d 250
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+[mpileup] maximum number of reads per input file set to -d 250</code></pre>
+</div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Task:">
 <div class="callout-header d-flex align-content-center">
@@ -665,39 +684,142 @@ Figure: possible genotypes in the data.
 </figcaption>
 </figure>
 <p>For example, here we read the first 50 rows from the <code>RNAseq_S10_merged.vcf</code> file. You can see that the file format follows the same pattern as explained above.</p>
-<div id="cell-27" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="81f3b2e2-2795-4130-febe-54180d0577e9" data-tags="[]">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_S10_merged.vcf <span class="op">|</span> head <span class="op">-</span><span class="dv">50</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-27" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="81f3b2e2-2795-4130-febe-54180d0577e9" data-tags="[]" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_S10_merged.vcf <span class="op">|</span> head <span class="op">-</span><span class="dv">50</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##fileformat=VCFv4.2
+##FILTER=&lt;ID=PASS,Description="All filters passed"&gt;
+##bcftoolsVersion=1.16+htslib-1.17
+##bcftoolsCommand=mpileup --threads 4 -Ou --skip-indels -f reference_data/DNA_Contig1_2.fasta Data_for_VCF_analysis/RNA_S10_merged.bam
+##reference=file://reference_data/DNA_Contig1_2.fasta
+##contig=&lt;ID=1,length=1031631&gt;
+##contig=&lt;ID=2,length=1057923&gt;
+##ALT=&lt;ID=*,Description="Represents allele(s) other than observed."&gt;
+##INFO=&lt;ID=INDEL,Number=0,Type=Flag,Description="Indicates that the variant is an INDEL."&gt;
+##INFO=&lt;ID=IDV,Number=1,Type=Integer,Description="Maximum number of raw reads supporting an indel"&gt;
+##INFO=&lt;ID=IMF,Number=1,Type=Float,Description="Maximum fraction of raw reads supporting an indel"&gt;
+##INFO=&lt;ID=DP,Number=1,Type=Integer,Description="Raw read depth"&gt;
+##INFO=&lt;ID=VDB,Number=1,Type=Float,Description="Variant Distance Bias for filtering splice-site artefacts in RNA-seq data (bigger is better)",Version="3"&gt;
+##INFO=&lt;ID=RPBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Read Position Bias (closer to 0 is better)"&gt;
+##INFO=&lt;ID=MQBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Mapping Quality Bias (closer to 0 is better)"&gt;
+##INFO=&lt;ID=BQBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Base Quality Bias (closer to 0 is better)"&gt;
+##INFO=&lt;ID=MQSBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Mapping Quality vs Strand Bias (closer to 0 is better)"&gt;
+##INFO=&lt;ID=NMBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Number of Mismatches within supporting reads (closer to 0 is better)"&gt;
+##INFO=&lt;ID=SCBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Soft-Clip Length Bias (closer to 0 is better)"&gt;
+##INFO=&lt;ID=FS,Number=1,Type=Float,Description="Phred-scaled p-value using Fisher's exact test to detect strand bias"&gt;
+##INFO=&lt;ID=SGB,Number=1,Type=Float,Description="Segregation based metric."&gt;
+##INFO=&lt;ID=MQ0F,Number=1,Type=Float,Description="Fraction of MQ0 reads (smaller is better)"&gt;
+##FORMAT=&lt;ID=PL,Number=G,Type=Integer,Description="List of Phred-scaled genotype likelihoods"&gt;
+##FORMAT=&lt;ID=GT,Number=1,Type=String,Description="Genotype"&gt;
+##INFO=&lt;ID=AC,Number=A,Type=Integer,Description="Allele count in genotypes for each ALT allele, in the same order as listed"&gt;
+##INFO=&lt;ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes"&gt;
+##INFO=&lt;ID=DP4,Number=4,Type=Integer,Description="Number of high-quality ref-forward , ref-reverse, alt-forward and alt-reverse bases"&gt;
+##INFO=&lt;ID=MQ,Number=1,Type=Integer,Description="Average mapping quality"&gt;
+##bcftools_callVersion=1.16+htslib-1.17
+##bcftools_callCommand=call -mv -Ov -o results/VCF_Files/RNA_S10_merged.vcf; Date=Wed May 14 10:21:46 2025
+#CHROM  POS ID  REF ALT QUAL    FILTER  INFO    FORMAT  Data_for_VCF_analysis/RNA_S10_merged.bam
+1   33218   .   G   A   65.3262 .   DP=88;VDB=0.0923504;SGB=-0.692914;RPBZ=3.99376;MQBZ=-1.86933;MQSBZ=-0.901828;BQBZ=-1.8368;SCBZ=2.6559;FS=0;MQ0F=0;AC=1;AN=2;DP4=15,13,16,9;MQ=19    GT:PL   0/1:98,0,138
+1   33222   .   C   G   69.1967 .   DP=56;VDB=4.89382e-06;SGB=-0.692352;RPBZ=3.47069;MQBZ=-1.73535;MQSBZ=-0.222384;BQBZ=-1.36705;SCBZ=2.16882;FS=0;MQ0F=0;AC=1;AN=2;DP4=18,13,12,9;MQ=19    GT:PL   0/1:102,0,138
+1   33223   .   T   G   61.1405 .   DP=56;VDB=2.99077e-05;SGB=-0.692067;RPBZ=3.40644;MQBZ=-1.80665;MQSBZ=-0.222384;BQBZ=0.830878;SCBZ=2.63256;FS=0;MQ0F=0;AC=1;AN=2;DP4=18,14,12,8;MQ=19    GT:PL   0/1:94,0,132
+1   33224   .   T   G   65.1016 .   DP=58;VDB=4.85907e-06;SGB=-0.692352;RPBZ=3.67489;MQBZ=-1.78978;MQSBZ=-0.159627;BQBZ=-1.43699;SCBZ=2.60016;FS=0;MQ0F=0;AC=1;AN=2;DP4=18,15,12,9;MQ=19    GT:PL   0/1:98,0,144
+1   33225   .   G   T   64.0746 .   DP=58;VDB=4.36523e-06;SGB=-0.692352;RPBZ=3.67489;MQBZ=-1.78978;MQSBZ=-0.159627;BQBZ=-2.60059;SCBZ=2.60016;FS=0;MQ0F=0;AC=1;AN=2;DP4=18,15,12,9;MQ=19    GT:PL   0/1:97,0,144
+1   33227   .   T   A   64.067  .   DP=59;VDB=4.09235e-06;SGB=-0.692352;RPBZ=4.13393;MQBZ=-1.81637;MQSBZ=-0.18317;BQBZ=-1.48941;SCBZ=2.64866;FS=0;MQ0F=0;AC=1;AN=2;DP4=19,15,12,9;MQ=19 GT:PL   0/1:97,0,144
+1   49149   .   C   T   30.4183 .   DP=4;VDB=0.0058656;SGB=-0.556411;FS=0;MQ0F=0;AC=2;AN=2;DP4=0,0,0,4;MQ=20    GT:PL   1/1:60,12,0
+1   83968   .   C   G   78.0347 .   DP=10;VDB=5.52906e-06;SGB=-0.662043;RPBZ=-3;MQBZ=0;MQSBZ=0;BQBZ=-0.333333;SCBZ=1.77187;FS=0;MQ0F=0;AC=2;AN=2;DP4=1,0,2,7;MQ=20  GT:PL   1/1:105,10,0
+1   83970   .   T   C   78.0347 .   DP=10;VDB=8.25997e-06;SGB=-0.662043;RPBZ=-1.79284;MQBZ=0;MQSBZ=0;BQBZ=0;SCBZ=1.77187;FS=0;MQ0F=0;AC=2;AN=2;DP4=1,0,2,7;MQ=20    GT:PL   1/1:105,10,0
+1   83972   .   G   T   78.0347 .   DP=10;VDB=8.25997e-06;SGB=-0.662043;RPBZ=-1.79284;MQBZ=0;MQSBZ=0;BQBZ=0;SCBZ=1.57628;FS=0;MQ0F=0;AC=2;AN=2;DP4=1,0,2,7;MQ=20    GT:PL   1/1:105,10,0
+1   83975   .   G   A   78.0347 .   DP=10;VDB=1.22485e-05;SGB=-0.662043;RPBZ=-1.79284;MQBZ=0;MQSBZ=0;BQBZ=0;SCBZ=1.57628;FS=0;MQ0F=0;AC=2;AN=2;DP4=1,0,2,7;MQ=20    GT:PL   1/1:105,10,0
+1   174956  .   C   T   10.7923 .   DP=2;VDB=0.14;SGB=-0.453602;MQSBZ=0;FS=0;MQ0F=0;AC=2;AN=2;DP4=0,0,1,1;MQ=20 GT:PL   1/1:40,6,0
+1   175456  .   A   G   7.30814 .   DP=2;VDB=0.02;SGB=-0.453602;FS=0;MQ0F=0;AC=2;AN=2;DP4=0,0,2,0;MQ=20 GT:PL   1/1:36,6,0
+1   211292  .   A   T   16.7427 .   DP=5;VDB=0.0058656;SGB=-0.556411;RPBZ=-2;MQBZ=0;MQSBZ=0;BQBZ=1.22474;SCBZ=2;FS=0;MQ0F=0;AC=1;AN=2;DP4=0,1,4,0;MQ=20 GT:PL   0/1:47,0,5
+1   321659  .   G   A   13.5525 .   DP=7;VDB=0.107235;SGB=-0.511536;RPBZ=1.34164;MQBZ=0;MQSBZ=0;BQBZ=1.73205;SCBZ=0.942809;FS=0;MQ0F=0;AC=1;AN=2;DP4=1,0,1,2;MQ=20  GT:PL   0/1:45,0,8
+1   321661  .   A   C   13.5525 .   DP=7;VDB=0.107235;SGB=-0.511536;RPBZ=1.34164;MQBZ=0;MQSBZ=0;BQBZ=1.73205;SCBZ=0.942809;FS=0;MQ0F=0;AC=1;AN=2;DP4=1,0,1,2;MQ=20  GT:PL   0/1:45,0,8
+1   323166  .   G   A   7.30814 .   DP=4;VDB=0.1;SGB=-0.453602;FS=0;MQ0F=0;AC=2;AN=2;DP4=0,0,0,2;MQ=20  GT:PL   1/1:36,6,0
+1   331785  .   A   T   7.30814 .   DP=2;VDB=0.02;SGB=-0.453602;FS=0;MQ0F=0;AC=2;AN=2;DP4=0,0,2,0;MQ=20 GT:PL   1/1:36,6,0
+1   331890  .   C   T   39.4149 .   DP=6;VDB=0.100421;SGB=-0.556411;MQSBZ=0;FS=0;MQ0F=0;AC=2;AN=2;DP4=0,0,3,1;MQ=20 GT:PL   1/1:69,12,0</code></pre>
+</div>
 </div>
 <p>Next, in order to generate plots of the metrics stored in the VCF files, we will first import the VCF files in Python using the <code>scikit-allel</code> package. This package contains a series of function helpful for processing variant calling files. <br> For now, we will import only the VCF files generated using the Hifi data alignments. You can ignore the warning.</p>
-<div id="cell-29" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="bfe98aaa-e71a-407e-8c7e-3f38090f8574" data-tags="[]">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Import the VCF files</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Hifi_Contig_1_vcf <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/HIFI_Contig_1.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>Hifi_Contig_2_vcf <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/HIFI_Contig_2.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>Hifi_Contig_1_2_vcf <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/HIFI_Contig_1_2.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-29" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="bfe98aaa-e71a-407e-8c7e-3f38090f8574" data-tags="[]" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Import the VCF files</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>Hifi_Contig_1_vcf <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/HIFI_Contig_1.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>Hifi_Contig_2_vcf <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/HIFI_Contig_2.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>Hifi_Contig_1_2_vcf <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/HIFI_Contig_1_2.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/opt/pixi/envs/Course_Env/.pixi/envs/default/lib/python3.11/site-packages/allel/io/vcf_read.py:1732: UserWarning: invalid INFO header: '##INFO=&lt;ID=VDB,Number=1,Type=Float,Description="Variant Distance Bias for filtering splice-site artefacts in RNA-seq data (bigger is better)",Version="3"&gt;\n'
+  warnings.warn('invalid INFO header: %r' % header)</code></pre>
+</div>
 </div>
 <p>Let’s check the number of SNPs in each of the three VCF files.</p>
 <p>The first two VCF files contain subgenome SNPs. You can see that we identified a have a high number of polymorphisms between the two subgenomes. On the other hand the Hifi_Contig1_2_vcf file contains what we would call false positives, as we called SNPs using the same Hifi reads that were used for assembling the reference genome. As expected the number of SNPs in this file is much smaller.</p>
-<div id="cell-31" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="9addd257-5ec9-472d-a609-95a6fed658fc" data-tags="[]">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in Hifi Contig 1 vcf file:"</span>, Hifi_Contig_1_vcf[<span class="st">'variants/POS'</span>].size)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in Hifi Contig 2 vcf file:"</span>, Hifi_Contig_2_vcf[<span class="st">'variants/POS'</span>].size)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in Hifi Contig 1 and 2 vcf file:"</span>, Hifi_Contig_1_2_vcf[<span class="st">'variants/POS'</span>].size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-31" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="9addd257-5ec9-472d-a609-95a6fed658fc" data-tags="[]" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in Hifi Contig 1 vcf file:"</span>, Hifi_Contig_1_vcf[<span class="st">'variants/POS'</span>].size)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in Hifi Contig 2 vcf file:"</span>, Hifi_Contig_2_vcf[<span class="st">'variants/POS'</span>].size)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in Hifi Contig 1 and 2 vcf file:"</span>, Hifi_Contig_1_2_vcf[<span class="st">'variants/POS'</span>].size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of SNPs in Hifi Contig 1 vcf file: 22918
+Number of SNPs in Hifi Contig 2 vcf file: 22588
+Number of SNPs in Hifi Contig 1 and 2 vcf file: 1433</code></pre>
+</div>
 </div>
 <p>As an overview of the distribution of SNPs, we can plot the density of SNPs across the contigs. We have defined a function called <code>plot_variant_density</code> in the file <code>../Scripts/pythonScripts.sh</code> that does exactly that. We use that to plot the SNP density across the contigs in the three VCF files in bins of 5000 bp.</p>
 <p>We can approximate that a SNP density of 0.1 SNPs/bp repesents one polymorphic site at every ten nucleotides. You can see that for the two contigs there are regions more conserved between the two subgenomes, which show a low density of SNPs and more variable regions, which have a higher SNP density.</p>
 <p>In the third plot we can mainly observe SNPs at the beging of the contigs, as you have probably also oberved when inspecting the files in IGV. Taking a look at the scale of the y-axis you can oberve that the SNP density for <code>Hifi_Contig1_2_vcf</code> is much smaller compared to the other two files.</p>
 <p>Note: For easier plotting of the files that contain SNPs from both Contig 1 and 2, the SNP density is plotted as an overlay of both contigs.</p>
-<div id="cell-33" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:719}}" data-outputid="c1cd00a6-c009-49be-c435-49122ed8b9b5" data-tags="[]">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot SNP density</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plot_variant_density(Hifi_Contig_1_vcf, window_size<span class="op">=</span><span class="dv">5000</span>, title<span class="op">=</span><span class="st">'Contig 1 Raw SNP density'</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plot_variant_density(Hifi_Contig_2_vcf, window_size<span class="op">=</span><span class="dv">5000</span>, title<span class="op">=</span><span class="st">'Contig 2 Raw SNP density'</span>)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>plot_variant_density(Hifi_Contig_1_2_vcf, window_size<span class="op">=</span><span class="dv">5000</span>, title<span class="op">=</span><span class="st">'Contig 1 and 2 Raw SNP density'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-33" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:719}}" data-outputid="c1cd00a6-c009-49be-c435-49122ed8b9b5" data-tags="[]" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot SNP density</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>plot_variant_density(Hifi_Contig_1_vcf, window_size<span class="op">=</span><span class="dv">5000</span>, title<span class="op">=</span><span class="st">'Contig 1 Raw SNP density'</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>plot_variant_density(Hifi_Contig_2_vcf, window_size<span class="op">=</span><span class="dv">5000</span>, title<span class="op">=</span><span class="st">'Contig 2 Raw SNP density'</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>plot_variant_density(Hifi_Contig_1_2_vcf, window_size<span class="op">=</span><span class="dv">5000</span>, title<span class="op">=</span><span class="st">'Contig 1 and 2 Raw SNP density'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_VCF_variant_calling_analysis_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_VCF_variant_calling_analysis_files/figure-html/cell-12-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_VCF_variant_calling_analysis_files/figure-html/cell-12-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
 </div>
 <p>We can also plot some of the most relevant parameters from the VCF files, such as the read depth and the quality, to have an overview of the quality of the SNPs in these samples. We defined for that the function <code>plot_variant_hist</code> in the file <code>../Scripts/pythonScripts.sh</code>.</p>
 <p>We can plot the metrics “DP” (Read depth), “QUAL” (Quality score), and “MQ” (Mapping quality for <code>Hifi_Contig1_vcf</code>. The x-axis represents the chosen metric, while the y-axis represents the number of SNPs. You can observe that the majority of the SNPs from this file have a high quality.</p>
-<div id="cell-36" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:881}}" data-outputid="0d82a668-e8da-45f8-fc02-4cc404e75d79" data-tags="[]">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plot_variant_hist(Hifi_Contig_1_vcf,<span class="st">'DP'</span>, <span class="st">"mediumblue"</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>plot_variant_hist(Hifi_Contig_1_vcf, <span class="st">'QUAL'</span>, <span class="st">"forestgreen"</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>plot_variant_hist(Hifi_Contig_1_vcf, <span class="st">'MQ'</span>, <span class="st">"darkred"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-36" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:881}}" data-outputid="0d82a668-e8da-45f8-fc02-4cc404e75d79" data-tags="[]" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>plot_variant_hist(Hifi_Contig_1_vcf,<span class="st">'DP'</span>, <span class="st">"mediumblue"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>plot_variant_hist(Hifi_Contig_1_vcf, <span class="st">'QUAL'</span>, <span class="st">"forestgreen"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>plot_variant_hist(Hifi_Contig_1_vcf, <span class="st">'MQ'</span>, <span class="st">"darkred"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_VCF_variant_calling_analysis_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_VCF_variant_calling_analysis_files/figure-html/cell-13-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_VCF_variant_calling_analysis_files/figure-html/cell-13-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Task:">
 <div class="callout-header d-flex align-content-center">
@@ -714,20 +836,20 @@ Task:
 <li>You will just need to copy the three command lines from the cell above and replace the name of the VCF files.</li>
 </ul>
 <div id="cell-38" class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot the metrics for Contig 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot the metrics for Contig 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-39" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot the metrics for Contig 1 + 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot the metrics for Contig 1 + 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As you can observe in the plots above, there are some positions with very low read depth and low quality. Those might represent false-positive variants. Thus, we will filter the VCF files in order to eliminate those positions. <br> For this purpose, we will use another <code>bcftools</code> function <code>bcftools filter</code>. We can pass thresholds for all the info metrics to this function using the “-i” flag. Below is just an example of the thresholds, you can change the values to suit your files. <br> Note that this command will generate a new filtered VCF file in the “VCF_Files” Folder.</p>
-<div id="cell-41" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span> <span class="op">-</span>i <span class="st">'(QUAL&gt;150) &amp; (DP &gt; 20) &amp; (MQ &gt; 40)'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1.vcf <span class="op">-</span>O v <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-41" class="cell" data-tags="[]" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span> <span class="op">-</span>i <span class="st">'(QUAL&gt;150) &amp; (DP &gt; 20) &amp; (MQ &gt; 40)'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1.vcf <span class="op">-</span>O v <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-42" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span> <span class="op">-</span>i <span class="st">'(QUAL&gt;150) &amp; (DP &gt; 20) &amp; (MQ &gt; 40)'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2.vcf <span class="op">-</span>O v <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-42" class="cell" data-tags="[]" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span> <span class="op">-</span>i <span class="st">'(QUAL&gt;150) &amp; (DP &gt; 20) &amp; (MQ &gt; 40)'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2.vcf <span class="op">-</span>O v <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-43" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span> <span class="op">-</span>i <span class="st">'(QUAL&gt;150) &amp; (DP &gt; 20) &amp; (MQ &gt; 40)'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_2.vcf <span class="op">-</span>O v <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_2_filtered.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-43" class="cell" data-tags="[]" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span> <span class="op">-</span>i <span class="st">'(QUAL&gt;150) &amp; (DP &gt; 20) &amp; (MQ &gt; 40)'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_2.vcf <span class="op">-</span>O v <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_2_filtered.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>End of Task</strong></p>
 </div>
@@ -736,17 +858,48 @@ Task:
 <p>We read the filtered VCF file for Contig1 in python and generate the same plots as before. We can read the VCF file and generate all the plots in one cell this time.</p>
 <p>We check how many positions have been eliminated by the filter and compare the plots with the ones for the unfiltered VCFs.</p>
 <p>If you consider that there are still positions with with low quality you can change the filter and repeat the process.</p>
-<div id="cell-46" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:1000}}" data-outputid="a51726b7-4a4a-4527-cf90-b0b722a5ec05" data-tags="[]">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Hifi_Contig1_filtered <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/HIFI_Contig_1_filtered.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in Contig 1 VCF filtered file:"</span>, Hifi_Contig1_filtered[<span class="st">'variants/POS'</span>].size)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot SNP density</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>plot_variant_density(Hifi_Contig1_filtered, window_size<span class="op">=</span><span class="dv">5000</span>, title<span class="op">=</span><span class="st">'Contig 1 Filtered variant density'</span>)</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot metrics</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>plot_variant_hist(Hifi_Contig1_filtered,<span class="st">'DP'</span>,  <span class="st">"mediumblue"</span>)</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>plot_variant_hist(Hifi_Contig1_filtered, <span class="st">'QUAL'</span>,  <span class="st">"forestgreen"</span>)</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>plot_variant_hist(Hifi_Contig1_filtered, <span class="st">'MQ'</span>, <span class="st">"darkred"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-46" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:1000}}" data-outputid="a51726b7-4a4a-4527-cf90-b0b722a5ec05" data-tags="[]" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Hifi_Contig1_filtered <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/HIFI_Contig_1_filtered.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in Contig 1 VCF filtered file:"</span>, Hifi_Contig1_filtered[<span class="st">'variants/POS'</span>].size)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot SNP density</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>plot_variant_density(Hifi_Contig1_filtered, window_size<span class="op">=</span><span class="dv">5000</span>, title<span class="op">=</span><span class="st">'Contig 1 Filtered variant density'</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot metrics</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>plot_variant_hist(Hifi_Contig1_filtered,<span class="st">'DP'</span>,  <span class="st">"mediumblue"</span>)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>plot_variant_hist(Hifi_Contig1_filtered, <span class="st">'QUAL'</span>,  <span class="st">"forestgreen"</span>)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>plot_variant_hist(Hifi_Contig1_filtered, <span class="st">'MQ'</span>, <span class="st">"darkred"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of SNPs in Contig 1 VCF filtered file: 21756</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_VCF_variant_calling_analysis_files/figure-html/cell-19-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_VCF_variant_calling_analysis_files/figure-html/cell-19-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_VCF_variant_calling_analysis_files/figure-html/cell-19-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02_VCF_variant_calling_analysis_files/figure-html/cell-19-output-5.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Task:">
 <div class="callout-header d-flex align-content-center">
@@ -763,60 +916,68 @@ Task:
 <li>Compare the VCF files before and after filtering in IGV. In the two cells below generate the same plots as above using the filtered VCF files for Contig 2 and Contig 1 + 2. You will just need to copy the three command lines from the cell above and replace the name of the VCF files.</li>
 </ul>
 <div id="cell-48" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Figures for Contig 2 Filtered VCF</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Figures for Contig 2 Filtered VCF</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-49" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Figures for Contig 1 + 2 Filtered VCF</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Figures for Contig 1 + 2 Filtered VCF</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>Repeat the quality check and filtering as described above for the two RNA-seq VCF files:</li>
 </ul>
 <p>Read the VCF files in Python:</p>
-<div id="cell-52" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="e9d2ea81-5fc4-4157-be80-7a667d4517f1" data-tags="[]">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>vcf_S10_RNA <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/RNA_S10_merged.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>vcf_Ti_RNA <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/RNA_TI_merged.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-52" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="e9d2ea81-5fc4-4157-be80-7a667d4517f1" data-tags="[]" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>vcf_S10_RNA <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/RNA_S10_merged.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>vcf_Ti_RNA <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/RNA_TI_merged.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Print the number of SNPs in the two RNA-seq VCF files. Note that the number of SNPs is much smaller than for the Hifi VCF files. Also, there is a difference in the number of SNPs for the two genotypes. As S10 RNA-seq data originates from the same genotype as the referece genome, one would expect a small number of SNPs to be identified in this case.</p>
-<div id="cell-54" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in S10 RNA-seq VCF file:"</span>, vcf_S10_RNA[<span class="st">'variants/POS'</span>].size)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in Ti RNA-seq VCF file:"</span>, vcf_Ti_RNA[<span class="st">'variants/POS'</span>].size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-54" class="cell" data-tags="[]" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in S10 RNA-seq VCF file:"</span>, vcf_S10_RNA[<span class="st">'variants/POS'</span>].size)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in Ti RNA-seq VCF file:"</span>, vcf_Ti_RNA[<span class="st">'variants/POS'</span>].size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of SNPs in S10 RNA-seq VCF file: 95
+Number of SNPs in Ti RNA-seq VCF file: 3599</code></pre>
+</div>
 </div>
 <p>Generate SNP density plots using the plot_variant_density() function:</p>
 <div id="cell-56" class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-57" class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Generate info histograms using the plot_variant_hist() function for the same fields. You should observe that the metrics for the RNA-seq vcf files are quite different from the ones using Hifi reads.</p>
 <div id="cell-59" class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-60" class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Filter the VCF files using <code>bcftools</code> and your selected tresholds after inspecting the VCF files. <strong>Add the filter thresholds before running the command.</strong></p>
-<div id="cell-62" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools view <span class="op">-</span>i <span class="st">'add filter thresholds here'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_S10_merged.vcf <span class="op">-</span>O v <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_S10_merged_filtered.vcf</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools view <span class="op">-</span>i <span class="st">'add filter thresholds here'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged.vcf <span class="op">-</span>O v <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-62" class="cell" data-tags="[]" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools view <span class="op">-</span>i <span class="st">'add filter thresholds here'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_S10_merged.vcf <span class="op">-</span>O v <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_S10_merged_filtered.vcf</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools view <span class="op">-</span>i <span class="st">'add filter thresholds here'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged.vcf <span class="op">-</span>O v <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Read the filtered VCFs in python:</p>
-<div id="cell-64" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>vcf_S10_RNA_filtered <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/RNA_S10_merged_filtered.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>vcf_Ti_RNA_filtered <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/RNA_TI_merged_filtered.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-64" class="cell" data-tags="[]" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>vcf_S10_RNA_filtered <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/RNA_S10_merged_filtered.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>vcf_Ti_RNA_filtered <span class="op">=</span> allel.read_vcf(<span class="st">'results/VCF_Files/RNA_TI_merged_filtered.vcf'</span>, fields<span class="op">=</span><span class="st">'*'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Check the number of SNPs in the filtered VCF files:</p>
-<div id="cell-66" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in the filtered S10 RNA-seq VCF file:"</span>, vcf_S10_RNA_filtered[<span class="st">'variants/POS'</span>].size)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in the filtered Ti RNA-seq VCF file:"</span>, vcf_Ti_RNA_filtered[<span class="st">'variants/POS'</span>].size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-66" class="cell" data-tags="[]" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in the filtered S10 RNA-seq VCF file:"</span>, vcf_S10_RNA_filtered[<span class="st">'variants/POS'</span>].size)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of SNPs in the filtered Ti RNA-seq VCF file:"</span>, vcf_Ti_RNA_filtered[<span class="st">'variants/POS'</span>].size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of SNPs in the filtered S10 RNA-seq VCF file: 5
+Number of SNPs in the filtered Ti RNA-seq VCF file: 865</code></pre>
+</div>
 </div>
 <p>Plot same histograms for the filtered VCF files.</p>
 <div id="cell-68" class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-69" class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>Question: Is it relevant to filter for false positives in this case, and what parameters would you look further into?</li>
@@ -827,25 +988,31 @@ Task:
 <ul>
 <li>You can then use the function with each of the 5 filtered VCF files to count the number of positions. You need to fill the names of the VCF files imported in Python.</li>
 </ul>
-<div id="cell-74" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="03c3e06a-8dd3-432f-eb19-95e53d91e167" data-tags="[]">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Contig 1 filtered VCF</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>position_count(Hifi_Contig1_filtered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-74" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="03c3e06a-8dd3-432f-eb19-95e53d91e167" data-tags="[]" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Contig 1 filtered VCF</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>position_count(Hifi_Contig1_filtered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Count missing positions: 0
+Count heterozygous positions: [20840]
+Count homozygous reference positions: [0]
+Count homozygous alternate positions: [916]</code></pre>
+</div>
 </div>
 <div id="cell-75" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:187}}" data-outputid="844c863e-8e3e-4986-e000-70d2e58d52ad">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Contig 2 filtered VCF</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>position_count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Contig 2 filtered VCF</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>position_count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-76" class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Contig 1 and 2 filtered VCF</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>position_count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Contig 1 and 2 filtered VCF</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>position_count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-77" class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#RNAseq S10 filtered VCF</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>position_count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#RNAseq S10 filtered VCF</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>position_count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-78" class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#RNAseq Ti filtered VCF</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>position_count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#RNAseq Ti filtered VCF</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>position_count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>End of the task</strong></p>
 </section>
@@ -863,27 +1030,79 @@ Task:
 <li>Hifi Contig 2 VCF + Ti RNAseq VCF</li>
 </ul>
 <p>Once again, we will use <code>bcftools</code> for this task, using the merge function. However, the <code>bcftools merge</code> function works only with compressed and indexed VCF files, so first we will do this.</p>
-<div id="cell-83" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="2397816a-53ea-47fb-8aaa-c199a5ee919d" data-tags="[]">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools view results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf <span class="op">-</span>Oz <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf.gz</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools index results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf.gz <span class="op">-</span>f <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf.gz.csi</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools view results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf <span class="op">-</span>Oz <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf.gz</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools index results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf.gz <span class="op">-</span>f <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf.gz.csi</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools view results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf <span class="op">-</span>Oz <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools index results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz <span class="op">-</span>f <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz.csi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-83" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="2397816a-53ea-47fb-8aaa-c199a5ee919d" data-tags="[]" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools view results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf <span class="op">-</span>Oz <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf.gz</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools index results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf.gz <span class="op">-</span>f <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf.gz.csi</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools view results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf <span class="op">-</span>Oz <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf.gz</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools index results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf.gz <span class="op">-</span>f <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf.gz.csi</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools view results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf <span class="op">-</span>Oz <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools index results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz <span class="op">-</span>f <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz.csi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we can merge Contig 1 VCF with the Ti RNA VCF and keep only positions that match between the two files by filtering out any positions with missing genotypes.</p>
-<div id="cell-85" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools merge results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf.gz results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz <span class="op">|</span> bcftools <span class="bu">filter</span> <span class="op">-</span>e <span class="st">'GT="./."'</span> <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-85" class="cell" data-tags="[]" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools merge results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf.gz results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz <span class="op">|</span> bcftools <span class="bu">filter</span> <span class="op">-</span>e <span class="st">'GT="./."'</span> <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Merge Contig 2 VCF with the Ti RNA VCF and keep only positions that match between the two files.</p>
-<div id="cell-87" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools merge results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf.gz results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz <span class="op">|</span> bcftools <span class="bu">filter</span> <span class="op">-</span>e <span class="st">'GT="./."'</span> <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_2_merged.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-87" class="cell" data-tags="[]" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools merge results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf.gz results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz <span class="op">|</span> bcftools <span class="bu">filter</span> <span class="op">-</span>e <span class="st">'GT="./."'</span> <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_2_merged.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Take a look at the merged VCF file. <br> You can see that compared with the VCF files for just one sample, there is now a new column in the file, with the corresponding genotype for the second sample that we merged.</p>
-<div id="cell-89" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="0f084879-0d21-43ec-a691-596fd40c4952" data-tags="[]">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf <span class="op">|</span> head <span class="op">-</span><span class="dv">50</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-89" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="0f084879-0d21-43ec-a691-596fd40c4952" data-tags="[]" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf <span class="op">|</span> head <span class="op">-</span><span class="dv">50</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>##fileformat=VCFv4.2
+##FILTER=&lt;ID=PASS,Description="All filters passed"&gt;
+##bcftoolsVersion=1.16+htslib-1.17
+##bcftoolsCommand=mpileup --threads 4 -Ou --skip-indels -f ../Data/Clover_Data/DNA_Contig1_2.fasta Data_for_VCF_analysis/HIFI_contig_1.bam
+##reference=file://../Data/Clover_Data/DNA_Contig1_2.fasta
+##contig=&lt;ID=1,length=1031631&gt;
+##ALT=&lt;ID=*,Description="Represents allele(s) other than observed."&gt;
+##INFO=&lt;ID=INDEL,Number=0,Type=Flag,Description="Indicates that the variant is an INDEL."&gt;
+##INFO=&lt;ID=IDV,Number=1,Type=Integer,Description="Maximum number of raw reads supporting an indel"&gt;
+##INFO=&lt;ID=IMF,Number=1,Type=Float,Description="Maximum fraction of raw reads supporting an indel"&gt;
+##INFO=&lt;ID=DP,Number=1,Type=Integer,Description="Raw read depth"&gt;
+##INFO=&lt;ID=VDB,Number=1,Type=Float,Description="Variant Distance Bias for filtering splice-site artefacts in RNA-seq data (bigger is better)",Version="3"&gt;
+##INFO=&lt;ID=RPBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Read Position Bias (closer to 0 is better)"&gt;
+##INFO=&lt;ID=MQBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Mapping Quality Bias (closer to 0 is better)"&gt;
+##INFO=&lt;ID=BQBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Base Quality Bias (closer to 0 is better)"&gt;
+##INFO=&lt;ID=MQSBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Mapping Quality vs Strand Bias (closer to 0 is better)"&gt;
+##INFO=&lt;ID=NMBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Number of Mismatches within supporting reads (closer to 0 is better)"&gt;
+##INFO=&lt;ID=SCBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Soft-Clip Length Bias (closer to 0 is better)"&gt;
+##INFO=&lt;ID=FS,Number=1,Type=Float,Description="Phred-scaled p-value using Fisher's exact test to detect strand bias"&gt;
+##INFO=&lt;ID=SGB,Number=1,Type=Float,Description="Segregation based metric."&gt;
+##INFO=&lt;ID=MQ0F,Number=1,Type=Float,Description="Fraction of MQ0 reads (smaller is better)"&gt;
+##FORMAT=&lt;ID=PL,Number=G,Type=Integer,Description="List of Phred-scaled genotype likelihoods"&gt;
+##FORMAT=&lt;ID=GT,Number=1,Type=String,Description="Genotype"&gt;
+##INFO=&lt;ID=AC,Number=A,Type=Integer,Description="Allele count in genotypes for each ALT allele, in the same order as listed"&gt;
+##INFO=&lt;ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes"&gt;
+##INFO=&lt;ID=DP4,Number=4,Type=Integer,Description="Number of high-quality ref-forward , ref-reverse, alt-forward and alt-reverse bases"&gt;
+##INFO=&lt;ID=MQ,Number=1,Type=Integer,Description="Average mapping quality"&gt;
+##bcftools_callVersion=1.16+htslib-1.17
+##bcftools_callCommand=call -mv -Ov -o results/VCF_Files/HIFI_Contig_1.vcf; Date=Wed May 14 10:29:24 2025
+##bcftools_filterVersion=1.16+htslib-1.17
+##bcftools_filterCommand=filter -i '(QUAL&gt;150) &amp; (DP &gt; 20) &amp; (MQ &gt; 40)' -O v results/VCF_Files/HIFI_Contig_1.vcf; Date=Wed May 14 10:39:40 2025
+##bcftools_viewVersion=1.16+htslib-1.17
+##bcftools_viewCommand=view -Oz -o results/VCF_Files/HIFI_Contig_1_filtered.vcf.gz results/VCF_Files/HIFI_Contig_1_filtered.vcf; Date=Wed May 14 10:41:43 2025
+##contig=&lt;ID=2,length=1057923&gt;
+##bcftools_mergeVersion=1.16+htslib-1.17
+##bcftools_mergeCommand=merge results/VCF_Files/HIFI_Contig_1_filtered.vcf.gz results/VCF_Files/RNA_TI_merged_filtered.vcf.gz; Date=Wed May 14 10:41:51 2025
+##bcftools_filterCommand=filter -e GT="./."; Date=Wed May 14 10:41:51 2025
+#CHROM  POS ID  REF ALT QUAL    FILTER  INFO    FORMAT  Data_for_VCF_analysis/HIFI_contig_1.bam Data_for_VCF_analysis/RNA_TI_merged.bam
+1   8411    .   C   T   221.993 PASS    VDB=1.9093e-05;SGB=-0.692831;RPBZ=4.93996;MQBZ=0;MQSBZ=0;BQBZ=0.940979;NMBZ=2.9757;SCBZ=1.67483;FS=0;MQ0F=0;MQ=60;DP=249;DP4=19,27,86,78;AN=4;AC=3  GT:PL   0/1:255,0,255   1/1:227,255,0
+1   27440   .   G   T   222.342 PASS    VDB=1.36482e-08;SGB=-0.693127;RPBZ=4.6357;MQBZ=0;MQSBZ=0;BQBZ=-0.711161;NMBZ=5.55229;SCBZ=2.85947;FS=0;MQ0F=0;MQ=60;DP=86;DP4=18,24,20,23;AN=4;AC=3 GT:PL   0/1:255,0,255   1/1:130,30,0
+1   28387   .   C   T   225.417 PASS    VDB=1.73442e-18;SGB=-0.69311;RPBZ=7.27347;MQBZ=0;MQSBZ=0;BQBZ=-0.165695;NMBZ=4.95221;SCBZ=1.9962;FS=0;MQ0F=0;MQ=60;DP=263;DP4=17,23,49,164;AN=4;AC=3    GT:PL   0/1:255,0,255   1/1:255,255,0
+1   72105   .   G   A   222.283 PASS    VDB=5.89179e-14;SGB=-0.69312;RPBZ=-5.06886;MQBZ=0;MQSBZ=0;BQBZ=-0.26012;NMBZ=6.1152;SCBZ=4.34531;FS=0;MQ0F=0;MQ=60;DP=338;DP4=13,10,283,26;AN=4;AC=3    GT:PL   0/1:255,0,255   1/1:182,255,0
+1   72179   .   C   G   222.364 PASS    VDB=2.88525e-12;SGB=-0.69312;RPBZ=-4.62605;MQBZ=0;MQSBZ=0;BQBZ=-2.86361;NMBZ=6.1152;SCBZ=4.34531;FS=0;MQ0F=0;MQ=60;DP=330;DP4=13,10,245,41;AN=4;AC=3    GT:PL   0/1:255,0,255   1/1:187,255,0
+1   74011   .   G   A   222.372 PASS    VDB=0.000876907;SGB=-0.693139;RPBZ=0.220561;MQBZ=0;MQSBZ=0;BQBZ=1.94218;NMBZ=6.88906;SCBZ=3.1441;FS=0;MQ0F=0;MQ=60;DP=314;DP4=14,17,198,78;AN=4;AC=3    GT:PL   0/1:255,0,255   1/1:243,255,0
+1   74185   .   C   T   222.367 PASS    VDB=0.0103781;SGB=-0.693143;RPBZ=0.423438;MQBZ=0;MQSBZ=0;BQBZ=-0.592373;NMBZ=7.03304;SCBZ=3.05397;FS=0;MQ0F=0;MQ=60;DP=314;DP4=14,17,208,72;AN=4;AC=3   GT:PL   0/1:255,0,255   1/1:244,255,0
+1   74200   .   G   A   222.396 PASS    VDB=0.00638722;SGB=-0.693141;RPBZ=0.524485;MQBZ=0;MQSBZ=0;BQBZ=-2.01282;NMBZ=6.96161;SCBZ=3.09809;FS=0;MQ0F=0;MQ=60;DP=321;DP4=14,17,215,71;AN=4;AC=3   GT:PL   0/1:255,0,255   1/1:246,255,0
+1   74206   .   T   C   222.358 PASS    VDB=0.0100852;SGB=-0.693143;RPBZ=0.477753;MQBZ=0;MQSBZ=0;BQBZ=0.283856;NMBZ=7.03304;SCBZ=3.05397;FS=0;MQ0F=0;MQ=60;DP=320;DP4=14,17,216,69;AN=4;AC=3    GT:PL   0/1:255,0,255   1/1:248,255,0
+1   83373   .   C   T   222.39  PASS    VDB=0.0004541;SGB=-0.693143;RPBZ=-5.30624;MQBZ=0;MQSBZ=0;BQBZ=-0.376852;NMBZ=7.13447;SCBZ=5.89771;FS=0;MQ0F=0;MQ=60;DP=94;DP4=20,16,27,27;AN=4;AC=3 GT:PL   0/1:255,0,255   1/1:133,0,1
+1   83467   .   C   T   222.406 PASS    VDB=0.000955171;SGB=-0.693139;RPBZ=-4.86077;MQBZ=0;MQSBZ=0;BQBZ=-1.61578;NMBZ=6.98931;SCBZ=5.76906;FS=0;MQ0F=0;MQ=60;DP=86;DP4=18,16,22,29;AN=4;AC=3    GT:PL   0/1:255,0,255   1/1:139,28,0
+1   83705   .   A   C   222.39  PASS    VDB=0.00598936;SGB=-0.693143;RPBZ=-4.6088;MQBZ=0;MQSBZ=0;BQBZ=-0.347564;NMBZ=7.08473;SCBZ=5.81866;FS=0;MQ0F=0;MQ=60;DP=83;DP4=17,15,26,24;AN=4;AC=3 GT:PL   0/1:255,0,255   1/1:149,36,0</code></pre>
+</div>
 </div>
 <p>In order to count the genotypes for the matching positions we can use once again <code>bcftools filter</code> command. Only that this time we will filter based on the genotype columns for the two samples (GT[0] and GT[1]). GT[0] repesents the genotype for the first sample in the merge command and GT[1] is the genotype for the second sample in the merge command.</p>
 <ul>
@@ -891,15 +1110,25 @@ Task:
 <li>AA - homozygous alternate</li>
 </ul>
 <p>For example, the filter <code>GT[0]="AR" &amp;&amp; GT[1]="AR"</code> will keep only position in which both samples have a heterozygous genotype. A quick way to count how many positions are in the VCF file is by suing the simple bash command <code>grep</code>. This will count all the lines in the VCF files that do not start with a <code>#</code>, thus all the data lines.</p>
-<div id="cell-91" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="0e6347cc-1def-4de1-f2d3-e87e54e40277" data-tags="[]">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>echo <span class="st">"AR + AR:"</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span>  <span class="op">-</span>i <span class="st">'GT[0]="AR" &amp;&amp; GT[1]="AR"'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf <span class="op">|</span> grep <span class="op">-</span>c <span class="op">-</span>v <span class="st">"^#"</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>echo <span class="st">"AR + AA:"</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span>  <span class="op">-</span>i <span class="st">'GT[0]="AR" &amp;&amp; GT[1]="AA"'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf <span class="op">|</span> grep <span class="op">-</span>c <span class="op">-</span>v <span class="st">"^#"</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>echo <span class="st">"AA + AR:"</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span>  <span class="op">-</span>i <span class="st">'GT[0]="AA" &amp;&amp; GT[1]="AR"'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf <span class="op">|</span> grep <span class="op">-</span>c <span class="op">-</span>v <span class="st">"^#"</span></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>echo <span class="st">"AA + AA:"</span></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span>  <span class="op">-</span>i <span class="st">'GT[0]="AA" &amp;&amp; GT[1]="AA"'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf <span class="op">|</span> grep <span class="op">-</span>c <span class="op">-</span>v <span class="st">"^#"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-91" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="0e6347cc-1def-4de1-f2d3-e87e54e40277" data-tags="[]" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>echo <span class="st">"AR + AR:"</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span>  <span class="op">-</span>i <span class="st">'GT[0]="AR" &amp;&amp; GT[1]="AR"'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf <span class="op">|</span> grep <span class="op">-</span>c <span class="op">-</span>v <span class="st">"^#"</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>echo <span class="st">"AR + AA:"</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span>  <span class="op">-</span>i <span class="st">'GT[0]="AR" &amp;&amp; GT[1]="AA"'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf <span class="op">|</span> grep <span class="op">-</span>c <span class="op">-</span>v <span class="st">"^#"</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>echo <span class="st">"AA + AR:"</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span>  <span class="op">-</span>i <span class="st">'GT[0]="AA" &amp;&amp; GT[1]="AR"'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf <span class="op">|</span> grep <span class="op">-</span>c <span class="op">-</span>v <span class="st">"^#"</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>echo <span class="st">"AA + AA:"</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>bcftools <span class="bu">filter</span>  <span class="op">-</span>i <span class="st">'GT[0]="AA" &amp;&amp; GT[1]="AA"'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf <span class="op">|</span> grep <span class="op">-</span>c <span class="op">-</span>v <span class="st">"^#"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AR + AR:
+8
+AR + AA:
+184
+AA + AR:
+0
+AA + AA:
+12</code></pre>
+</div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Task:">
 <div class="callout-header d-flex align-content-center">
@@ -917,7 +1146,7 @@ Task:
 </div>
 </div>
 <div id="cell-93" class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Wrapping up">
 <div class="callout-header d-flex align-content-center">
