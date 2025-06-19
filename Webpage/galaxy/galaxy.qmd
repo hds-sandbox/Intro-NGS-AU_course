@@ -1,3 +1,13 @@
+---
+format: 
+    html:
+      toc: true
+date-modified: last-modified
+title: "NGS data quality and alignment workflow with Galaxy"
+author: "Samuele Soraggi, Lavinia Fechete"
+title-block-banner: true
+---
+
 # Quality Control and Alignment of raw reads
 
 This first exercise will be executed on `Galaxy`, an interactive platform to run bioinformatics workflows. We will replicate this lesson with computer code later in this course. `Galaxy` has the possibility of working with a free account.
@@ -39,8 +49,7 @@ Hifi_reads_white_clover.fastq.
 The second type is *Illumina RNA-seq reads*, which are short and accurate and should be aligned
 using [a spliced aligner, such as STAR](https://youtu.be/XbBS9o-4100).
 
-There are 24 of these files, 12 for each of the two genotypes mentioned
-before. The files are named `[genotype]_[treatment]_[replicate].fastq`. Treatment 1 is before and
+There are 24 of these files, 12 for each of the two genotypes mentioned before. The files are named `[genotype]_[treatment]_[replicate].fastq`. Treatment 1 is before and
 treatment 2 is after exposure to frost, respectively.
 
 In addition to the sequencing data, there are also three reference files: one for homologous contig 1 (referencing T. occidentale-derived subgenome), one for contig 2 (T.
@@ -73,34 +82,33 @@ There are quite many tools in Galaxy. Please use the search bar above the toolba
 
 #### Quality control
 
-**1** Run FastQC on the PacBio Hifi reads and on two of the Illumina RNA-seq libraries. FastQC does quality control of the raw sequence data, providing an overview of the data which can help identify if there are any problems that should be addressed before further analysis. 
+**1** Run Falco on the PacBio Hifi reads and on two of the Illumina RNA-seq libraries. Falco does quality control of the raw sequence data, providing an overview of the data which can help identify if there are any problems that should be addressed before further analysis. 
    
-In the tool searchbar, find `FastQC` and choose `FASTQC read quality reports`. You will see a window with *tool parameters*: for the first option (raw read data from your current history), choose multiple files and select `Hifi_reads_white_clover.fastq` plus other `fastq` files you want to see the quality of (example in figure below).  Then click on the button `Run Tool`.
-![](./images/fastqc.png)
+In the tool searchbar, find `Falco` and choose `Falco - An alternative, more performant [...]`. You will see a window with *tool parameters*: for the first option (raw read data from your current history), choose multiple files and select `Hifi_reads_white_clover.fastq` plus other `fastq` files you want to see the quality of (example in figure below).  Then click on the button `Run Tool`.
+![](./images/falco.png)
 
-You will notice that some new elements are added to your history. Part of them are `FastQC` producing a text file, while others are `FastQC` producing a webpage report. The reports are ready when coloured in green: click on the *eye symbol* of a history item to read a report.
+You will notice that some new elements are added to your history. Part of them are `Falco` producing a text file, while others are `Falco` producing a webpage report. The reports are ready when coloured in green: click on the *eye symbol* of a history item to read a report.
 
-**2** FastQC provides a report for each sample. To have a better comparison between
-the *Hifi* and *Illumina* data, we would combine the three `FastQC` reports into one using `MultiQC`.
+**2** Falco provides a report for each sample. To have a better comparison between
+the *Hifi* and *Illumina* data, we would combine the `Falco` reports into one using `MultiQC`.
 
-Find the tool called `MultiQC aggregate results from [...]`. In the options, select `FastQC` as the used tool for the generated logs. Then select the items of `FastQC` of your history producing `RawData` (Figure below). In this way, you build a pipeline from the previous reports to the new tool you are using. Now click on `Run Tool`.
+Find the tool called `MultiQC aggregate results from [...]`. In the options, select `FastQC` as the used tool for the generated logs. Then select the history items of `FastQC` (equivalent to `Falco`) of your history producing `RawData` (Figure below). In this way, you build a pipeline from the previous reports to the new tool you are using. Now click on `Run Tool`.
 
 ![](./images/multiqc.png)
 
-The tool will be now running in your history. When it is done, click on the *eye symbol* to see the report.
+The tool will be now running in your history. When it is done, click on the *eye symbol* to see the report. It is easier to download it for better viewing.
 
-:::{.callout-tip}
+&nbsp;
 
-You can find a “Help” button that offers additional information about the plots for each panel.
+You can find a “Help” button that offers additional information about the plots for each panel. Otherwise, a more detailed guide of all information coming from the reports [is in this documentation](https://mugenomicscore.missouri.edu/PDF/FastQC_Manual.pdf) from page 5. 
 
+:::{.callout-tip title="Questions"}
+Focus on the following panels: “Per base sequence quality”, “Per sequence quality scores”…. (“Per base sequence content” always gives a FAIL for RNA-seq data). What do you notice with respect to the sequence quality scores? And are there any other quality issues worth noting?
+
+&nbsp;
+
+Think about why “Per base sequence content” always fails. Can you imagine how the nucleotide content is biased because of priming bias during cDNA synthesis and expressed transcripts in the sample?
 :::
-
-<summary>Questions:
-<p>
-<i>Focus on the following panels: “Per base sequence quality”, “Per sequence quality scores”…. (“Per base sequence content” always gives a FAIL for RNA-seq data). What do you notice with respect to the sequence quality scores? And are there any other quality issues worth noting?
-</i>
-</p>
-</summary>
 
 #### Hifi Data Alignment
 
@@ -108,10 +116,11 @@ You can find a “Help” button that offers additional information about the pl
 
 Under the profile with preset options, choose `PacBio HiFi reads vs reference mapping (map-hifi)`. Then click on `Run Tool`.
 
-**4** Run the same alignment, but choose as preset options `Long assembly to reference mapping. Up to 20% divergence (asm20)`.
+**4** Run the same alignment, but choose as preset options the one for Short Reads ('sr').
 
+&nbsp;
 
-Rename then the two alignments using the edit function (*pen symbol* in the history). Use for example names `Contig1_2_maphifi` and `Contig1_2_asm20`, to distinguish alignment options and reference genome.
+In the history, rename then the two alignments using the edit function (*pen symbol* in the history). Use for example names `Contig1_2_maphifi` and `Contig1_2_sr`, to distinguish alignment options and reference genome.
 
 **5** The aligned genomes are not sorted by coordinates. Sort the alignments using `Samtools sort`. In the options, choose the two aligned files with multiple selection. Then click on `Run Tool`.
 
@@ -121,49 +130,52 @@ Rename then the two alignments using the edit function (*pen symbol* in the hist
 
 ![](./images/IGV.png)
 
-<summary>Questions:
-<p>
-<i> Look at the alignments in IGV. What do you notice about the alignments? What is the difference between the two alignments? Do you think one of them is better than the other? Choose on of the two alignments for the next steps.
-</i>
-</p>
-</summary>
+:::{.callout-tip title="Questions"}
+Look at the alignments in IGV. 
 
-**8** Repeat the alignment with Minimap2 (using the chosen alignment option from the question above) and the sorting, but using the reference genomes for Contig 1 and for Contig 2 searaately. **Note:** you can run all at once by choosing multiple reference genomes in the options!
+- What do you notice about them? What is characteristic about the alignment `sr`? 
 
-<summary>Questions:
-<p>
-<i> Download the two references for Contig 1 and 2, and the two sorted alignments. Load the references from the menu `Genomes` in IGV, and then open the two alignments using the menu `File` in IGV.
+- Can you think of why `sr` alignment has these characteristics?
+
+- What is the difference between the two alignments? 
+
+&nbsp;
+
+Especially for `sr` you are going to see a lot of graphics on the genome. Eventually, look online to find out what those mean. For example [those slides](https://www.igv.org/workshops/March2017/SlidesHandouts/IGV_SlideDeck.pdf) have a lot of visualizations from slide ~70.
+:::
+
+**8** Repeat the alignment with Minimap2 (using the chosen alignment option from the question above) and the sorting, but using the reference genomes for Contig 1 and for Contig 2 separaately. **Note:** you can run all at once by choosing multiple reference genomes in the options!
+
+:::{.callout-tip title="Questions"}
+Download the two references for Contig 1 and 2, and the two sorted alignments. Load the references from the menu `Genomes` in IGV, and then open the two alignments using the menu `File` in IGV.
 
 - Why do you see fluctuations in coverage and large regions without any apparent subgenome
 SNPs?
 
 - What are the major differences between the stats for the reads mapped to Contigs1&2
 versus contig1 and contig2? What is your interpretation of the differences?
-</i>
-</p>
-</summary>
+:::
 
 #### RNA Data Alignment
 
 **9** First, group the 24 RNA-seq libraries into two dataset lists, one list of pairs for S10 libraries and
 another for Tienshan libraries. so we can work with multiple samples simultaneously.
-You can do this by selecting the libraries for each genotype and choosing `Build Lists of Dataset
-Pairs`. 
+You can do this by selecting the libraries for each genotype and choosing `Advanced build list` --> `List of paired datasets`. 
 
-![](./images/buildlist.png)
+![](./images/buildlist1.png)
 
-The grouping suggested by Galaxy is wrong, because the paired reads are paired according to `_1` and `_2` in their names. Change those two with `R1` and `R2`, click on `Unpair all`, and then click on the suggested corrected pairs with the buttons `Pair these datasets`.
+Then click `Next` and define the pairs by `R1` and `R2` in their names, removing the default `_1` and `_2` suggested by Galaxy.
 
-![](./images/groupoptions.png)
+![](./images/buildList2.png)
 
-Your sequences will be substituted by two elements in your history. Here we chose for example to name them `S10` and `TI`.
+Click `Next`, assign a name (TI or S10). You will have completed the process. Your sequences will be collected into two elements in your history, which makes usability better.
 
 ![](./images/builtlist.png)
 
-**10** Do alignment of the RNA-seq lists of raw files to the reference `DNA_Contig1_2.fasta` using `STAR Gapped-read mapper for RNA-seq data`. In the options use:
+**10** Do alignment of the RNA-seq lists of raw files to the reference `DNA_Contig1_2.fasta` using `RNA STAR Gapped-read mapper for RNA-seq data`. In the options use:
 
 - as data, the parameter `Paired-end (as collection)`, and then choose one of the two collections (you cannot run them all at once)
-- as reference, `DNA_Contig1_2.fasta`, with Length of SA pre-indexing string equal to `9`
+- as reference, `DNA_Contig1_2.fasta`, with Length of SA pre-indexing string equal to `9`. Usually you do not choose this value, and get a warning message to choose the right one if necessary.
 - as index with gene-model, use `white_clover_genes.gtf`
 - as output, `Per gene read counts (GeneCounts)`.
 
@@ -171,13 +183,12 @@ Your sequences will be substituted by two elements in your history. Here we chos
 
 ![](./images/starMultiQC.png)
 
-View the report to see the alignment statistics.
-
+:::{.calout-tip title="Questions"}
+View the report to see the alignment statistics. What is the difference between *Aligned* and *Uniquely aligned* reads? Which factors could be responsible of having ~15% of reads not uniquely aligned? 
+:::
 
 :::{.callout-note}
-
 Galaxy can also be used to create an automatic workflow that will map the data. This workflow can be useful when running multiple samples. You can
 generate a workflow from the analysis already completed in a history, by going to Settings →
 Extract workflow. You can also create a workflow from scratch using the Workflow editor.
-
 :::
