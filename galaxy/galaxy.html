@@ -2,12 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Samuele Soraggi, Lavinia Fechete">
 
-<title>galaxy – Introduction to NGS data analysis</title>
+<title>NGS data quality and alignment workflow with Galaxy – Introduction to NGS data analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -36,14 +37,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-dae57635cdda1161e19e52ff23cf38e0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-a5cec38defc11f7561b05eff66b91810.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-dae57635cdda1161e19e52ff23cf38e0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-eacb1df1f40892b057e8ea827c2dd49f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-0c23511428beaf87b29bbdf0654d5814.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-eacb1df1f40892b057e8ea827c2dd49f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -174,7 +175,7 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 </script>
 
 
-<meta property="og:title" content="Introduction to NGS data analysis">
+<meta property="og:title" content="NGS data quality and alignment workflow with Galaxy – Introduction to NGS data analysis">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://hds-sandbox.github.io/Intro-NGS-AU_course/galaxy/images/clover.png">
 <meta property="og:site_name" content="Introduction to NGS data analysis">
@@ -348,7 +349,7 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
   </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -435,7 +436,35 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">NGS data quality and alignment workflow with Galaxy</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Samuele Soraggi, Lavinia Fechete </p>
+            </div>
+    </div>
+      
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">June 19, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -456,7 +485,8 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
 
 
 
@@ -526,79 +556,101 @@ Use the search bat
 </div>
 <section id="quality-control" class="level4">
 <h4 class="anchored" data-anchor-id="quality-control">Quality control</h4>
-<p><strong>1</strong> Run FastQC on the PacBio Hifi reads and on two of the Illumina RNA-seq libraries. FastQC does quality control of the raw sequence data, providing an overview of the data which can help identify if there are any problems that should be addressed before further analysis.</p>
-<p>In the tool searchbar, find <code>FastQC</code> and choose <code>FASTQC read quality reports</code>. You will see a window with <em>tool parameters</em>: for the first option (raw read data from your current history), choose multiple files and select <code>Hifi_reads_white_clover.fastq</code> plus other <code>fastq</code> files you want to see the quality of (example in figure below). Then click on the button <code>Run Tool</code>. <img src="./images/fastqc.png" class="img-fluid"></p>
-<p>You will notice that some new elements are added to your history. Part of them are <code>FastQC</code> producing a text file, while others are <code>FastQC</code> producing a webpage report. The reports are ready when coloured in green: click on the <em>eye symbol</em> of a history item to read a report.</p>
-<p><strong>2</strong> FastQC provides a report for each sample. To have a better comparison between the <em>Hifi</em> and <em>Illumina</em> data, we would combine the three <code>FastQC</code> reports into one using <code>MultiQC</code>.</p>
-<p>Find the tool called <code>MultiQC aggregate results from [...]</code>. In the options, select <code>FastQC</code> as the used tool for the generated logs. Then select the items of <code>FastQC</code> of your history producing <code>RawData</code> (Figure below). In this way, you build a pipeline from the previous reports to the new tool you are using. Now click on <code>Run Tool</code>.</p>
+<p><strong>1</strong> Run Falco on the PacBio Hifi reads and on two of the Illumina RNA-seq libraries. Falco does quality control of the raw sequence data, providing an overview of the data which can help identify if there are any problems that should be addressed before further analysis.</p>
+<p>In the tool searchbar, find <code>Falco</code> and choose <code>Falco - An alternative, more performant [...]</code>. You will see a window with <em>tool parameters</em>: for the first option (raw read data from your current history), choose multiple files and select <code>Hifi_reads_white_clover.fastq</code> plus other <code>fastq</code> files you want to see the quality of (example in figure below). Then click on the button <code>Run Tool</code>. <img src="./images/falco.png" class="img-fluid"></p>
+<p>You will notice that some new elements are added to your history. Part of them are <code>Falco</code> producing a text file, while others are <code>Falco</code> producing a webpage report. The reports are ready when coloured in green: click on the <em>eye symbol</em> of a history item to read a report.</p>
+<p><strong>2</strong> Falco provides a report for each sample. To have a better comparison between the <em>Hifi</em> and <em>Illumina</em> data, we would combine the <code>Falco</code> reports into one using <code>MultiQC</code>.</p>
+<p>Find the tool called <code>MultiQC aggregate results from [...]</code>. In the options, select <code>FastQC</code> as the used tool for the generated logs. Then select the history items of <code>FastQC</code> (equivalent to <code>Falco</code>) of your history producing <code>RawData</code> (Figure below). In this way, you build a pipeline from the previous reports to the new tool you are using. Now click on <code>Run Tool</code>.</p>
 <p><img src="./images/multiqc.png" class="img-fluid"></p>
-<p>The tool will be now running in your history. When it is done, click on the <em>eye symbol</em> to see the report.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<p>The tool will be now running in your history. When it is done, click on the <em>eye symbol</em> to see the report. It is easier to download it for better viewing.</p>
+<p>&nbsp;</p>
+<p>You can find a “Help” button that offers additional information about the plots for each panel. Otherwise, a more detailed guide of all information coming from the reports <a href="https://mugenomicscore.missouri.edu/PDF/FastQC_Manual.pdf">is in this documentation</a> from page 5.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Questions">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+Questions
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You can find a “Help” button that offers additional information about the plots for each panel.</p>
+<p>Focus on the following panels: “Per base sequence quality”, “Per sequence quality scores”…. (“Per base sequence content” always gives a FAIL for RNA-seq data). What do you notice with respect to the sequence quality scores? And are there any other quality issues worth noting?</p>
+<p>&nbsp;</p>
+<p>Think about why “Per base sequence content” always fails. Can you imagine how the nucleotide content is biased because of priming bias during cDNA synthesis and expressed transcripts in the sample?</p>
 </div>
 </div>
-<summary>
-Questions:
-<p>
-<i>Focus on the following panels: “Per base sequence quality”, “Per sequence quality scores”…. (“Per base sequence content” always gives a FAIL for RNA-seq data). What do you notice with respect to the sequence quality scores? And are there any other quality issues worth noting? </i>
-</p>
-</summary>
 </section>
 <section id="hifi-data-alignment" class="level4">
 <h4 class="anchored" data-anchor-id="hifi-data-alignment">Hifi Data Alignment</h4>
 <p><strong>3</strong> Map the PacBio Hifi reads (<code>Hifi_reads_white_clover.fastq</code>) to the white clover reference sequence (Contigs 1 and 2) using <code>minimap2</code> (Map with minimap2). Find the <code>minimap2</code> tool. In the options, change <code>Use a built-in genome index</code> into but select the option for having a genome from history and build an index from that. Choose then <code>DNA_Contig1_2.fasta</code> as the reference sequence.</p>
 <p>Under the profile with preset options, choose <code>PacBio HiFi reads vs reference mapping (map-hifi)</code>. Then click on <code>Run Tool</code>.</p>
-<p><strong>4</strong> Run the same alignment, but choose as preset options <code>Long assembly to reference mapping. Up to 20% divergence (asm20)</code>.</p>
-<p>Rename then the two alignments using the edit function (<em>pen symbol</em> in the history). Use for example names <code>Contig1_2_maphifi</code> and <code>Contig1_2_asm20</code>, to distinguish alignment options and reference genome.</p>
+<p><strong>4</strong> Run the same alignment, but choose as preset options the one for Short Reads (‘sr’).</p>
+<p>&nbsp;</p>
+<p>In the history, rename then the two alignments using the edit function (<em>pen symbol</em> in the history). Use for example names <code>Contig1_2_maphifi</code> and <code>Contig1_2_sr</code>, to distinguish alignment options and reference genome.</p>
 <p><strong>5</strong> The aligned genomes are not sorted by coordinates. Sort the alignments using <code>Samtools sort</code>. In the options, choose the two aligned files with multiple selection. Then click on <code>Run Tool</code>.</p>
 <p><strong>6</strong> Download the two alignments to your computer. To do so, click on the <em>disk symbol</em> of each file in your history, and for each download both the Dataset (alignments in <code>bam</code> format) and their index files (in <code>bai</code> format). Download as well the reference genome in <code>fasta</code> format (<code>DNA_Contig1_2.fasta</code> from the history).</p>
 <p><strong>7</strong> Open IGV on your computer. Load the reference first: go on <code>Genome --&gt; Load genome from file</code> and select the <code>fasta</code> file you downloaded. Then load the two alignments: go on <code>File --&gt; Load from file</code> and select the <code>bam</code> and <code>bai</code> files you downloaded, together. You can now visualize the alignments by choosing a region of the genome and zooming in.</p>
 <p><img src="./images/IGV.png" class="img-fluid"></p>
-<summary>
-Questions:
-<p>
-<i> Look at the alignments in IGV. What do you notice about the alignments? What is the difference between the two alignments? Do you think one of them is better than the other? Choose on of the two alignments for the next steps. </i>
-</p>
-</summary>
-<p><strong>8</strong> Repeat the alignment with Minimap2 (using the chosen alignment option from the question above) and the sorting, but using the reference genomes for Contig 1 and for Contig 2 searaately. <strong>Note:</strong> you can run all at once by choosing multiple reference genomes in the options!</p>
-<summary>
-Questions:
-<p>
-</p><p><i> Download the two references for Contig 1 and 2, and the two sorted alignments. Load the references from the menu <code>Genomes</code> in IGV, and then open the two alignments using the menu <code>File</code> in IGV.</i></p><i>
-</i><ul><i>
-<li><p>Why do you see fluctuations in coverage and large regions without any apparent subgenome SNPs?</p></li>
-</i><li><i></i><p><i>What are the major differences between the stats for the reads mapped to Contigs1&amp;2 versus contig1 and contig2? What is your interpretation of the differences? </i></p></li>
+<div class="callout callout-style-default callout-tip callout-titled" title="Questions">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Questions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Look at the alignments in IGV.</p>
+<ul>
+<li><p>What do you notice about them? What is characteristic about the alignment <code>sr</code>?</p></li>
+<li><p>Can you think of why <code>sr</code> alignment has these characteristics?</p></li>
+<li><p>What is the difference between the two alignments?</p></li>
 </ul>
-<p></p>
-</summary>
+<p>&nbsp;</p>
+<p>Especially for <code>sr</code> you are going to see a lot of graphics on the genome. Eventually, look online to find out what those mean. For example <a href="https://www.igv.org/workshops/March2017/SlidesHandouts/IGV_SlideDeck.pdf">those slides</a> have a lot of visualizations from slide ~70.</p>
+</div>
+</div>
+<p><strong>8</strong> Repeat the alignment with Minimap2 (using the chosen alignment option from the question above) and the sorting, but using the reference genomes for Contig 1 and for Contig 2 separaately. <strong>Note:</strong> you can run all at once by choosing multiple reference genomes in the options!</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Questions">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Questions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Download the two references for Contig 1 and 2, and the two sorted alignments. Load the references from the menu <code>Genomes</code> in IGV, and then open the two alignments using the menu <code>File</code> in IGV.</p>
+<ul>
+<li><p>Why do you see fluctuations in coverage and large regions without any apparent subgenome SNPs?</p></li>
+<li><p>What are the major differences between the stats for the reads mapped to Contigs1&amp;2 versus contig1 and contig2? What is your interpretation of the differences?</p></li>
+</ul>
+</div>
+</div>
 </section>
 <section id="rna-data-alignment" class="level4">
 <h4 class="anchored" data-anchor-id="rna-data-alignment">RNA Data Alignment</h4>
-<p><strong>9</strong> First, group the 24 RNA-seq libraries into two dataset lists, one list of pairs for S10 libraries and another for Tienshan libraries. so we can work with multiple samples simultaneously. You can do this by selecting the libraries for each genotype and choosing <code>Build Lists of Dataset Pairs</code>.</p>
-<p><img src="./images/buildlist.png" class="img-fluid"></p>
-<p>The grouping suggested by Galaxy is wrong, because the paired reads are paired according to <code>_1</code> and <code>_2</code> in their names. Change those two with <code>R1</code> and <code>R2</code>, click on <code>Unpair all</code>, and then click on the suggested corrected pairs with the buttons <code>Pair these datasets</code>.</p>
-<p><img src="./images/groupoptions.png" class="img-fluid"></p>
-<p>Your sequences will be substituted by two elements in your history. Here we chose for example to name them <code>S10</code> and <code>TI</code>.</p>
+<p><strong>9</strong> First, group the 24 RNA-seq libraries into two dataset lists, one list of pairs for S10 libraries and another for Tienshan libraries. so we can work with multiple samples simultaneously. You can do this by selecting the libraries for each genotype and choosing <code>Advanced build list</code> –&gt; <code>List of paired datasets</code>.</p>
+<p><img src="./images/buildlist1.png" class="img-fluid"></p>
+<p>Then click <code>Next</code> and define the pairs by <code>R1</code> and <code>R2</code> in their names, removing the default <code>_1</code> and <code>_2</code> suggested by Galaxy.</p>
+<p><img src="./images/buildList2.png" class="img-fluid"></p>
+<p>Click <code>Next</code>, assign a name (TI or S10). You will have completed the process. Your sequences will be collected into two elements in your history, which makes usability better.</p>
 <p><img src="./images/builtlist.png" class="img-fluid"></p>
-<p><strong>10</strong> Do alignment of the RNA-seq lists of raw files to the reference <code>DNA_Contig1_2.fasta</code> using <code>STAR Gapped-read mapper for RNA-seq data</code>. In the options use:</p>
+<p><strong>10</strong> Do alignment of the RNA-seq lists of raw files to the reference <code>DNA_Contig1_2.fasta</code> using <code>RNA STAR Gapped-read mapper for RNA-seq data</code>. In the options use:</p>
 <ul>
 <li>as data, the parameter <code>Paired-end (as collection)</code>, and then choose one of the two collections (you cannot run them all at once)</li>
-<li>as reference, <code>DNA_Contig1_2.fasta</code>, with Length of SA pre-indexing string equal to <code>9</code></li>
+<li>as reference, <code>DNA_Contig1_2.fasta</code>, with Length of SA pre-indexing string equal to <code>9</code>. Usually you do not choose this value, and get a warning message to choose the right one if necessary.</li>
 <li>as index with gene-model, use <code>white_clover_genes.gtf</code></li>
 <li>as output, <code>Per gene read counts (GeneCounts)</code>.</li>
 </ul>
 <p><strong>11</strong> Use <code>MultiQC</code> to see the quality of the output. The alignment of <code>STAR</code> produces log files which can be used for quality reports. In the options of <code>MultiQC</code> select the tool <code>STAR</code>. Then <code>Insert STAR output</code>, as type of output the <code>Log</code>, and choose the two logs listing collections of <code>STAR</code> alignments. Then click on <code>Run Tool</code>.</p>
 <p><img src="./images/starMultiQC.png" class="img-fluid"></p>
-<p>View the report to see the alignment statistics.</p>
+<div class="calout-tip" title="Questions">
+<p>View the report to see the alignment statistics. What is the difference between <em>Aligned</em> and <em>Uniquely aligned</em> reads? Which factors could be responsible of having ~15% of reads not uniquely aligned?</p>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
