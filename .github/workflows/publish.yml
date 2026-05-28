@@ -1,0 +1,44 @@
+on: 
+  push:
+    branches: 
+      - main
+    paths:
+      - 'Webpage/**'
+      - 'Notebooks/**'
+      - '.github/**'
+  workflow_dispatch:
+
+name: Quarto Publish
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Install libcurl on Linux
+        if: runner.os == 'Linux'
+        run: sudo apt-get update -y && sudo apt-get install -y libfontconfig1-dev libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
+
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up python
+        uses: actions/setup-python@v6
+      - run: pip install --no-cache-dir jupyter pandas tabulate
+
+      - name: copy Notebook folder into Webpage
+        run: cp -a Notebooks Webpage/
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+
+# This part publishes the website to the gh-pages branch
+# but looks specifically at Webpage folder to find the _quarto.yml file
+# default would be looking at the root of the repository
+      - name: Render and Publish
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+          path: Webpage

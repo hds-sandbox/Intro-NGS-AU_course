@@ -1,0 +1,108 @@
+Bootstrap: docker
+From: debian:bookworm-slim
+
+%labels
+    Maintainer samuele
+    Description Course template apptainer container
+    Version 0.1
+    Author Samuele Soraggi
+    License MIT
+
+# Copy the environment file into the container
+%file Environments/environment.yml /opt/environment.yml  
+
+%post
+    set -eu
+    export DEBIAN_FRONTEND=noninteractive
+    export PIXI_HOME=/opt/pixi
+    export PATH=/opt/pixi/bin:/usr/local/bin:$PATH
+
+    ### Install useful python libraries and pixi
+    apt-get update
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        git \
+        unzip \
+        bzip2 \
+        xz-utils \
+        libgomp1
+    rm -rf /var/lib/apt/lists/*
+
+    curl -fsSL https://pixi.sh/install.sh | PIXI_HOME=/opt/pixi bash
+    chmod -R a+rX /opt/pixi
+
+    ### Environment folder
+    mkdir -p /opt/gwas
+
+PIXI
+
+    cd /opt/gwas
+
+    # create pixi env from the environment file
+    pixi init --import ./environment.yml
+    pixi install
+
+    # Install R kernel for jupyterlab and bash kernel for jupyterlab
+    pixi run R -e 'IRkernel::installspec(prefix = "/opt/gwas/.pixi/envs/default", name = "courser", displayname = "Course (R)")'
+    pixi run 'python -m bash_kernel.install'
+    
+######### Adding executables not installable as packages to the container
+    # An example of executables that can be added to the container, and then used in the notebooks. You can add any executable you want, 
+    # but make sure to add it to the PATH and to give it the right permissions (done in %environments). Here we add some of the tools used in the post GWAS course.
+    git clone --depth 1 https://github.com/CBIIT/ldsc.git /opt/ldsc
+    git clone --depth 1 https://github.com/Marijn-Schipper/FLAMES.git /opt/FLAMES
+    git clone --depth 1 https://github.com/FinucaneLab/pops.git /opt/pops
+
+    cat > /usr/local/bin/ldsc <<'EOF'
+#!/bin/sh
+exec /opt/gwas/.pixi/envs/default/bin/python /opt/ldsc/ldsc.py "$@"
+EOF
+
+    cat > /usr/local/bin/munge_sumstats <<'EOF'
+#!/bin/sh
+exec /opt/gwas/.pixi/envs/default/bin/python /opt/ldsc/munge_sumstats.py "$@"
+EOF
+
+    cat > /usr/local/bin/munge_feature_directory <<'EOF'
+#!/bin/sh
+exec /opt/gwas/.pixi/envs/default/bin/python /opt/pops/munge_feature_directory.py "$@"
+EOF
+
+    cat > /usr/local/bin/flames <<'EOF'
+#!/bin/sh
+exec /opt/gwas/.pixi/envs/default/bin/python /opt/FLAMES/FLAMES.py "$@"
+EOF
+
+    cat > /usr/local/bin/pops <<'EOF'
+#!/bin/sh
+exec /opt/gwas/.pixi/envs/default/bin/python /opt/pops/pops.py "$@"
+EOF
+
+    cat > /usr/local/bin/scdrs <<'EOF'
+#!/bin/sh
+exec /opt/gwas/.pixi/envs/default/bin/scdrs "$@"
+EOF
+    # Give execute permissions to the executables and read permissions to the folders
+    chmod +x /usr/local/bin/ldsc /usr/local/bin/munge_sumstats /usr/local/bin/munge_feature_directory /usr/local/bin/flames /usr/local/bin/pops /usr/local/bin/scdrs
+    chmod -R a+rX /opt/gwas /opt/ldsc /opt/FLAMES /opt/pops
+
+###############
+
+%environment
+    export PIXI_HOME=/opt/pixi
+    export PATH=/opt/pixi/bin:/usr/local/bin:$PATH
+
+%runscript
+    echo "Available commands: ldsc munge_sumstats flames pops scdrs"
+
+%help
+    Build:
+      apptainer build --fakeroot gwas-minimal.sif gwas-minimal.def
+
+    Commands:
+      ldsc
+      munge_sumstats
+      flames
+      pops
+      scdrs
