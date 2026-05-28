@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,6 +10,9 @@
 
 <title>Bulk RNA Analysis in R – Introduction to NGS data analysis</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -59,7 +62,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -72,14 +75,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-eacb1df1f40892b057e8ea827c2dd49f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-0c23511428beaf87b29bbdf0654d5814.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-eacb1df1f40892b057e8ea827c2dd49f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-70081db2ec286ab53e229405c10ccad2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-b9e9b0af3005a2810d15fa088a586432.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-70081db2ec286ab53e229405c10ccad2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -116,7 +119,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 <script type="application/ld+json">
@@ -392,7 +395,8 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../images/NGSlogo.png" alt="" class="navbar-logo">
+    <img src="../images/NGSlogo.png" alt="" class="navbar-logo light-content">
+    <img src="../images/NGSlogo.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Introduction to NGS data analysis</span>
@@ -441,19 +445,19 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
  <span class="dropdown-text">Alignment with Galaxy</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../nb/01_raw_data_alignment.html">
+    <a class="dropdown-item" href="../Notebooks/01_raw_data_alignment.html">
  <span class="dropdown-text">Alignment with bash</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../nb/02_VCF_variant_calling_analysis.html">
+    <a class="dropdown-item" href="../Notebooks/02_VCF_variant_calling_analysis.html">
  <span class="dropdown-text">Variant analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../nb/03_bulk_RNA_analysis_edgeR.html">
+    <a class="dropdown-item" href="../Notebooks/03_bulk_RNA_analysis_edgeR.html">
  <span class="dropdown-text">bulkRNA analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../nb/04_scRNAseq_analysis.html">
+    <a class="dropdown-item" href="../Notebooks/04_scRNAseq_analysis.html">
  <span class="dropdown-text">scRNA analysis</span></a>
   </li>  
     </ul>
@@ -495,7 +499,7 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">June 23, 2025</p>
+        <p class="date-modified">May 28, 2026</p>
       </div>
     </div>
       
@@ -548,7 +552,7 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tutorial description
+<span class="screen-reader-only">Note</span>Tutorial description
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -564,7 +568,7 @@ Tutorial description
 <p><code>edgeR</code> is a package to test for differentially expressed genes between our Control and Treatment Samples. You can read more about the edgeR package and its functionalities <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/edgeR/inst/doc/edgeRUsersGuide.pdf">here</a>. This exercise largely follows their user manual.</p>
 <p><strong>Load the necessary R libraries</strong></p>
 <div id="cell-3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-tags="[]" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressWarnings</span>({</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(VennDiagram)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -573,7 +577,7 @@ Tutorial description
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mixOmics)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pheatmap)</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(edgeR)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="edger---data-filtering-and-normalization" class="level1">
 <h1>EdgeR - Data filtering and Normalization</h1>
@@ -583,9 +587,9 @@ Tutorial description
 <p>The data for this exercise comes from the 12 tabular files with Reads per Gene counts generated by STAR Mapping in the <a href="../nb/01_raw_data_alignment.html">raw-data alignment</a> part of this course. We want to create a table where each column is a sample, and the content of the table are the read counts from STAR. We must merge the 12 files with Reads per Gene information into a single file.</p>
 <p>You need to have previously executed the alignment notebook to be able to load the data. The commands below will find the text files whose names end with <code>ReadsPerGene.out.tab</code>, and will read and concatenate them into a unique table.</p>
 <div id="cell-7" class="cell" data-tags="[]" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">system</span>(<span class="st">"find results/STAR_output/*_align_contigs_1_2 -name </span><span class="sc">\"</span><span class="st">*ReadsPerGene.out.tab</span><span class="sc">\"</span><span class="st">"</span>, <span class="at">intern=</span><span class="cn">TRUE</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">system</span>(<span class="st">"find results/STAR_output/*_align_contigs_1_2 -name </span><span class="sc">\"</span><span class="st">*ReadsPerGene.out.tab</span><span class="sc">\"</span><span class="st">"</span>, <span class="at">intern=</span><span class="cn">TRUE</span>))</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(samples)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Read_counts <span class="ot">&lt;-</span> <span class="fu">do.call</span>(cbind, <span class="fu">lapply</span>(samples, <span class="cf">function</span>(x) <span class="fu">read.delim</span>(<span class="at">file=</span>x, <span class="at">header =</span> <span class="cn">FALSE</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Read_counts <span class="ot">&lt;-</span> <span class="fu">do.call</span>(cbind, <span class="fu">lapply</span>(samples, <span class="cf">function</span>(x) <span class="fu">read.delim</span>(<span class="at">file=</span>x, <span class="at">header =</span> <span class="cn">FALSE</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "results/STAR_output/S10_align_contigs_1_2/S10_1_1ReadsPerGene.out.tab"
  [2] "results/STAR_output/S10_align_contigs_1_2/S10_1_2ReadsPerGene.out.tab"
@@ -604,9 +608,9 @@ Tutorial description
 <p>The data frame has genes as rows and samples as columns and stores the gene expression counts (value representing the total number of sequence reads that originated from a particular gene in a sample) for each of the 12 samples. This data frame should have 12 columns and 366 rows.</p>
 <p>A brief peep into the table:</p>
 <div id="cell-10" class="cell" data-scrolled="true" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Read_counts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Read_counts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 370 × 48</caption>
 <thead>
 <tr class="header">
@@ -2066,14 +2070,14 @@ Tutorial description
 </div>
 <p>We need to remove the informative lines on top of the table which are not of interest for our analysis, and extract the second column of each sample to keep the counts only. We also assign the sample names and print out a brief view of the table and its size.</p>
 <div id="cell-12" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="695957c4-1210-4c5c-c576-5addfe921892" data-tags="[]" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(Read_counts) <span class="ot">&lt;-</span> Read_counts[,<span class="dv">1</span>]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(Read_counts) <span class="ot">&lt;-</span> Read_counts[,<span class="dv">1</span>]</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Read_counts <span class="ot">&lt;-</span> Read_counts[<span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span><span class="fu">nrow</span>(Read_counts)), <span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">2</span>, <span class="dv">46</span>, <span class="at">by=</span><span class="dv">4</span>))]</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(Read_counts) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"S10_1_1"</span>, <span class="st">"S10_1_2"</span>, <span class="st">"S10_1_3"</span>, <span class="st">"S10_2_1"</span>, <span class="st">"S10_2_2"</span>, <span class="st">"S10_2_3"</span>, </span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"TI_1_1"</span>, <span class="st">"TI_1_2"</span>, <span class="st">"TI_1_3"</span>, <span class="st">"TI_2_1"</span>, <span class="st">"TI_2_2"</span>, <span class="st">"TI_2_3"</span>)</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Read_counts, <span class="at">n=</span><span class="dv">10</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Read_counts) <span class="co"># dimensions of the data frame</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Read_counts) <span class="co"># dimensions of the data frame</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 10 × 12</caption>
 <thead>
 <tr class="header">
@@ -2109,7 +2113,7 @@ Tutorial description
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g175</td>
+<th data-quarto-table-cell-role="th" scope="row">g175</th>
 <td>143</td>
 <td>226</td>
 <td>227</td>
@@ -2124,7 +2128,7 @@ Tutorial description
 <td>165</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g176</td>
+<th data-quarto-table-cell-role="th" scope="row">g176</th>
 <td>17</td>
 <td>12</td>
 <td>15</td>
@@ -2139,7 +2143,7 @@ Tutorial description
 <td>23</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g177</td>
+<th data-quarto-table-cell-role="th" scope="row">g177</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -2154,7 +2158,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g178</td>
+<th data-quarto-table-cell-role="th" scope="row">g178</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -2169,7 +2173,7 @@ Tutorial description
 <td>2</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g179</td>
+<th data-quarto-table-cell-role="th" scope="row">g179</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -2184,7 +2188,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g180</td>
+<th data-quarto-table-cell-role="th" scope="row">g180</th>
 <td>2773</td>
 <td>5223</td>
 <td>4350</td>
@@ -2199,7 +2203,7 @@ Tutorial description
 <td>2565</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g181</td>
+<th data-quarto-table-cell-role="th" scope="row">g181</th>
 <td>473</td>
 <td>679</td>
 <td>583</td>
@@ -2214,7 +2218,7 @@ Tutorial description
 <td>410</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g182</td>
+<th data-quarto-table-cell-role="th" scope="row">g182</th>
 <td>19</td>
 <td>15</td>
 <td>20</td>
@@ -2229,7 +2233,7 @@ Tutorial description
 <td>4</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g183</td>
+<th data-quarto-table-cell-role="th" scope="row">g183</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -2244,7 +2248,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g184</td>
+<th data-quarto-table-cell-role="th" scope="row">g184</th>
 <td>30</td>
 <td>22</td>
 <td>50</td>
@@ -2274,10 +2278,10 @@ Tutorial description
 <p>Note that the order of the rows in the Metadata table should be the same as the columns in the <code>Read_counts</code> table generated above.</p>
 <p>In order to aid the following steps, we will create a <code>Group</code> for each sample (a new column in the metadata) based on the <code>Genotype + Condition</code> of each sample and assign the three replicates to this group.</p>
 <div id="cell-15" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="98c192c7-46f3-4662-819b-81cddaafb3b7" data-tags="[]" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>metadata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../Data/Clover_Data/metadata.csv"</span>, <span class="at">sep =</span><span class="st">";"</span>, <span class="at">row.names=</span><span class="dv">1</span>, <span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>metadata</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>metadata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../Data/Clover_Data/metadata.csv"</span>, <span class="at">sep =</span><span class="st">";"</span>, <span class="at">row.names=</span><span class="dv">1</span>, <span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>metadata</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 12 × 3</caption>
 <thead>
 <tr class="header">
@@ -2295,73 +2299,73 @@ Tutorial description
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_1</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_1</th>
 <td>Control</td>
 <td>S10</td>
 <td>1</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_2</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_2</th>
 <td>Control</td>
 <td>S10</td>
 <td>2</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_3</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_3</th>
 <td>Control</td>
 <td>S10</td>
 <td>3</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_1</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_1</th>
 <td>Treatment</td>
 <td>S10</td>
 <td>1</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_2</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_2</th>
 <td>Treatment</td>
 <td>S10</td>
 <td>2</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_3</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_3</th>
 <td>Treatment</td>
 <td>S10</td>
 <td>3</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_1</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_1</th>
 <td>Control</td>
 <td>Tienshan</td>
 <td>1</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_2</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_2</th>
 <td>Control</td>
 <td>Tienshan</td>
 <td>2</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_3</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_3</th>
 <td>Control</td>
 <td>Tienshan</td>
 <td>3</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_1</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_1</th>
 <td>Treatment</td>
 <td>Tienshan</td>
 <td>1</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_2</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_2</th>
 <td>Treatment</td>
 <td>Tienshan</td>
 <td>2</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_3</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_3</th>
 <td>Treatment</td>
 <td>Tienshan</td>
 <td>3</td>
@@ -2372,11 +2376,11 @@ Tutorial description
 </div>
 <p>To make the analysis possible, we will create a <code>Group</code> for each sample (a new column in the metadata) based on the <code>Genotype + Condition</code> of each sample and assign the three replicates to this group.</p>
 <div id="cell-17" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="7b78e7c3-a246-4638-9e56-68605e85ad52" data-tags="[]" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Group <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">paste</span>(metadata<span class="sc">$</span>Genotype, metadata<span class="sc">$</span>Condition, <span class="at">sep=</span><span class="st">"_"</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Group <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">paste</span>(metadata<span class="sc">$</span>Genotype, metadata<span class="sc">$</span>Condition, <span class="at">sep=</span><span class="st">"_"</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>metadata <span class="ot">&lt;-</span> <span class="fu">cbind</span>(metadata,<span class="at">Group=</span>Group)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>metadata</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>metadata</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 12 × 4</caption>
 <thead>
 <tr class="header">
@@ -2396,84 +2400,84 @@ Tutorial description
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_1</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_1</th>
 <td>Control</td>
 <td>S10</td>
 <td>1</td>
 <td>S10_Control</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_2</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_2</th>
 <td>Control</td>
 <td>S10</td>
 <td>2</td>
 <td>S10_Control</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_3</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_3</th>
 <td>Control</td>
 <td>S10</td>
 <td>3</td>
 <td>S10_Control</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_1</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_1</th>
 <td>Treatment</td>
 <td>S10</td>
 <td>1</td>
 <td>S10_Treatment</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_2</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_2</th>
 <td>Treatment</td>
 <td>S10</td>
 <td>2</td>
 <td>S10_Treatment</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_3</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_3</th>
 <td>Treatment</td>
 <td>S10</td>
 <td>3</td>
 <td>S10_Treatment</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_1</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_1</th>
 <td>Control</td>
 <td>Tienshan</td>
 <td>1</td>
 <td>Tienshan_Control</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_2</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_2</th>
 <td>Control</td>
 <td>Tienshan</td>
 <td>2</td>
 <td>Tienshan_Control</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_3</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_3</th>
 <td>Control</td>
 <td>Tienshan</td>
 <td>3</td>
 <td>Tienshan_Control</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_1</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_1</th>
 <td>Treatment</td>
 <td>Tienshan</td>
 <td>1</td>
 <td>Tienshan_Treatment</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_2</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_2</th>
 <td>Treatment</td>
 <td>Tienshan</td>
 <td>2</td>
 <td>Tienshan_Treatment</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_3</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_3</th>
 <td>Treatment</td>
 <td>Tienshan</td>
 <td>3</td>
@@ -2490,11 +2494,11 @@ Tutorial description
 <p>The main components of the DGEList object are the matrix “counts” containing our read per gene counts and a data.frame “samples” containing the metadata.</p>
 <p>Note that all the genes with zero counts across all samples were eliminated.</p>
 <div id="cell-19" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="64d6fedd-0394-4edc-ca79-519e5d30de63" data-tags="[]" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>DGEList <span class="ot">&lt;-</span> <span class="fu">DGEList</span>(Read_counts, <span class="at">remove.zeros =</span> <span class="cn">TRUE</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>DGEList <span class="ot">&lt;-</span> <span class="fu">DGEList</span>(Read_counts, <span class="at">remove.zeros =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>DGEList<span class="sc">$</span>samples<span class="sc">$</span>Condition <span class="ot">&lt;-</span> <span class="fu">relevel</span>(metadata<span class="sc">$</span>Condition, <span class="at">ref =</span> <span class="st">"Control"</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>DGEList<span class="sc">$</span>samples<span class="sc">$</span>Genotype <span class="ot">&lt;-</span> metadata<span class="sc">$</span>Genotype</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>DGEList<span class="sc">$</span>samples<span class="sc">$</span>group <span class="ot">&lt;-</span> metadata<span class="sc">$</span>Group</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>DGEList</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>DGEList</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Removing 99 rows with all zero counts
 </code></pre>
@@ -2503,7 +2507,7 @@ Tutorial description
 <dl>
     <dt>$counts</dt>
         <dd>
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A matrix: 267 × 12 of type int</caption>
 <thead>
 <tr class="header">
@@ -2524,7 +2528,7 @@ Tutorial description
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g175</td>
+<th data-quarto-table-cell-role="th" scope="row">g175</th>
 <td>143</td>
 <td>226</td>
 <td>227</td>
@@ -2539,7 +2543,7 @@ Tutorial description
 <td>165</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g176</td>
+<th data-quarto-table-cell-role="th" scope="row">g176</th>
 <td>17</td>
 <td>12</td>
 <td>15</td>
@@ -2554,7 +2558,7 @@ Tutorial description
 <td>23</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g178</td>
+<th data-quarto-table-cell-role="th" scope="row">g178</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -2569,7 +2573,7 @@ Tutorial description
 <td>2</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g180</td>
+<th data-quarto-table-cell-role="th" scope="row">g180</th>
 <td>2773</td>
 <td>5223</td>
 <td>4350</td>
@@ -2584,7 +2588,7 @@ Tutorial description
 <td>2565</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g181</td>
+<th data-quarto-table-cell-role="th" scope="row">g181</th>
 <td>473</td>
 <td>679</td>
 <td>583</td>
@@ -2599,7 +2603,7 @@ Tutorial description
 <td>410</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g182</td>
+<th data-quarto-table-cell-role="th" scope="row">g182</th>
 <td>19</td>
 <td>15</td>
 <td>20</td>
@@ -2614,7 +2618,7 @@ Tutorial description
 <td>4</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g184</td>
+<th data-quarto-table-cell-role="th" scope="row">g184</th>
 <td>30</td>
 <td>22</td>
 <td>50</td>
@@ -2629,7 +2633,7 @@ Tutorial description
 <td>89</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g185</td>
+<th data-quarto-table-cell-role="th" scope="row">g185</th>
 <td>0</td>
 <td>2</td>
 <td>0</td>
@@ -2644,7 +2648,7 @@ Tutorial description
 <td>1</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g186</td>
+<th data-quarto-table-cell-role="th" scope="row">g186</th>
 <td>1</td>
 <td>0</td>
 <td>0</td>
@@ -2659,7 +2663,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g187</td>
+<th data-quarto-table-cell-role="th" scope="row">g187</th>
 <td>1</td>
 <td>1</td>
 <td>2</td>
@@ -2674,7 +2678,7 @@ Tutorial description
 <td>29</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g188</td>
+<th data-quarto-table-cell-role="th" scope="row">g188</th>
 <td>316</td>
 <td>285</td>
 <td>417</td>
@@ -2689,7 +2693,7 @@ Tutorial description
 <td>547</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g190</td>
+<th data-quarto-table-cell-role="th" scope="row">g190</th>
 <td>14</td>
 <td>18</td>
 <td>29</td>
@@ -2704,7 +2708,7 @@ Tutorial description
 <td>6</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g191</td>
+<th data-quarto-table-cell-role="th" scope="row">g191</th>
 <td>2</td>
 <td>2</td>
 <td>1</td>
@@ -2719,7 +2723,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g192</td>
+<th data-quarto-table-cell-role="th" scope="row">g192</th>
 <td>1</td>
 <td>1</td>
 <td>1</td>
@@ -2734,7 +2738,7 @@ Tutorial description
 <td>2</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g193</td>
+<th data-quarto-table-cell-role="th" scope="row">g193</th>
 <td>208</td>
 <td>231</td>
 <td>301</td>
@@ -2749,7 +2753,7 @@ Tutorial description
 <td>91</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g194</td>
+<th data-quarto-table-cell-role="th" scope="row">g194</th>
 <td>40</td>
 <td>41</td>
 <td>37</td>
@@ -2764,7 +2768,7 @@ Tutorial description
 <td>25</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g195</td>
+<th data-quarto-table-cell-role="th" scope="row">g195</th>
 <td>54</td>
 <td>85</td>
 <td>85</td>
@@ -2779,7 +2783,7 @@ Tutorial description
 <td>56</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g196</td>
+<th data-quarto-table-cell-role="th" scope="row">g196</th>
 <td>77</td>
 <td>120</td>
 <td>118</td>
@@ -2794,7 +2798,7 @@ Tutorial description
 <td>34</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g197</td>
+<th data-quarto-table-cell-role="th" scope="row">g197</th>
 <td>1</td>
 <td>6</td>
 <td>5</td>
@@ -2809,7 +2813,7 @@ Tutorial description
 <td>17</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g198</td>
+<th data-quarto-table-cell-role="th" scope="row">g198</th>
 <td>14</td>
 <td>27</td>
 <td>10</td>
@@ -2824,7 +2828,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g199</td>
+<th data-quarto-table-cell-role="th" scope="row">g199</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -2839,7 +2843,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g200</td>
+<th data-quarto-table-cell-role="th" scope="row">g200</th>
 <td>57</td>
 <td>80</td>
 <td>94</td>
@@ -2854,7 +2858,7 @@ Tutorial description
 <td>5</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g203</td>
+<th data-quarto-table-cell-role="th" scope="row">g203</th>
 <td>815</td>
 <td>1188</td>
 <td>1412</td>
@@ -2869,7 +2873,7 @@ Tutorial description
 <td>784</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g204</td>
+<th data-quarto-table-cell-role="th" scope="row">g204</th>
 <td>250</td>
 <td>312</td>
 <td>348</td>
@@ -2884,7 +2888,7 @@ Tutorial description
 <td>130</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g205</td>
+<th data-quarto-table-cell-role="th" scope="row">g205</th>
 <td>109</td>
 <td>132</td>
 <td>181</td>
@@ -2899,7 +2903,7 @@ Tutorial description
 <td>50</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g206</td>
+<th data-quarto-table-cell-role="th" scope="row">g206</th>
 <td>0</td>
 <td>1</td>
 <td>2</td>
@@ -2914,7 +2918,7 @@ Tutorial description
 <td>2</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g207</td>
+<th data-quarto-table-cell-role="th" scope="row">g207</th>
 <td>0</td>
 <td>1</td>
 <td>0</td>
@@ -2929,7 +2933,7 @@ Tutorial description
 <td>3</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g208</td>
+<th data-quarto-table-cell-role="th" scope="row">g208</th>
 <td>0</td>
 <td>1</td>
 <td>0</td>
@@ -2944,7 +2948,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g209</td>
+<th data-quarto-table-cell-role="th" scope="row">g209</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -2959,7 +2963,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g210</td>
+<th data-quarto-table-cell-role="th" scope="row">g210</th>
 <td>52</td>
 <td>76</td>
 <td>60</td>
@@ -2974,7 +2978,7 @@ Tutorial description
 <td>21</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">⋮</td>
+<th data-quarto-table-cell-role="th" scope="row">⋮</th>
 <td>⋮</td>
 <td>⋮</td>
 <td>⋮</td>
@@ -2989,7 +2993,7 @@ Tutorial description
 <td>⋮</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g135</td>
+<th data-quarto-table-cell-role="th" scope="row">g135</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -3004,7 +3008,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g139</td>
+<th data-quarto-table-cell-role="th" scope="row">g139</th>
 <td>0</td>
 <td>1</td>
 <td>1</td>
@@ -3019,7 +3023,7 @@ Tutorial description
 <td>3</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g140</td>
+<th data-quarto-table-cell-role="th" scope="row">g140</th>
 <td>0</td>
 <td>5</td>
 <td>1</td>
@@ -3034,7 +3038,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g141</td>
+<th data-quarto-table-cell-role="th" scope="row">g141</th>
 <td>177</td>
 <td>217</td>
 <td>224</td>
@@ -3049,7 +3053,7 @@ Tutorial description
 <td>77</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g142</td>
+<th data-quarto-table-cell-role="th" scope="row">g142</th>
 <td>488</td>
 <td>713</td>
 <td>557</td>
@@ -3064,7 +3068,7 @@ Tutorial description
 <td>933</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g144</td>
+<th data-quarto-table-cell-role="th" scope="row">g144</th>
 <td>3319</td>
 <td>3987</td>
 <td>4763</td>
@@ -3079,7 +3083,7 @@ Tutorial description
 <td>3590</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g146</td>
+<th data-quarto-table-cell-role="th" scope="row">g146</th>
 <td>293</td>
 <td>330</td>
 <td>350</td>
@@ -3094,7 +3098,7 @@ Tutorial description
 <td>226</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g147</td>
+<th data-quarto-table-cell-role="th" scope="row">g147</th>
 <td>6</td>
 <td>3</td>
 <td>3</td>
@@ -3109,7 +3113,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g148</td>
+<th data-quarto-table-cell-role="th" scope="row">g148</th>
 <td>19</td>
 <td>30</td>
 <td>24</td>
@@ -3124,7 +3128,7 @@ Tutorial description
 <td>8</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g149</td>
+<th data-quarto-table-cell-role="th" scope="row">g149</th>
 <td>35</td>
 <td>62</td>
 <td>65</td>
@@ -3139,7 +3143,7 @@ Tutorial description
 <td>93</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g150</td>
+<th data-quarto-table-cell-role="th" scope="row">g150</th>
 <td>263</td>
 <td>411</td>
 <td>278</td>
@@ -3154,7 +3158,7 @@ Tutorial description
 <td>508</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g151</td>
+<th data-quarto-table-cell-role="th" scope="row">g151</th>
 <td>44</td>
 <td>44</td>
 <td>50</td>
@@ -3169,7 +3173,7 @@ Tutorial description
 <td>31</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g152</td>
+<th data-quarto-table-cell-role="th" scope="row">g152</th>
 <td>242</td>
 <td>258</td>
 <td>294</td>
@@ -3184,7 +3188,7 @@ Tutorial description
 <td>15</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g153</td>
+<th data-quarto-table-cell-role="th" scope="row">g153</th>
 <td>142</td>
 <td>144</td>
 <td>181</td>
@@ -3199,7 +3203,7 @@ Tutorial description
 <td>57</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g155</td>
+<th data-quarto-table-cell-role="th" scope="row">g155</th>
 <td>0</td>
 <td>4</td>
 <td>2</td>
@@ -3214,7 +3218,7 @@ Tutorial description
 <td>1</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g156</td>
+<th data-quarto-table-cell-role="th" scope="row">g156</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -3229,7 +3233,7 @@ Tutorial description
 <td>1</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g157</td>
+<th data-quarto-table-cell-role="th" scope="row">g157</th>
 <td>6</td>
 <td>1</td>
 <td>3</td>
@@ -3244,7 +3248,7 @@ Tutorial description
 <td>155</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g158</td>
+<th data-quarto-table-cell-role="th" scope="row">g158</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -3259,7 +3263,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g161</td>
+<th data-quarto-table-cell-role="th" scope="row">g161</th>
 <td>25</td>
 <td>38</td>
 <td>18</td>
@@ -3274,7 +3278,7 @@ Tutorial description
 <td>6</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g162</td>
+<th data-quarto-table-cell-role="th" scope="row">g162</th>
 <td>31</td>
 <td>43</td>
 <td>38</td>
@@ -3289,7 +3293,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g163</td>
+<th data-quarto-table-cell-role="th" scope="row">g163</th>
 <td>1</td>
 <td>0</td>
 <td>12</td>
@@ -3304,7 +3308,7 @@ Tutorial description
 <td>15</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g164</td>
+<th data-quarto-table-cell-role="th" scope="row">g164</th>
 <td>69</td>
 <td>58</td>
 <td>97</td>
@@ -3319,7 +3323,7 @@ Tutorial description
 <td>135</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g165</td>
+<th data-quarto-table-cell-role="th" scope="row">g165</th>
 <td>203</td>
 <td>376</td>
 <td>594</td>
@@ -3334,7 +3338,7 @@ Tutorial description
 <td>490</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g167</td>
+<th data-quarto-table-cell-role="th" scope="row">g167</th>
 <td>2</td>
 <td>0</td>
 <td>0</td>
@@ -3349,7 +3353,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g168</td>
+<th data-quarto-table-cell-role="th" scope="row">g168</th>
 <td>2</td>
 <td>14</td>
 <td>6</td>
@@ -3364,7 +3368,7 @@ Tutorial description
 <td>10</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g169</td>
+<th data-quarto-table-cell-role="th" scope="row">g169</th>
 <td>0</td>
 <td>0</td>
 <td>1</td>
@@ -3379,7 +3383,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g170</td>
+<th data-quarto-table-cell-role="th" scope="row">g170</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -3394,7 +3398,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g171</td>
+<th data-quarto-table-cell-role="th" scope="row">g171</th>
 <td>0</td>
 <td>5</td>
 <td>0</td>
@@ -3409,7 +3413,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g172</td>
+<th data-quarto-table-cell-role="th" scope="row">g172</th>
 <td>1</td>
 <td>2</td>
 <td>2</td>
@@ -3424,7 +3428,7 @@ Tutorial description
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g173</td>
+<th data-quarto-table-cell-role="th" scope="row">g173</th>
 <td>80</td>
 <td>107</td>
 <td>120</td>
@@ -3444,7 +3448,7 @@ Tutorial description
 </dd>
     <dt>$samples</dt>
         <dd>
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 12 × 5</caption>
 <thead>
 <tr class="header">
@@ -3466,7 +3470,7 @@ Tutorial description
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_1</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_1</th>
 <td>S10_Control</td>
 <td>43614</td>
 <td>1</td>
@@ -3474,7 +3478,7 @@ Tutorial description
 <td>S10</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_2</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_2</th>
 <td>S10_Control</td>
 <td>58803</td>
 <td>1</td>
@@ -3482,7 +3486,7 @@ Tutorial description
 <td>S10</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_3</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_3</th>
 <td>S10_Control</td>
 <td>62654</td>
 <td>1</td>
@@ -3490,7 +3494,7 @@ Tutorial description
 <td>S10</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_1</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_1</th>
 <td>S10_Treatment</td>
 <td>59909</td>
 <td>1</td>
@@ -3498,7 +3502,7 @@ Tutorial description
 <td>S10</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_2</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_2</th>
 <td>S10_Treatment</td>
 <td>56761</td>
 <td>1</td>
@@ -3506,7 +3510,7 @@ Tutorial description
 <td>S10</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_3</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_3</th>
 <td>S10_Treatment</td>
 <td>63152</td>
 <td>1</td>
@@ -3514,7 +3518,7 @@ Tutorial description
 <td>S10</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_1</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_1</th>
 <td>Tienshan_Control</td>
 <td>43387</td>
 <td>1</td>
@@ -3522,7 +3526,7 @@ Tutorial description
 <td>Tienshan</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_2</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_2</th>
 <td>Tienshan_Control</td>
 <td>38355</td>
 <td>1</td>
@@ -3530,7 +3534,7 @@ Tutorial description
 <td>Tienshan</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_3</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_3</th>
 <td>Tienshan_Control</td>
 <td>40304</td>
 <td>1</td>
@@ -3538,7 +3542,7 @@ Tutorial description
 <td>Tienshan</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_1</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_1</th>
 <td>Tienshan_Treatment</td>
 <td>55509</td>
 <td>1</td>
@@ -3546,7 +3550,7 @@ Tutorial description
 <td>Tienshan</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_2</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_2</th>
 <td>Tienshan_Treatment</td>
 <td>39909</td>
 <td>1</td>
@@ -3554,7 +3558,7 @@ Tutorial description
 <td>Tienshan</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_3</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_3</th>
 <td>Tienshan_Treatment</td>
 <td>45008</td>
 <td>1</td>
@@ -3573,12 +3577,12 @@ Tutorial description
 <h2 class="anchored" data-anchor-id="preliminary-data-analysis">Preliminary data analysis</h2>
 <p>First, we will calculate the “pseudoCounts” as log2 of the reads per gene counts. <br> This is not part of the actual differential gene expression analysis but is helpful for data exploration and quality assessment. We will look at a histogram of one of the samples and a boxplot representation of the log2 counts for all the 12 samples. <br> Note that there are many genes with a low number of mapped reads and that there are differences between the average read counts for each library.</p>
 <div id="cell-21" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="b0938de1-e0c6-44cc-a721-2f6fb5298908" data-tags="[]" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pseudoCounts <span class="ot">&lt;-</span> <span class="fu">log2</span>(DGEList<span class="sc">$</span>counts <span class="sc">+</span> <span class="dv">1</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pseudoCounts <span class="ot">&lt;-</span> <span class="fu">log2</span>(DGEList<span class="sc">$</span>counts <span class="sc">+</span> <span class="dv">1</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pseudoCounts)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(pseudoCounts[ ,<span class="st">"S10_1_1"</span>], <span class="at">main =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"Read counts"</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(pseudoCounts, <span class="at">col =</span> <span class="st">"gray"</span>, <span class="at">las =</span> <span class="dv">3</span>, <span class="at">cex.names =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(pseudoCounts, <span class="at">col =</span> <span class="st">"gray"</span>, <span class="at">las =</span> <span class="dv">3</span>, <span class="at">cex.names =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A matrix: 6 × 12 of type dbl</caption>
 <thead>
 <tr class="header">
@@ -3599,7 +3603,7 @@ Tutorial description
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g175</td>
+<th data-quarto-table-cell-role="th" scope="row">g175</th>
 <td>7.169925</td>
 <td>7.826548</td>
 <td>7.832890</td>
@@ -3614,7 +3618,7 @@ Tutorial description
 <td>7.375039</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g176</td>
+<th data-quarto-table-cell-role="th" scope="row">g176</th>
 <td>4.169925</td>
 <td>3.700440</td>
 <td>4.000000</td>
@@ -3629,7 +3633,7 @@ Tutorial description
 <td>4.584963</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g178</td>
+<th data-quarto-table-cell-role="th" scope="row">g178</th>
 <td>0.000000</td>
 <td>0.000000</td>
 <td>0.000000</td>
@@ -3644,7 +3648,7 @@ Tutorial description
 <td>1.584963</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g180</td>
+<th data-quarto-table-cell-role="th" scope="row">g180</th>
 <td>11.437752</td>
 <td>12.350939</td>
 <td>12.087131</td>
@@ -3659,7 +3663,7 @@ Tutorial description
 <td>11.325305</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g181</td>
+<th data-quarto-table-cell-role="th" scope="row">g181</th>
 <td>8.888743</td>
 <td>9.409391</td>
 <td>9.189825</td>
@@ -3674,7 +3678,7 @@ Tutorial description
 <td>8.682995</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g182</td>
+<th data-quarto-table-cell-role="th" scope="row">g182</th>
 <td>4.321928</td>
 <td>4.000000</td>
 <td>4.392317</td>
@@ -3708,10 +3712,10 @@ Tutorial description
 </div>
 <p>We can also create a PCA plot of the samples in order to assess the differences between the Genotypes and Conditions, but also between the replicates. In this plot the samples that are similar cluster together, while samples that are different are further apart. <br> In this type of plot, we would expect samples from the same group (the three replicates for each sample) to exhibit a similar gene expression profile thus clustering together while being separated from the other samples.</p>
 <div id="cell-23" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="9e9c75ec-eaff-4de8-df49-e710d7723f6f" data-tags="[]" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>resPCA <span class="ot">&lt;-</span> <span class="fu">pca</span>(<span class="fu">t</span>(pseudoCounts), <span class="at">ncomp =</span> <span class="dv">6</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>resPCA <span class="ot">&lt;-</span> <span class="fu">pca</span>(<span class="fu">t</span>(pseudoCounts), <span class="at">ncomp =</span> <span class="dv">6</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plotIndiv</span>(resPCA, <span class="at">group =</span> metadata<span class="sc">$</span>Genotype, <span class="at">pch=</span>metadata<span class="sc">$</span>Condition,</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">legend =</span> T, <span class="at">legend.title =</span> <span class="st">'Genotype'</span>, <span class="at">legend.title.pch =</span> <span class="st">'Condition'</span>,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">title =</span> <span class="st">'PCA plot raw counts'</span>, <span class="at">style =</span> <span class="st">'ggplot2'</span>, <span class="at">size.xlabel =</span> <span class="dv">10</span>, <span class="at">size.ylabel =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">title =</span> <span class="st">'PCA plot raw counts'</span>, <span class="at">style =</span> <span class="st">'ggplot2'</span>, <span class="at">size.xlabel =</span> <span class="dv">10</span>, <span class="at">size.ylabel =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning message in shape.input.plotIndiv(object = object, n = n, blocks = blocks, :
 “'ind.names' is set to FALSE as 'pch' overrides it”</code></pre>
@@ -3729,9 +3733,9 @@ Tutorial description
 <h2 class="anchored" data-anchor-id="filtering-the-lowly-expressed-genes">Filtering the lowly expressed genes</h2>
 <p>As seen previously, many genes have a low number of read counts in our samples. The genes with very low counts across all libraries provide little evidence for differential expression, thus we should eliminate these genes before the analysis. <br> One of the filtering methods we can use is the “filterByExpr” function provided by the edgeR package. By default, this function keeps only the genes that have at least 10 reads per group, but other cutoffs can also be applied.</p>
 <div id="cell-25" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="6aaf80e9-b0b5-493d-d217-a6233ffda53f" data-tags="[]" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">filterByExpr</span>(DGEList, <span class="at">group=</span>metadata<span class="sc">$</span>Group) <span class="co">#create the filter</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">filterByExpr</span>(DGEList, <span class="at">group=</span>metadata<span class="sc">$</span>Group) <span class="co">#create the filter</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>DGEList <span class="ot">&lt;-</span> DGEList[keep, , keep.lib.sizes<span class="ot">=</span><span class="cn">FALSE</span>] <span class="co">#apply the filter to on the DGEList object</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(keep) <span class="co">#Check the number of genes that passed the filter</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(keep) <span class="co">#Check the number of genes that passed the filter</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>keep
 FALSE  TRUE 
@@ -3745,10 +3749,10 @@ FALSE  TRUE
 <br> Note that running “calcNormFactors” does not change the actual reads per gene counts, it just fills the “norm.factors” column in <code>DGEList$samples</code>.</p>
 <p>These factors will be used to scale the read counts for each library. From the user guide: “A normalization factor below one indicates that a small number of high count genes are monopolizing the sequencing, causing the counts for other genes to be lower than would be usual given the library size.”</p>
 <div id="cell-27" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="380c972e-581e-46e0-aba4-f79032597c21" data-tags="[]" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>DGEList <span class="ot">&lt;-</span> <span class="fu">calcNormFactors</span>(DGEList, <span class="at">method=</span><span class="st">"RLE"</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>DGEList<span class="sc">$</span>samples</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>DGEList <span class="ot">&lt;-</span> <span class="fu">calcNormFactors</span>(DGEList, <span class="at">method=</span><span class="st">"RLE"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>DGEList<span class="sc">$</span>samples</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 12 × 5</caption>
 <thead>
 <tr class="header">
@@ -3770,7 +3774,7 @@ FALSE  TRUE
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_1</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_1</th>
 <td>S10_Control</td>
 <td>43506</td>
 <td>1.0897129</td>
@@ -3778,7 +3782,7 @@ FALSE  TRUE
 <td>S10</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_2</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_2</th>
 <td>S10_Control</td>
 <td>58660</td>
 <td>1.0385093</td>
@@ -3786,7 +3790,7 @@ FALSE  TRUE
 <td>S10</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_3</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_3</th>
 <td>S10_Control</td>
 <td>62512</td>
 <td>1.0362962</td>
@@ -3794,7 +3798,7 @@ FALSE  TRUE
 <td>S10</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_1</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_1</th>
 <td>S10_Treatment</td>
 <td>59741</td>
 <td>0.9802860</td>
@@ -3802,7 +3806,7 @@ FALSE  TRUE
 <td>S10</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_2</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_2</th>
 <td>S10_Treatment</td>
 <td>56653</td>
 <td>0.8418644</td>
@@ -3810,7 +3814,7 @@ FALSE  TRUE
 <td>S10</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_3</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_3</th>
 <td>S10_Treatment</td>
 <td>63008</td>
 <td>0.8949144</td>
@@ -3818,7 +3822,7 @@ FALSE  TRUE
 <td>S10</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_1</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_1</th>
 <td>Tienshan_Control</td>
 <td>43174</td>
 <td>1.0618440</td>
@@ -3826,7 +3830,7 @@ FALSE  TRUE
 <td>Tienshan</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_2</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_2</th>
 <td>Tienshan_Control</td>
 <td>38203</td>
 <td>1.0431678</td>
@@ -3834,7 +3838,7 @@ FALSE  TRUE
 <td>Tienshan</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_3</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_3</th>
 <td>Tienshan_Control</td>
 <td>40178</td>
 <td>1.0676351</td>
@@ -3842,7 +3846,7 @@ FALSE  TRUE
 <td>Tienshan</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_1</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_1</th>
 <td>Tienshan_Treatment</td>
 <td>55391</td>
 <td>0.9048196</td>
@@ -3850,7 +3854,7 @@ FALSE  TRUE
 <td>Tienshan</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_2</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_2</th>
 <td>Tienshan_Treatment</td>
 <td>39810</td>
 <td>1.1235077</td>
@@ -3858,7 +3862,7 @@ FALSE  TRUE
 <td>Tienshan</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_3</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_3</th>
 <td>Tienshan_Treatment</td>
 <td>44910</td>
 <td>0.9603761</td>
@@ -3876,7 +3880,7 @@ FALSE  TRUE
 <p>We will generate the same plots as for the raw counts in order to compare the data before and after normalization.</p>
 <p>Do the plots for normalized counts look different compared with the plots computed before data filtering and normalization?</p>
 <div id="cell-29" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="7def7808-5abd-466f-ed36-5a4706348a25" data-tags="[]" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pseudoNormCounts <span class="ot">&lt;-</span> <span class="fu">cpm</span>(DGEList, <span class="at">log =</span> <span class="cn">TRUE</span>, <span class="at">prior.count =</span> <span class="dv">1</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pseudoNormCounts <span class="ot">&lt;-</span> <span class="fu">cpm</span>(DGEList, <span class="at">log =</span> <span class="cn">TRUE</span>, <span class="at">prior.count =</span> <span class="dv">1</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pseudoNormCounts)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(pseudoNormCounts[ ,<span class="st">"S10_1_1"</span>], <span class="at">main =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"counts"</span>)</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(pseudoNormCounts, <span class="at">col =</span> <span class="st">"gray"</span>, <span class="at">las =</span> <span class="dv">3</span>, <span class="at">cex.names =</span> <span class="dv">1</span>)</span>
@@ -3884,9 +3888,9 @@ FALSE  TRUE
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>resPCA <span class="ot">&lt;-</span> <span class="fu">pca</span>(<span class="fu">t</span>(pseudoNormCounts), <span class="at">ncomp =</span> <span class="dv">6</span>)</span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plotIndiv</span>(resPCA, <span class="at">group =</span> metadata<span class="sc">$</span>Genotype, <span class="at">pch=</span>metadata<span class="sc">$</span>Condition,</span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">legend =</span> T, <span class="at">legend.title =</span> <span class="st">'Genotype'</span>, <span class="at">legend.title.pch =</span> <span class="st">'Condition'</span>,</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">title =</span> <span class="st">'PCA plot normalized counts'</span>, <span class="at">style =</span> <span class="st">'ggplot2'</span>, <span class="at">size.xlabel =</span> <span class="dv">10</span>, <span class="at">size.ylabel =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">title =</span> <span class="st">'PCA plot normalized counts'</span>, <span class="at">style =</span> <span class="st">'ggplot2'</span>, <span class="at">size.xlabel =</span> <span class="dv">10</span>, <span class="at">size.ylabel =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A matrix: 6 × 12 of type dbl</caption>
 <thead>
 <tr class="header">
@@ -3907,7 +3911,7 @@ FALSE  TRUE
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g175</td>
+<th data-quarto-table-cell-role="th" scope="row">g175</th>
 <td>11.568005</td>
 <td>11.864813</td>
 <td>11.782957</td>
@@ -3922,7 +3926,7 @@ FALSE  TRUE
 <td>11.908906</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g176</td>
+<th data-quarto-table-cell-role="th" scope="row">g176</th>
 <td>8.564108</td>
 <td>7.760868</td>
 <td>7.974199</td>
@@ -3937,7 +3941,7 @@ FALSE  TRUE
 <td>9.111569</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g180</td>
+<th data-quarto-table-cell-role="th" scope="row">g180</th>
 <td>15.836359</td>
 <td>16.387906</td>
 <td>16.035457</td>
@@ -3952,7 +3956,7 @@ FALSE  TRUE
 <td>15.860317</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g181</td>
+<th data-quarto-table-cell-role="th" scope="row">g181</th>
 <td>13.287211</td>
 <td>13.446752</td>
 <td>13.138771</td>
@@ -3967,7 +3971,7 @@ FALSE  TRUE
 <td>13.217591</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g182</td>
+<th data-quarto-table-cell-role="th" scope="row">g182</th>
 <td>8.716557</td>
 <td>8.056048</td>
 <td>8.360376</td>
@@ -3982,7 +3986,7 @@ FALSE  TRUE
 <td>6.815835</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g184</td>
+<th data-quarto-table-cell-role="th" scope="row">g184</th>
 <td>9.350249</td>
 <td>8.573811</td>
 <td>9.628852</td>
@@ -4034,12 +4038,12 @@ FALSE  TRUE
 <p>For this, we first need to define a “design matrix” which describes our experimental design. We construct a matrix containing samples as rows and our previously defined groups (S10_Control, S10_Treatment, Tienshan_Control, Tienshan_Treatment) as columns. The samples belonging to each group are assigned a “1” in this matrix.</p>
 <p>In few words, the design matrix identifies the various groups between which you can do the differential gene expression test.</p>
 <div id="cell-33" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="214fd833-17b3-465c-de56-6f60416ab515" data-tags="[]" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>design.matrix <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span><span class="dv">0</span><span class="sc">+</span>Group)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>design.matrix <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span><span class="dv">0</span><span class="sc">+</span>Group)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(design.matrix) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(DGEList)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(design.matrix) <span class="ot">&lt;-</span> <span class="fu">levels</span>(metadata<span class="sc">$</span>Group)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>design.matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>design.matrix</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A matrix: 12 × 4 of type dbl</caption>
 <thead>
 <tr class="header">
@@ -4052,84 +4056,84 @@ FALSE  TRUE
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_1</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_1</th>
 <td>1</td>
 <td>0</td>
 <td>0</td>
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_2</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_2</th>
 <td>1</td>
 <td>0</td>
 <td>0</td>
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_1_3</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_1_3</th>
 <td>1</td>
 <td>0</td>
 <td>0</td>
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_1</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_1</th>
 <td>0</td>
 <td>1</td>
 <td>0</td>
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_2</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_2</th>
 <td>0</td>
 <td>1</td>
 <td>0</td>
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_2_3</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_2_3</th>
 <td>0</td>
 <td>1</td>
 <td>0</td>
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_1</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_1</th>
 <td>0</td>
 <td>0</td>
 <td>1</td>
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_2</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_2</th>
 <td>0</td>
 <td>0</td>
 <td>1</td>
 <td>0</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_1_3</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_1_3</th>
 <td>0</td>
 <td>0</td>
 <td>1</td>
 <td>0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_1</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_1</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
 <td>1</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_2</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_2</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
 <td>1</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">TI_2_3</td>
+<th data-quarto-table-cell-role="th" scope="row">TI_2_3</th>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -4142,14 +4146,14 @@ FALSE  TRUE
 <p>For easier pairwise comparisons between the groups we can create some “contrasts” using the “makeContrasts” function. This will tell the program which samples we will like to consider as our “Control” and which as our “Treatment” groups. The Control groups will be assigned a “-1” and the Treatment groups a “1”. When using multiple Control and Treatment samples in the same contrast we need to devide by the number of samples used as for example in the contrast S10_Tienshan, where we use both S10 and Ti samples.</p>
 <p>For example, the contrast <code>S10 = S10_Treatment - S10_Control</code> will test for differentially expressed genes between the S10 treatment samples vs the S10 Control samples.</p>
 <div id="cell-35" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="e7164a60-f51b-4349-85d7-4209efd7b617" data-tags="[]" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>contrasts <span class="ot">&lt;-</span> <span class="fu">makeContrasts</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>contrasts <span class="ot">&lt;-</span> <span class="fu">makeContrasts</span>(</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">S10 =</span> S10_Treatment<span class="sc">-</span>S10_Control,</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">Tienshan =</span> Tienshan_Treatment<span class="sc">-</span>Tienshan_Control,</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">S10_Tienshan=</span> (S10_Treatment<span class="sc">+</span>Tienshan_Treatment)<span class="sc">/</span><span class="dv">2</span> <span class="sc">-</span> (S10_Control<span class="sc">+</span>Tienshan_Control)<span class="sc">/</span><span class="dv">2</span>,</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">levels=</span>design.matrix)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>contrasts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>contrasts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A matrix: 4 × 3 of type dbl</caption>
 <thead>
 <tr class="header">
@@ -4161,25 +4165,25 @@ FALSE  TRUE
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">S10_Control</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_Control</th>
 <td>-1</td>
 <td>0</td>
 <td>-0.5</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">S10_Treatment</td>
+<th data-quarto-table-cell-role="th" scope="row">S10_Treatment</th>
 <td>1</td>
 <td>0</td>
 <td>0.5</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">Tienshan_Control</td>
+<th data-quarto-table-cell-role="th" scope="row">Tienshan_Control</th>
 <td>0</td>
 <td>-1</td>
 <td>-0.5</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">Tienshan_Treatment</td>
+<th data-quarto-table-cell-role="th" scope="row">Tienshan_Treatment</th>
 <td>0</td>
 <td>1</td>
 <td>0.5</td>
@@ -4193,22 +4197,22 @@ FALSE  TRUE
 </ul>
 <p>The following cell will run two mandatory steps in order to fit a model in edgeR. First, the dispersion needs to be estimated, this is a measure of the degree of inter-library variation for each gene. Afterwards, a QL ( quasi-likelihood) model representing the sample design is fitted using the “glmQLFit” function. You can read more about these steps in the edgeR user guide.</p>
 <div id="cell-38" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-tags="[]" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>DGEList <span class="ot">&lt;-</span> <span class="fu">estimateDisp</span>(DGEList, design.matrix)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">glmQLFit</span>(DGEList, design.matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>DGEList <span class="ot">&lt;-</span> <span class="fu">estimateDisp</span>(DGEList, design.matrix)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">glmQLFit</span>(DGEList, design.matrix)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="degs-for-white-clover-s10-plants-treatment-vs-control" class="level2">
 <h2 class="anchored" data-anchor-id="degs-for-white-clover-s10-plants-treatment-vs-control">DEGs for White clover S10 plants Treatment vs Control</h2>
 <p>Find DEGs for White clover S10 plants in Treatment condition compared with the Control condition We will test for differentially expressed genes using the quasi-likelihood F-tests method. This is easily done just by running the “glmQFTest” function on the fit model and selecting one of the contrasts we created above (in this case the “S10” contrast).</p>
 <p>Next, we will use the topTags function to extract the information about all the genes.</p>
 <div id="cell-40" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="98005ba9-3ece-4af3-dbbb-bda6f571f6fe" data-tags="[]" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>glmqlf_S10 <span class="ot">&lt;-</span> <span class="fu">glmQLFTest</span>(fit, <span class="at">contrast=</span>contrasts[,<span class="st">"S10"</span>])</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>glmqlf_S10 <span class="ot">&lt;-</span> <span class="fu">glmQLFTest</span>(fit, <span class="at">contrast=</span>contrasts[,<span class="st">"S10"</span>])</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>DEG_S10 <span class="ot">&lt;-</span> <span class="fu">topTags</span>(glmqlf_S10, <span class="at">n =</span> <span class="fu">nrow</span>(DGEList<span class="sc">$</span>counts))</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>DEG_S10</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>DEG_S10</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <dl>
     <dt>$table</dt>
         <dd>
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 163 × 5</caption>
 <thead>
 <tr class="header">
@@ -4230,7 +4234,7 @@ FALSE  TRUE
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g39</td>
+<th data-quarto-table-cell-role="th" scope="row">g39</th>
 <td>3.5861702</td>
 <td>14.124630</td>
 <td>336.66158</td>
@@ -4238,7 +4242,7 @@ FALSE  TRUE
 <td>8.520550e-08</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g232</td>
+<th data-quarto-table-cell-role="th" scope="row">g232</th>
 <td>4.0494125</td>
 <td>11.950441</td>
 <td>157.50997</td>
@@ -4246,7 +4250,7 @@ FALSE  TRUE
 <td>2.591779e-06</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g6</td>
+<th data-quarto-table-cell-role="th" scope="row">g6</th>
 <td>2.3225347</td>
 <td>12.999541</td>
 <td>150.27854</td>
@@ -4254,7 +4258,7 @@ FALSE  TRUE
 <td>2.591779e-06</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g350</td>
+<th data-quarto-table-cell-role="th" scope="row">g350</th>
 <td>2.0530029</td>
 <td>13.324566</td>
 <td>97.56453</td>
@@ -4262,7 +4266,7 @@ FALSE  TRUE
 <td>1.992775e-05</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g99</td>
+<th data-quarto-table-cell-role="th" scope="row">g99</th>
 <td>-1.5387874</td>
 <td>11.681004</td>
 <td>85.17478</td>
@@ -4270,7 +4274,7 @@ FALSE  TRUE
 <td>3.195090e-05</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g142</td>
+<th data-quarto-table-cell-role="th" scope="row">g142</th>
 <td>-1.4235276</td>
 <td>13.830692</td>
 <td>82.52308</td>
@@ -4278,7 +4282,7 @@ FALSE  TRUE
 <td>3.195090e-05</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g240</td>
+<th data-quarto-table-cell-role="th" scope="row">g240</th>
 <td>1.3603712</td>
 <td>14.708794</td>
 <td>79.98114</td>
@@ -4286,7 +4290,7 @@ FALSE  TRUE
 <td>3.220882e-05</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g269</td>
+<th data-quarto-table-cell-role="th" scope="row">g269</th>
 <td>-1.4191681</td>
 <td>11.834217</td>
 <td>75.66563</td>
@@ -4294,7 +4298,7 @@ FALSE  TRUE
 <td>3.751606e-05</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g26</td>
+<th data-quarto-table-cell-role="th" scope="row">g26</th>
 <td>2.1254241</td>
 <td>11.366827</td>
 <td>68.55898</td>
@@ -4302,7 +4306,7 @@ FALSE  TRUE
 <td>5.518949e-05</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g129</td>
+<th data-quarto-table-cell-role="th" scope="row">g129</th>
 <td>-5.3324794</td>
 <td>8.679594</td>
 <td>60.45459</td>
@@ -4310,7 +4314,7 @@ FALSE  TRUE
 <td>9.353127e-05</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g272</td>
+<th data-quarto-table-cell-role="th" scope="row">g272</th>
 <td>3.1405978</td>
 <td>13.860652</td>
 <td>59.08187</td>
@@ -4318,7 +4322,7 @@ FALSE  TRUE
 <td>9.532503e-05</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g157</td>
+<th data-quarto-table-cell-role="th" scope="row">g157</th>
 <td>5.3813801</td>
 <td>10.414972</td>
 <td>57.03712</td>
@@ -4326,7 +4330,7 @@ FALSE  TRUE
 <td>1.040417e-04</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g42</td>
+<th data-quarto-table-cell-role="th" scope="row">g42</th>
 <td>-1.9856547</td>
 <td>9.962762</td>
 <td>53.97164</td>
@@ -4334,7 +4338,7 @@ FALSE  TRUE
 <td>1.260298e-04</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g165</td>
+<th data-quarto-table-cell-role="th" scope="row">g165</th>
 <td>2.2666761</td>
 <td>13.690016</td>
 <td>51.66777</td>
@@ -4342,7 +4346,7 @@ FALSE  TRUE
 <td>1.447913e-04</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g101</td>
+<th data-quarto-table-cell-role="th" scope="row">g101</th>
 <td>3.1488142</td>
 <td>13.181625</td>
 <td>48.21727</td>
@@ -4350,7 +4354,7 @@ FALSE  TRUE
 <td>1.887363e-04</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g15</td>
+<th data-quarto-table-cell-role="th" scope="row">g15</th>
 <td>2.7410696</td>
 <td>10.684840</td>
 <td>47.29143</td>
@@ -4358,7 +4362,7 @@ FALSE  TRUE
 <td>1.941800e-04</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g210</td>
+<th data-quarto-table-cell-role="th" scope="row">g210</th>
 <td>-2.2430064</td>
 <td>9.993002</td>
 <td>46.52627</td>
@@ -4366,7 +4370,7 @@ FALSE  TRUE
 <td>1.975772e-04</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g299</td>
+<th data-quarto-table-cell-role="th" scope="row">g299</th>
 <td>-2.3509276</td>
 <td>10.984491</td>
 <td>45.75893</td>
@@ -4374,7 +4378,7 @@ FALSE  TRUE
 <td>2.019901e-04</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g103</td>
+<th data-quarto-table-cell-role="th" scope="row">g103</th>
 <td>2.6810410</td>
 <td>10.579777</td>
 <td>44.26963</td>
@@ -4382,7 +4386,7 @@ FALSE  TRUE
 <td>2.238762e-04</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g144</td>
+<th data-quarto-table-cell-role="th" scope="row">g144</th>
 <td>-0.7963477</td>
 <td>16.186987</td>
 <td>43.17707</td>
@@ -4390,7 +4394,7 @@ FALSE  TRUE
 <td>2.392886e-04</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g77</td>
+<th data-quarto-table-cell-role="th" scope="row">g77</th>
 <td>1.0984806</td>
 <td>14.118231</td>
 <td>41.46740</td>
@@ -4398,7 +4402,7 @@ FALSE  TRUE
 <td>2.754016e-04</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g125</td>
+<th data-quarto-table-cell-role="th" scope="row">g125</th>
 <td>-1.3099534</td>
 <td>10.195970</td>
 <td>39.85537</td>
@@ -4406,7 +4410,7 @@ FALSE  TRUE
 <td>3.160955e-04</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g298</td>
+<th data-quarto-table-cell-role="th" scope="row">g298</th>
 <td>-2.0471647</td>
 <td>9.837072</td>
 <td>33.49832</td>
@@ -4414,7 +4418,7 @@ FALSE  TRUE
 <td>6.658881e-04</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g104</td>
+<th data-quarto-table-cell-role="th" scope="row">g104</th>
 <td>2.4081173</td>
 <td>9.219160</td>
 <td>38.54240</td>
@@ -4422,7 +4426,7 @@ FALSE  TRUE
 <td>7.615370e-04</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g122</td>
+<th data-quarto-table-cell-role="th" scope="row">g122</th>
 <td>-0.6485441</td>
 <td>12.457152</td>
 <td>30.90261</td>
@@ -4430,7 +4434,7 @@ FALSE  TRUE
 <td>8.744287e-04</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g164</td>
+<th data-quarto-table-cell-role="th" scope="row">g164</th>
 <td>1.4415064</td>
 <td>11.156457</td>
 <td>30.50383</td>
@@ -4438,7 +4442,7 @@ FALSE  TRUE
 <td>8.897970e-04</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g146</td>
+<th data-quarto-table-cell-role="th" scope="row">g146</th>
 <td>1.3983889</td>
 <td>12.824184</td>
 <td>29.92911</td>
@@ -4446,7 +4450,7 @@ FALSE  TRUE
 <td>9.306356e-04</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g313</td>
+<th data-quarto-table-cell-role="th" scope="row">g313</th>
 <td>2.2492040</td>
 <td>13.614815</td>
 <td>28.41728</td>
@@ -4454,7 +4458,7 @@ FALSE  TRUE
 <td>1.121686e-03</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g150</td>
+<th data-quarto-table-cell-role="th" scope="row">g150</th>
 <td>1.9650641</td>
 <td>13.229706</td>
 <td>27.90020</td>
@@ -4462,7 +4466,7 @@ FALSE  TRUE
 <td>1.171222e-03</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g13</td>
+<th data-quarto-table-cell-role="th" scope="row">g13</th>
 <td>-0.6522187</td>
 <td>13.101579</td>
 <td>26.45593</td>
@@ -4470,7 +4474,7 @@ FALSE  TRUE
 <td>1.417109e-03</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">⋮</td>
+<th data-quarto-table-cell-role="th" scope="row">⋮</th>
 <td>⋮</td>
 <td>⋮</td>
 <td>⋮</td>
@@ -4478,7 +4482,7 @@ FALSE  TRUE
 <td>⋮</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g96</td>
+<th data-quarto-table-cell-role="th" scope="row">g96</th>
 <td>-1.873792302</td>
 <td>8.939397</td>
 <td>0.4844512655</td>
@@ -4486,7 +4490,7 @@ FALSE  TRUE
 <td>0.6041584</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g10</td>
+<th data-quarto-table-cell-role="th" scope="row">g10</th>
 <td>0.233134670</td>
 <td>14.382992</td>
 <td>0.4834790913</td>
@@ -4494,7 +4498,7 @@ FALSE  TRUE
 <td>0.6041584</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g253</td>
+<th data-quarto-table-cell-role="th" scope="row">g253</th>
 <td>0.052426914</td>
 <td>13.741219</td>
 <td>0.3075042687</td>
@@ -4502,7 +4506,7 @@ FALSE  TRUE
 <td>0.7066759</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g289</td>
+<th data-quarto-table-cell-role="th" scope="row">g289</th>
 <td>-0.212573283</td>
 <td>9.390864</td>
 <td>0.2887857862</td>
@@ -4510,7 +4514,7 @@ FALSE  TRUE
 <td>0.7150974</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g312</td>
+<th data-quarto-table-cell-role="th" scope="row">g312</th>
 <td>0.093543041</td>
 <td>10.849110</td>
 <td>0.2666731965</td>
@@ -4518,7 +4522,7 @@ FALSE  TRUE
 <td>0.7265972</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g301</td>
+<th data-quarto-table-cell-role="th" scope="row">g301</th>
 <td>-0.102000599</td>
 <td>10.135184</td>
 <td>0.2572520652</td>
@@ -4526,7 +4530,7 @@ FALSE  TRUE
 <td>0.7274503</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g221</td>
+<th data-quarto-table-cell-role="th" scope="row">g221</th>
 <td>-0.277095720</td>
 <td>8.469909</td>
 <td>0.2522121463</td>
@@ -4534,7 +4538,7 @@ FALSE  TRUE
 <td>0.7274503</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g162</td>
+<th data-quarto-table-cell-role="th" scope="row">g162</th>
 <td>-0.145155616</td>
 <td>8.517263</td>
 <td>0.2278112475</td>
@@ -4542,7 +4546,7 @@ FALSE  TRUE
 <td>0.7413085</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g50</td>
+<th data-quarto-table-cell-role="th" scope="row">g50</th>
 <td>-0.170907352</td>
 <td>8.749274</td>
 <td>0.2158314533</td>
@@ -4550,7 +4554,7 @@ FALSE  TRUE
 <td>0.7413085</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g203</td>
+<th data-quarto-table-cell-role="th" scope="row">g203</th>
 <td>0.062836598</td>
 <td>14.227601</td>
 <td>0.2124612164</td>
@@ -4558,7 +4562,7 @@ FALSE  TRUE
 <td>0.7413085</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g88</td>
+<th data-quarto-table-cell-role="th" scope="row">g88</th>
 <td>0.045949497</td>
 <td>14.235850</td>
 <td>0.2103049178</td>
@@ -4566,7 +4570,7 @@ FALSE  TRUE
 <td>0.7413085</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g355</td>
+<th data-quarto-table-cell-role="th" scope="row">g355</th>
 <td>-0.287897714</td>
 <td>8.890754</td>
 <td>0.1803234432</td>
@@ -4574,7 +4578,7 @@ FALSE  TRUE
 <td>0.7630314</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g204</td>
+<th data-quarto-table-cell-role="th" scope="row">g204</th>
 <td>-0.055975779</td>
 <td>11.947887</td>
 <td>0.1408988543</td>
@@ -4582,7 +4586,7 @@ FALSE  TRUE
 <td>0.7972262</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g306</td>
+<th data-quarto-table-cell-role="th" scope="row">g306</th>
 <td>0.054269738</td>
 <td>11.294732</td>
 <td>0.0923937800</td>
@@ -4590,7 +4594,7 @@ FALSE  TRUE
 <td>0.8498990</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g193</td>
+<th data-quarto-table-cell-role="th" scope="row">g193</th>
 <td>0.049946343</td>
 <td>11.682386</td>
 <td>0.0642557849</td>
@@ -4598,7 +4602,7 @@ FALSE  TRUE
 <td>0.8857886</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g205</td>
+<th data-quarto-table-cell-role="th" scope="row">g205</th>
 <td>0.037877227</td>
 <td>10.986961</td>
 <td>0.0473457745</td>
@@ -4606,7 +4610,7 @@ FALSE  TRUE
 <td>0.9029713</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g194</td>
+<th data-quarto-table-cell-role="th" scope="row">g194</th>
 <td>-0.142990391</td>
 <td>9.403497</td>
 <td>0.0447552162</td>
@@ -4614,7 +4618,7 @@ FALSE  TRUE
 <td>0.9029713</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g362</td>
+<th data-quarto-table-cell-role="th" scope="row">g362</th>
 <td>0.025629967</td>
 <td>11.336529</td>
 <td>0.0415198735</td>
@@ -4622,7 +4626,7 @@ FALSE  TRUE
 <td>0.9029713</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g315</td>
+<th data-quarto-table-cell-role="th" scope="row">g315</th>
 <td>0.027958374</td>
 <td>11.878331</td>
 <td>0.0409766489</td>
@@ -4630,7 +4634,7 @@ FALSE  TRUE
 <td>0.9029713</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g180</td>
+<th data-quarto-table-cell-role="th" scope="row">g180</th>
 <td>0.059680256</td>
 <td>15.711409</td>
 <td>0.0386140448</td>
@@ -4638,7 +4642,7 @@ FALSE  TRUE
 <td>0.9029713</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g282</td>
+<th data-quarto-table-cell-role="th" scope="row">g282</th>
 <td>-0.026492114</td>
 <td>11.756078</td>
 <td>0.0247991469</td>
@@ -4646,7 +4650,7 @@ FALSE  TRUE
 <td>0.9288284</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g176</td>
+<th data-quarto-table-cell-role="th" scope="row">g176</th>
 <td>-0.061055115</td>
 <td>8.587203</td>
 <td>0.0144510429</td>
@@ -4654,7 +4658,7 @@ FALSE  TRUE
 <td>0.9531258</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g126</td>
+<th data-quarto-table-cell-role="th" scope="row">g126</th>
 <td>0.061707217</td>
 <td>8.311212</td>
 <td>0.0024786868</td>
@@ -4662,7 +4666,7 @@ FALSE  TRUE
 <td>1.0000000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g128</td>
+<th data-quarto-table-cell-role="th" scope="row">g128</th>
 <td>0.063825269</td>
 <td>7.671043</td>
 <td>0.0019414812</td>
@@ -4670,7 +4674,7 @@ FALSE  TRUE
 <td>1.0000000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g227</td>
+<th data-quarto-table-cell-role="th" scope="row">g227</th>
 <td>-0.025740630</td>
 <td>7.939955</td>
 <td>0.0011908008</td>
@@ -4678,7 +4682,7 @@ FALSE  TRUE
 <td>1.0000000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g121</td>
+<th data-quarto-table-cell-role="th" scope="row">g121</th>
 <td>0.002660852</td>
 <td>12.896620</td>
 <td>0.0005233398</td>
@@ -4686,7 +4690,7 @@ FALSE  TRUE
 <td>1.0000000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g284</td>
+<th data-quarto-table-cell-role="th" scope="row">g284</th>
 <td>0.000000000</td>
 <td>8.538720</td>
 <td>0.0000000000</td>
@@ -4694,7 +4698,7 @@ FALSE  TRUE
 <td>1.0000000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g116</td>
+<th data-quarto-table-cell-role="th" scope="row">g116</th>
 <td>0.000000000</td>
 <td>7.180297</td>
 <td>0.0000000000</td>
@@ -4702,7 +4706,7 @@ FALSE  TRUE
 <td>1.0000000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">g117</td>
+<th data-quarto-table-cell-role="th" scope="row">g117</th>
 <td>0.000000000</td>
 <td>7.033307</td>
 <td>0.0000000000</td>
@@ -4710,7 +4714,7 @@ FALSE  TRUE
 <td>1.0000000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">g118</td>
+<th data-quarto-table-cell-role="th" scope="row">g118</th>
 <td>0.000000000</td>
 <td>7.515646</td>
 <td>0.0000000000</td>
@@ -4739,12 +4743,12 @@ FALSE  TRUE
 <p>Many of the genes in the samples are uninteresting for us, as they have a high FDR and/or low logFC values so we cannot consider them as differentially expressed.</p>
 <p>We will apply a filtering step in order to keep only the statistically significant genes. We will filter out the genes with an FDR higher than 0.05 and an absolute logFC lower than 1.</p>
 <div id="cell-43" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="7cebe4ec-b387-44a6-a992-6544f44d8803" data-tags="[]" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>DEG_S10_filtered <span class="ot">&lt;-</span> DEG_S10<span class="sc">$</span>table[DEG_S10<span class="sc">$</span>table<span class="sc">$</span>FDR <span class="sc">&lt;</span> <span class="fl">0.05</span> <span class="sc">&amp;</span> <span class="fu">abs</span>(DEG_S10<span class="sc">$</span>table<span class="sc">$</span>logFC) <span class="sc">&gt;</span> <span class="dv">1</span>,] <span class="co">#Filtering</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>DEG_S10_filtered <span class="ot">&lt;-</span> DEG_S10<span class="sc">$</span>table[DEG_S10<span class="sc">$</span>table<span class="sc">$</span>FDR <span class="sc">&lt;</span> <span class="fl">0.05</span> <span class="sc">&amp;</span> <span class="fu">abs</span>(DEG_S10<span class="sc">$</span>table<span class="sc">$</span>logFC) <span class="sc">&gt;</span> <span class="dv">1</span>,] <span class="co">#Filtering</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>DEG_S10_filtered <span class="ot">&lt;-</span> <span class="fu">rownames_to_column</span>(DEG_S10_filtered) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">gene_ID =</span> rowname) <span class="co">#Adding the gene_ID column</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(DEG_S10_filtered)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(DEG_S10_filtered) <span class="co"># finding the number of genes that passed the filter </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(DEG_S10_filtered) <span class="co"># finding the number of genes that passed the filter </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 6 × 6</caption>
 <thead>
 <tr class="header">
@@ -4768,7 +4772,7 @@ FALSE  TRUE
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">1</td>
+<th data-quarto-table-cell-role="th" scope="row">1</th>
 <td>g39</td>
 <td>3.586170</td>
 <td>14.12463</td>
@@ -4777,7 +4781,7 @@ FALSE  TRUE
 <td>8.520550e-08</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">2</td>
+<th data-quarto-table-cell-role="th" scope="row">2</th>
 <td>g232</td>
 <td>4.049413</td>
 <td>11.95044</td>
@@ -4786,7 +4790,7 @@ FALSE  TRUE
 <td>2.591779e-06</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">3</td>
+<th data-quarto-table-cell-role="th" scope="row">3</th>
 <td>g6</td>
 <td>2.322535</td>
 <td>12.99954</td>
@@ -4795,7 +4799,7 @@ FALSE  TRUE
 <td>2.591779e-06</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">4</td>
+<th data-quarto-table-cell-role="th" scope="row">4</th>
 <td>g350</td>
 <td>2.053003</td>
 <td>13.32457</td>
@@ -4804,7 +4808,7 @@ FALSE  TRUE
 <td>1.992775e-05</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">5</td>
+<th data-quarto-table-cell-role="th" scope="row">5</th>
 <td>g99</td>
 <td>-1.538787</td>
 <td>11.68100</td>
@@ -4813,7 +4817,7 @@ FALSE  TRUE
 <td>3.195090e-05</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">6</td>
+<th data-quarto-table-cell-role="th" scope="row">6</th>
 <td>g142</td>
 <td>-1.423528</td>
 <td>13.83069</td>
@@ -4831,7 +4835,7 @@ FALSE  TRUE
 <p>We can also visualize the selected genes by plotting a Volcano plot and a Smear plot. A volcano plot highlits genes that are both significant and have high logFC. In this case, the x-axis is the logFC and the y axis the negative exponent of the p-value. We draw thresholds for -1&lt;logFC&lt;1 and P&lt;0.001. We can see that the majority of the genes analysed are either not statistically significant or have a very small logFC.</p>
 <p>We first create a table where we define labels to write on the plot only for genes beyond the defined thresholds.</p>
 <div id="cell-45" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="15318014-668e-4b38-dd94-ddb9bb81f396" data-tags="[]" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">16</span>, <span class="at">repr.plot.height=</span><span class="dv">8</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">16</span>, <span class="at">repr.plot.height=</span><span class="dv">8</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># adding column for differential expression label</span></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>DEG <span class="ot">&lt;-</span> DEG_S10<span class="sc">$</span>table</span>
@@ -4845,7 +4849,7 @@ FALSE  TRUE
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> diffexpr), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
 <span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"black"</span>, <span class="st">"red"</span>)) <span class="sc">+</span></span>
 <span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="at">col=</span><span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="sc">-</span><span class="fu">log10</span>(<span class="fl">0.001</span>), <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="sc">-</span><span class="fu">log10</span>(<span class="fl">0.001</span>), <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <div class="ansi-escaped-output">
 <pre>Warning message:
@@ -4866,14 +4870,14 @@ FALSE  TRUE
 </div>
 <p>In the smear plot below we have the normalized counts of each gene on the x axis, and the logfold change of each gene on the y axis. Genes which are differentially expressed with many transcripts will show on the right side of the plot and away from the center. The Genes that passed the filter are coloured in red, and the top 10 genes with the lowest FDR value are labelled with their gene ID.</p>
 <div id="cell-47" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">16</span>, <span class="at">repr.plot.height=</span><span class="dv">8</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">16</span>, <span class="at">repr.plot.height=</span><span class="dv">8</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(DEG, <span class="fu">aes</span>(<span class="at">x=</span>logCPM, <span class="at">y=</span>logFC, <span class="at">label=</span>diffexpr)) <span class="sc">+</span></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> diffexpr), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.3</span>) <span class="sc">+</span></span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"black"</span>, <span class="st">"red"</span>)) <span class="sc">+</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="at">col=</span><span class="st">"red"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <div class="ansi-escaped-output">
 <pre>Warning message:
@@ -4895,8 +4899,8 @@ FALSE  TRUE
 <p>We can also create a heatmap with the log2 read counts of the selected differentially expressed genes so that we can visualise the differences in normalized counts between the Control and the Treatment samples.</p>
 <p>The genes are ordered by the FDR value.</p>
 <div id="cell-49" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="340a6abb-dfc0-433f-f987-8d79f7ed0437" data-tags="[]" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>annot_col <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">row.names =</span> <span class="fu">colnames</span>(pseudoNormCounts)[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>], <span class="at">Condition =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"Control"</span>, <span class="dv">3</span>),<span class="fu">rep</span>( <span class="st">"Treatment"</span>, <span class="dv">3</span>)))                   </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(<span class="fu">as.matrix</span>(pseudoNormCounts[DEG_S10_filtered<span class="sc">$</span>gene_ID,<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>)]), <span class="at">cluster_rows =</span> F, <span class="at">cluster_col =</span> F, <span class="at">annotation_col =</span> annot_col)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>annot_col <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">row.names =</span> <span class="fu">colnames</span>(pseudoNormCounts)[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>], <span class="at">Condition =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"Control"</span>, <span class="dv">3</span>),<span class="fu">rep</span>( <span class="st">"Treatment"</span>, <span class="dv">3</span>)))                   </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(<span class="fu">as.matrix</span>(pseudoNormCounts[DEG_S10_filtered<span class="sc">$</span>gene_ID,<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>)]), <span class="at">cluster_rows =</span> F, <span class="at">cluster_col =</span> F, <span class="at">annotation_col =</span> annot_col)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -4911,13 +4915,13 @@ FALSE  TRUE
 <p>We can do this using the same functions as above and changing the contrast.</p>
 <p>This time we will directly filter the differentially expressed genes using the same parameters as for the S10 samples.</p>
 <div id="cell-51" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="22bd389e-fc28-43c6-ff33-e464164c06a6" data-tags="[]" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>glmqlf_Ti <span class="ot">&lt;-</span> <span class="fu">glmQLFTest</span>(fit, <span class="at">contrast=</span>contrasts[,<span class="st">"Tienshan"</span>])</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>glmqlf_Ti <span class="ot">&lt;-</span> <span class="fu">glmQLFTest</span>(fit, <span class="at">contrast=</span>contrasts[,<span class="st">"Tienshan"</span>])</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>DEG_Ti <span class="ot">&lt;-</span> <span class="fu">topTags</span>(glmqlf_Ti, <span class="at">n =</span> <span class="fu">nrow</span>(DGEList<span class="sc">$</span>counts))</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>DEG_Ti_filtered <span class="ot">&lt;-</span> DEG_Ti<span class="sc">$</span>table[DEG_Ti<span class="sc">$</span>table<span class="sc">$</span>FDR <span class="sc">&lt;</span> <span class="fl">0.05</span> <span class="sc">&amp;</span> <span class="fu">abs</span>(DEG_Ti<span class="sc">$</span>table<span class="sc">$</span>logFC) <span class="sc">&gt;</span> <span class="dv">1</span>,]</span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>DEG_Ti_filtered <span class="ot">&lt;-</span> <span class="fu">rownames_to_column</span>(DEG_Ti_filtered) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">gene_ID =</span> rowname)</span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(DEG_Ti_filtered))</span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Nr of differentially expressed genes:"</span>)</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">nrow</span>(DEG_Ti_filtered))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">nrow</span>(DEG_Ti_filtered))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  gene_ID     logFC   logCPM         F       PValue          FDR
 1    g234 -3.348667 13.00417 278.01679 1.547626e-09 2.522630e-07
@@ -4932,7 +4936,7 @@ FALSE  TRUE
 </div>
 <p>We can now plot a Venn diagram with the DEGs for the two genotypes in order to observe the number of common and specific differentially expressed genes between the two genotypes as response to the cold exposure. You can see that a high percentage of the identified genes are common for the two genotypes, while each genotype has also specific genes.</p>
 <div id="cell-53" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="72c86e42-33b5-4a6e-e3b3-30816eb231b6" data-tags="[]" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>vd <span class="ot">&lt;-</span> <span class="fu">venn.diagram</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>vd <span class="ot">&lt;-</span> <span class="fu">venn.diagram</span>(</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">list</span>(DEG_S10_filtered<span class="sc">$</span>gene_ID, DEG_Ti_filtered<span class="sc">$</span>gene_ID),</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">category.names =</span> <span class="fu">c</span>(<span class="st">"S10"</span> , <span class="st">"Tienshan"</span>),</span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">4</span>,</span>
@@ -4942,7 +4946,7 @@ FALSE  TRUE
 <span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">cat.fontface =</span> <span class="st">"bold"</span>,</span>
 <span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">output=</span><span class="cn">TRUE</span></span>
 <span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.draw</span>(vd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.draw</span>(vd)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -4956,13 +4960,13 @@ FALSE  TRUE
 <h2 class="anchored" data-anchor-id="degs-for-s10tienshan-treatment-vs-control-wo-genotype-effects">DEGs for S10+Tienshan Treatment vs Control w/o genotype effects</h2>
 <p>Until now we tested for DEGs specific for each of the two genotypes under cold treatment. We can also run a test where we ignore the genotype and just test for the differences in the cold response. <br> Consider the counts for both genotypes as a single dataset using the previously created contrast “S10_Tienshan”. <br> * Do the results look different compared with the previous tests?</p>
 <div id="cell-55" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="9c18f993-436d-4f83-e440-339e6b267631" data-tags="[]" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>glmqlf_S10_Ti <span class="ot">&lt;-</span> <span class="fu">glmQLFTest</span>(fit, <span class="at">contrast=</span>contrasts[,<span class="st">"S10_Tienshan"</span>])</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>glmqlf_S10_Ti <span class="ot">&lt;-</span> <span class="fu">glmQLFTest</span>(fit, <span class="at">contrast=</span>contrasts[,<span class="st">"S10_Tienshan"</span>])</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>DEG_S10_Ti <span class="ot">&lt;-</span> <span class="fu">topTags</span>(glmqlf_S10_Ti, <span class="at">n =</span> <span class="fu">nrow</span>(DGEList<span class="sc">$</span>counts))</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>DEG_S10_Ti_filtered <span class="ot">&lt;-</span> DEG_S10_Ti<span class="sc">$</span>table[DEG_S10_Ti<span class="sc">$</span>table<span class="sc">$</span>FDR <span class="sc">&lt;</span> <span class="fl">0.05</span> <span class="sc">&amp;</span> <span class="fu">abs</span>(DEG_S10_Ti<span class="sc">$</span>table<span class="sc">$</span>logFC) <span class="sc">&gt;</span> <span class="dv">1</span>,]</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>DEG_S10_Ti_filtered <span class="ot">&lt;-</span> <span class="fu">rownames_to_column</span>(DEG_S10_Ti_filtered)  <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">gene_ID =</span> rowname)</span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(DEG_S10_Ti_filtered))</span>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Nr of differentially expressed genes:"</span>)</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">nrow</span>(DEG_S10_Ti_filtered))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">nrow</span>(DEG_S10_Ti_filtered))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  gene_ID     logFC   logCPM        F       PValue          FDR
 1     g39  2.057128 14.12463 246.6519 3.039491e-09 4.954370e-07
@@ -4977,7 +4981,7 @@ FALSE  TRUE
 </div>
 <p>Plot the results from the 3 tests in a Venn diagram to visualize the number of common and unique genes</p>
 <div id="cell-57" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="df9b7407-c040-4c1d-b480-312522f8b1a7" data-tags="[]" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>vd <span class="ot">&lt;-</span> <span class="fu">venn.diagram</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>vd <span class="ot">&lt;-</span> <span class="fu">venn.diagram</span>(</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">list</span>(DEG_S10_filtered<span class="sc">$</span>gene_ID, DEG_Ti_filtered<span class="sc">$</span>gene_ID,</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>           DEG_S10_Ti_filtered<span class="sc">$</span>gene_ID),</span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">category.names =</span> <span class="fu">c</span>(<span class="st">"S10"</span> , <span class="st">"Tienshan"</span>, <span class="st">"S10_Tienshan"</span>),</span>
@@ -4988,7 +4992,7 @@ FALSE  TRUE
 <span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cat.fontface =</span> <span class="st">"bold"</span>,</span>
 <span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">output=</span><span class="cn">TRUE</span></span>
 <span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.draw</span>(vd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.draw</span>(vd)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -5004,11 +5008,11 @@ FALSE  TRUE
 <h3 class="anchored" data-anchor-id="select-the-genes-which-appear-only-in-the-analysis-using-both-genotypes-for-further-examination.">Select the genes which appear only in the analysis using both genotypes for further examination.</h3>
 <p>We can use the “anti_join” function from the dplyr package to keep only the unique genes that appear only when using both genotypes.</p>
 <div id="cell-60" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="f1cb0416-2fc8-4d25-c378-3712e7cac131" data-tags="[]" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(DEG_S10_Ti_filtered, DEG_S10_filtered, <span class="at">by=</span><span class="st">"gene_ID"</span>) <span class="sc">%&gt;%</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique <span class="ot">&lt;-</span> <span class="fu">anti_join</span>(DEG_S10_Ti_filtered, DEG_S10_filtered, <span class="at">by=</span><span class="st">"gene_ID"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">anti_join</span>(DEG_Ti_filtered, <span class="at">by=</span><span class="st">"gene_ID"</span>)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 2 × 6</caption>
 <thead>
 <tr class="header">
@@ -5054,11 +5058,11 @@ FALSE  TRUE
 <h3 class="anchored" data-anchor-id="linking-the-genes-selected-as-differentially-expressed-back-to-the-raw-read-counts">Linking the genes selected as differentially expressed back to the raw read counts</h3>
 <p>How do the counts look for these genes, does it make sense that they are differentially expressed only when using the two genotypes?</p>
 <div id="cell-62" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="495b2bbd-e625-4c4c-95c0-5e6fba3ed677" data-tags="[]" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>Read_counts <span class="ot">&lt;-</span> <span class="fu">rownames_to_column</span>(Read_counts) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">gene_ID =</span> rowname)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>Read_counts <span class="ot">&lt;-</span> <span class="fu">rownames_to_column</span>(Read_counts) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">gene_ID =</span> rowname)</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique_counts <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(S10_Ti_unique[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">6</span>)], Read_counts, <span class="at">by=</span><span class="st">"gene_ID"</span>)</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique_counts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique_counts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 2 × 15</caption>
 <thead>
 <tr class="header">
@@ -5141,11 +5145,11 @@ FALSE  TRUE
 <p>Until now we looked only at gene IDs, but we can also add functional annotations to the DEGs. The functional annotations were generated using protein sequences and the <code>EggNOG</code> software.</p>
 <p>Identifying the molecular function of the differentially expressed genes can help us do a literature survey in order to check if any of the genes discovered have been previously identified as being involved in the cold response.</p>
 <div id="cell-64" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="30170679-e42b-4184-c2fd-5451dfc656ae" data-tags="[]" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>Functional_annotations <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"../Data/Clover_Data/Functional_Annotations.txt"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>Functional_annotations <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"../Data/Clover_Data/Functional_Annotations.txt"</span>)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique_FA <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(S10_Ti_unique[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">6</span>)], Functional_annotations, <span class="at">by=</span><span class="st">"gene_ID"</span>)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique_FA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique_FA</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 2 × 4</caption>
 <thead>
 <tr class="header">
@@ -5184,7 +5188,7 @@ FALSE  TRUE
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Task:
+<span class="screen-reader-only">Tip</span>Task:
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -5193,7 +5197,7 @@ Task:
 </ul>
 <p>You can also plot histograms with the FDR and logFC values.</p>
 <div id="cell-66" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="3ba78a4d-9651-40e1-b69b-55ee83104b77" data-tags="[]" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">hist</span>(DEG_S10<span class="sc">$</span>table<span class="sc">$</span>FDR , <span class="at">main =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"FDR"</span>,  <span class="at">breaks=</span> <span class="dv">200</span>, <span class="at">xlim =</span> <span class="fu">range</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.1</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">hist</span>(DEG_S10<span class="sc">$</span>table<span class="sc">$</span>FDR , <span class="at">main =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"FDR"</span>,  <span class="at">breaks=</span> <span class="dv">200</span>, <span class="at">xlim =</span> <span class="fu">range</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.1</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -5203,7 +5207,7 @@ Task:
 </div>
 </div>
 <div id="cell-67" class="cell" data-tags="[]" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">hist</span>(DEG_S10<span class="sc">$</span>table<span class="sc">$</span>logFC , <span class="at">main =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"logFC"</span>,  <span class="at">breaks=</span> <span class="dv">50</span>, <span class="at">xlim =</span> <span class="fu">range</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">6</span>, <span class="dv">6</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">hist</span>(DEG_S10<span class="sc">$</span>table<span class="sc">$</span>logFC , <span class="at">main =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"logFC"</span>,  <span class="at">breaks=</span> <span class="dv">50</span>, <span class="at">xlim =</span> <span class="fu">range</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">6</span>, <span class="dv">6</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -5220,18 +5224,18 @@ Task:
 <p>To answer these questions, it may be convenient to save summary tables from R and open them in excel. See the code below for examples of how to do this. Files can be downloaded by right-clicking on the file name.</p>
 <p>If you are familiar with R functions, you are welcome to use those for counting.</p>
 <div id="cell-69" class="cell" data-tags="[]" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"DEG_Output_tables"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"DEG_Output_tables"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="cell-70" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-outputid="4fca6a22-48cd-44d5-f221-f9172ea5ad3d" data-tags="[]" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create the table with the DEGs, Raw counts(just for the Ti samples in this case, change to columns (2:7) for the S10 samples) and Functional annotations</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create the table with the DEGs, Raw counts(just for the Ti samples in this case, change to columns (2:7) for the S10 samples) and Functional annotations</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>DEG_Ti_counts_FA <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(DEG_Ti_filtered[,<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>)], Read_counts[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span><span class="sc">:</span><span class="dv">13</span>)], <span class="at">by=</span><span class="st">"gene_ID"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">inner_join</span>(Functional_annotations, <span class="at">by=</span><span class="st">"gene_ID"</span>)</span>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Write the table to file</span></span>
 <span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.table</span>(DEG_Ti_counts_FA, <span class="at">file =</span> <span class="st">"DEG_Output_tables/Ti_Treatment_Control_DGE.txt"</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span>
 <span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Display the first 10 rows of the table</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(DEG_Ti_counts_FA, <span class="at">n=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(DEG_Ti_counts_FA, <span class="at">n=</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="dataframe caption-top table table-sm table-striped small">
 <caption>A data.frame: 10 × 10</caption>
 <thead>
 <tr class="header">
@@ -5263,7 +5267,7 @@ Task:
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">1</td>
+<th data-quarto-table-cell-role="th" scope="row">1</th>
 <td>g234</td>
 <td>-3.348667</td>
 <td>2.522630e-07</td>
@@ -5276,7 +5280,7 @@ Task:
 <td>Polysaccharide lyase family 4, domain III</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">2</td>
+<th data-quarto-table-cell-role="th" scope="row">2</th>
 <td>g269</td>
 <td>-1.885843</td>
 <td>9.556922e-06</td>
@@ -5289,7 +5293,7 @@ Task:
 <td>zinc finger</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">3</td>
+<th data-quarto-table-cell-role="th" scope="row">3</th>
 <td>g26</td>
 <td>2.423725</td>
 <td>8.910761e-05</td>
@@ -5302,7 +5306,7 @@ Task:
 <td>Transcription factor PIF3</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">4</td>
+<th data-quarto-table-cell-role="th" scope="row">4</th>
 <td>g101</td>
 <td>4.303290</td>
 <td>8.910761e-05</td>
@@ -5315,7 +5319,7 @@ Task:
 <td>WRKY transcription factor 23</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">5</td>
+<th data-quarto-table-cell-role="th" scope="row">5</th>
 <td>g272</td>
 <td>3.391225</td>
 <td>9.840357e-05</td>
@@ -5328,7 +5332,7 @@ Task:
 <td>WRKY transcription factor 23</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">6</td>
+<th data-quarto-table-cell-role="th" scope="row">6</th>
 <td>g99</td>
 <td>-1.430395</td>
 <td>9.840357e-05</td>
@@ -5341,7 +5345,7 @@ Task:
 <td>zinc finger</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">7</td>
+<th data-quarto-table-cell-role="th" scope="row">7</th>
 <td>g232</td>
 <td>2.472603</td>
 <td>1.660786e-04</td>
@@ -5354,7 +5358,7 @@ Task:
 <td>Retrovirus-related Pol polyprotein from transposon TNT 1-94</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">8</td>
+<th data-quarto-table-cell-role="th" scope="row">8</th>
 <td>g240</td>
 <td>1.107904</td>
 <td>1.829713e-04</td>
@@ -5367,7 +5371,7 @@ Task:
 <td>Shaggy-related protein kinase alpha</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th" scope="row">9</td>
+<th data-quarto-table-cell-role="th" scope="row">9</th>
 <td>g90</td>
 <td>4.610490</td>
 <td>2.085299e-04</td>
@@ -5380,7 +5384,7 @@ Task:
 <td>Galactinol synthase 1</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th" scope="row">10</td>
+<th data-quarto-table-cell-role="th" scope="row">10</th>
 <td>g92</td>
 <td>-1.331468</td>
 <td>2.394810e-04</td>
@@ -5398,12 +5402,12 @@ Task:
 </div>
 <p>Example for filtering and counting the Up/Down genes. You can easily filter using the “filter()” function just by specifying the dataframe and a logical argument.</p>
 <div id="cell-72" class="cell" data-tags="[]" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="32">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>DEG_Ti_up <span class="ot">&lt;-</span> <span class="fu">filter</span>(DEG_Ti_counts_FA, logFC <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>DEG_Ti_up <span class="ot">&lt;-</span> <span class="fu">filter</span>(DEG_Ti_counts_FA, logFC <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Nr of upregulated genes:"</span>)</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">nrow</span>(DEG_Ti_up))</span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>DEG_Ti_down <span class="ot">&lt;-</span> <span class="fu">filter</span>(DEG_Ti_counts_FA, logFC <span class="sc">&lt;</span> <span class="dv">0</span>)</span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Nr of downregulated genes:"</span>)</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">nrow</span>(DEG_Ti_down))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">nrow</span>(DEG_Ti_down))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Nr of upregulated genes:"
 [1] 22
@@ -5423,7 +5427,7 @@ Task:
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Wrapping up
+<span class="screen-reader-only">Note</span>Wrapping up
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -5511,13 +5515,14 @@ Wrapping up
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
