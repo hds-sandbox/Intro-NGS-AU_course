@@ -1,0 +1,88 @@
+Bootstrap: docker
+From: debian:bookworm-slim
+
+%labels
+    Maintainer samuele
+    Description apptainer container for NGS summer school
+    Version 2026.1
+    Author Samuele Soraggi
+    License MIT
+
+# Copy the environment file into the container
+%files 
+    Environments/environment.yml /opt/environment.yml  
+
+%post
+    set -eu
+    export DEBIAN_FRONTEND=noninteractive
+    export PIXI_HOME=/opt/pixi
+    export PATH=/opt/pixi/bin:/usr/local/bin:$PATH
+
+    # LIBRARIES
+
+    ### Install useful python libraries and pixi
+    apt-get update
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        git \
+        unzip \
+        bzip2 \
+        xz-utils \
+        libgomp1
+    rm -rf /var/lib/apt/lists/*
+
+    curl -fsSL https://pixi.sh/install.sh | PIXI_HOME=/opt/pixi bash
+    chmod -R a+rX /opt/pixi
+
+    ### Environment folder
+    mkdir -p /opt/course
+
+    # PIXI
+
+    cd /opt/course
+
+    # create pixi env from the environment file
+    pixi init --import /opt/environment.yml
+    pixi install -v
+
+    # Install R kernel for jupyterlab and bash kernel for jupyterlab
+    pixi run R -e 'IRkernel::installspec(prefix = "/opt/course/.pixi/envs/default", name = "courser", displayname = "Course (R)")'
+    pixi run python -m bash_kernel.install
+    
+######### Adding executables not installable as packages to the container
+    # An example of executables that can be added to the container, and then used in the notebooks. You can add any executable you want, 
+    # but make sure to add it to the PATH and to give it the right permissions (done in %environments). Here we add some of the tools used in the post GWAS course.
+
+    cat > /usr/local/bin/igv <<'EOF'
+#!/bin/sh
+exec /opt/course/.pixi/envs/default/bin/igv "$@"
+EOF
+
+    cat > /usr/local/bin/jupyter <<'EOF'
+#!/bin/sh
+exec /opt/course/.pixi/envs/default/bin/jupyter "$@"
+EOF
+
+
+    # Give execute permissions to the executables and read permissions to the folders
+    chmod +x /usr/local/bin/igv
+    chmod +x /usr/local/bin/jupyter
+    #chmod -R a+rX /opt/gwas /opt/ldsc /opt/FLAMES /opt/pops
+
+###############
+
+%environment
+    export PIXI_HOME=/opt/pixi
+    export PATH=/opt/pixi/bin:/usr/local/bin:$PATH
+
+%runscript
+    echo "Available commands: igv jupyter"
+
+%help
+    Build:
+      apptainer build --fakeroot ngs-summer-school.sif apptainer.def
+
+    Commands:
+      igv
+      jupyter

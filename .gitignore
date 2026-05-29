@@ -11,3 +11,5 @@ _site
 site_libs
 *_files
 .ipynb_checkpoints
+.tmp_*
+*.sif
