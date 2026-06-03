@@ -9,9 +9,9 @@ if [ ! -d $DIR ]; then
     echo "=============================================================="
     
     mkdir -p ../Data
-    curl https://zenodo.org/record/6952995/files/clover.tar.gz?download=1 -o ../Data/Clover_Data.tar.gz
+    curl -L https://zenodo.org/record/6952995/files/clover.tar.gz?download=1 -o ../Data/Clover_Data.tar.gz
     tar -zxvf ../Data/Clover_Data.tar.gz -C ../Data/
-    curl https://zenodo.org/record/6952995/files/singlecell.tar.gz?download=1 -o ../Data/scrna_Data.tar.gz
+    curl -L https://zenodo.org/record/6952995/files/singlecell.tar.gz?download=1 -o ../Data/scrna_Data.tar.gz
     tar -zxvf ../Data/scrna_Data.tar.gz -C ../Data/
     rm -f ../Data/*.tar.gz
 else

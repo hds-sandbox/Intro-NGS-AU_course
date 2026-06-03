@@ -1,3 +1,4 @@
+name: ngs-course
 channels:
   - conda-forge
   - bioconda
