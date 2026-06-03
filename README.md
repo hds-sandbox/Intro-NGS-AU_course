@@ -1,7 +1,7 @@
 # Introduction to Next Generation Sequencing data
-**A course of the danish healt data science sandbox**
+**A course of the danish health data science sandbox**
 
-This course is based on the material developed for the NGS summer school at Aarhus University. The material is organized in four separated jupyter notebooks in both `bash`, `python` and `R` where you will benefit of an interactive coding setup. 
+This course is based on the material developed for the NGS summer school at Aarhus University. The material is organized in four separated Jupyter notebooks in both `bash`, `python` and `R` where you will benefit of an interactive coding setup.
 
 If you use any of this material for your research, please cite this course with the DOI below, and acknowledge the Health Data Science Sandbox project of the Novo Nordisk Foundation (grant number NNF20OC0063268). It is of great help to support the project.
 [![DOI](https://zenodo.org/badge/468293635.svg)](https://zenodo.org/badge/latestdoi/468293635)
@@ -28,7 +28,7 @@ This is an introductory course that needs a basic understanding of the biology b
 
 ### Supporting material
 
-- jupyter notebooks for interactive coding
+- Jupyter notebooks for interactive coding
 - lecture slides from the instructor
 
 You can find the links to the material in [the table at the bottom of this page](#course-material).
