@@ -497,7 +497,7 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">May 29, 2026</p>
+        <p class="date-modified">June 3, 2026</p>
       </div>
     </div>
       
@@ -516,8 +516,8 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
   <li><a href="#quality-control-and-mapping" id="toc-quality-control-and-mapping" class="nav-link" data-scroll-target="#quality-control-and-mapping">Quality control and mapping</a>
   <ul class="collapse">
   <li><a href="#quality-control" id="toc-quality-control" class="nav-link" data-scroll-target="#quality-control">Quality Control</a></li>
-  <li><a href="#hifi-data-mapping" id="toc-hifi-data-mapping" class="nav-link" data-scroll-target="#hifi-data-mapping">Hifi data mapping</a></li>
-  <li><a href="#rna-seq-mapping" id="toc-rna-seq-mapping" class="nav-link" data-scroll-target="#rna-seq-mapping">RNA-seq mapping</a></li>
+  <li><a href="#hifi-data-mapping-long-dna-reads" id="toc-hifi-data-mapping-long-dna-reads" class="nav-link" data-scroll-target="#hifi-data-mapping-long-dna-reads">Hifi data mapping — long DNA reads</a></li>
+  <li><a href="#rna-seq-mapping-short-rna-reads" id="toc-rna-seq-mapping-short-rna-reads" class="nav-link" data-scroll-target="#rna-seq-mapping-short-rna-reads">RNA-seq mapping — short RNA reads</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -546,65 +546,79 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 <li>align HiFi and RNA sequencing data with dedicated tools such as <code>MiniMap2</code> and <code>STAR</code></li>
 <li>analyze the quality the alignment with <code>qualimap</code></li>
 </ul>
-<p>The output of this notebook will be used for the Variant calling analysis and the bulk RNA-sequencing analysis. If you do not want to run this notebook, you can alternatively use <a href="https://usegalaxy.org/">the free interactive tool Galaxy</a> to perform the alignment steps. We have uploaded the data on Galaxy, and the manual to perform the exercise is found <a href="https://hds-sandbox.github.io/NGS_summer_course_Aarhus/">at the course webpage</a>.</p>
+<p>The output of this notebook will be used for the Variant calling analysis and the bulk RNA-sequencing analysis.</p>
 </div>
 </div>
 <section id="biological-background" class="level1">
 <h1>Biological background</h1>
-<p>White clover (Trifolium repens) is an allotetraploid. It is a relatively young, outcrossing species, which originated during the most recent glaciation around 20,000 years ago by hybridisation of two diploid species, T. occidentale and T. pallescens (see figure below).</p>
+<p>White clover (<em>Trifolium repens</em>) is a common plant found in fields across the world. It has an unusual origin story: it’s the result of two different plant species “merging” their genetic material. At some point during evolution (during the last ice age), these two diploid (2n) parent species—<em>T. occidentale</em> and <em>T. pallescens</em>—naturally hybridized and created white clover, which is in result allotetraploid (4n) (see figure below).</p>
 <figure class="figure">
 <img src="images/white_clover.png" width="700" alt="Kernel Choice" class="center figure-img">
 </figure>
-<p>This means that it contains genomes originating from two different species within the same nucleus. Normally, white clover is an outbreeding species, but a self-compatible line was used for sequencing the white clover genome <a href="https://academic.oup.com/plcell/article/31/7/1466/5985684">(Griffiths et al, 2019)</a>. This line will be designated as <code>S10</code> in the data, indicating that this is the 10th self-fertilized generation. In addition, we have data from a wild clover accession (ecotype) called Tienshan (<code>Ti</code>), which is collected from the Chinese mountains and is adapted to alpine conditions.</p>
-<p>We will perform alignment of the data to the white clover’s reference genome containing both T. occidentale and T. pallescens (called <code>contig 1</code> and <code>contig 2</code> in the data). We will also perform alignment to each subgenome, and see which are the differences with the quality control tools.</p>
+<ul>
+<li>Normal plants have two copies of each gene: one from maternal origin, one from paternal origin (these plants are <em>diploid</em>, 2n)</li>
+<li>White clover, however has <strong>four copies</strong> of each gene. That is, two copies inherited from <em>T. occidentale</em> and two from <em>T. pallescens</em> (called an <em>allotetraploid</em>, 4n)</li>
+<li>These four copies are in the same nucleus, you can think of it as two complete genomes side-by-side.</li>
+</ul>
+<p>Normally, white clover is an obligate outcrosser species—that means that plants swap pollen with other plants instead of fertilizing themselves. However, a special self-compatible (it <em>can</em> self-fertilize) line was used for sequencing its genome <a href="https://academic.oup.com/plcell/article/31/7/1466/5985684">(Griffiths et al, 2019)</a>. This line is designated as <code>S10</code> in our data (this is the 10th self-fertilized generation). In addition, we also have data from a wild clover variety (ecotype) called Tienshan (<code>Ti</code>), from mountains in China. This variety is adapted to alpine conditions, making it genetically different from the S10 line.</p>
+<p>We have sequences (DNA “reads”) from both clover varieties, and we need to align them to the white clover reference genome. However, our reference genome is tricky: it contains sequences from <strong>both parent species</strong> (we call them <code>contig 1</code> and <code>contig 2</code>). Therefore, when we align short DNA reads to the reference, some reads might match equally well to both <code>contig 1</code> and <code>contig 2</code> (they’re similar but different species).</p>
+<p>We’ll use quality control tools to: (1) Align reads to the <strong>complete reference</strong> (both contigs together); (2) Align reads to <strong>each subgenome separately</strong> (<code>contig 1</code> alone, <code>contig 2</code> alone); and (3) Compare the results to see how this affects our data quality and interpretation</p>
 </section>
 <section id="quality-control-and-mapping" class="level1">
 <h1>Quality control and mapping</h1>
 <section id="quality-control" class="level2">
 <h2 class="anchored" data-anchor-id="quality-control">Quality Control</h2>
 <p>We run <code>FastQC</code> on the PacBio Hifi reads and on two of the Illumina RNA-seq libraries. <code>FastQC</code> does quality control of the raw sequence data, providing an overview of the data which can help identify if there are any problems that should be addressed before further analysis. You can find the report for each file into the folder <code>results/fastqc_output/</code>. The output is in HTML format and can be opened in any browser or in <code>jupyterlab</code>. It is however not easy to compare the various libraries by opening separate reports. To aggregate all the results, we apply the <code>MultiQC</code> software to the reports’ folder. The output of MultiQC is in the directory <code>results/multiqc_output/fastqc_data</code>.</p>
-<div id="8e870118-3af0-4e12-80bd-381786b58833" class="cell" data-tags="[]">
+<div id="2" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#run fastqc</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p results<span class="op">/</span>fastqc_output</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>fastqc <span class="op">-</span>q <span class="op">-</span>o results<span class="op">/</span>fastqc_output ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/*</span>.fastq  <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Note:</strong> <code>fastqc</code> prints a lot of output conisting of a simple confirmation of execution without error, even when using the option <code>-q</code>, which means <code>quiet</code>. Therefore we added <code>&gt; /dev/null 2&gt;&amp;1</code> to the command to mute the printing of that output.</p>
-<div id="bb569b9f-9700-4edf-a785-ee4b5c632432" class="cell" data-tags="[]">
+<div id="4" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#run multiqc</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>multiqc <span class="op">--</span>outdir results<span class="op">/</span>multiqc_output<span class="op">/</span>fastqc_data results<span class="op">/</span>fastqc_output</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p results<span class="op">/</span>multiqc_output<span class="op">/</span>fastqc_data</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>multiqc <span class="op">--</span>outdir results<span class="op">/</span>multiqc_output<span class="op">/</span>fastqc_data results<span class="op">/</span>fastqc_output</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="alert-success">
 <font size="+2"> <b> Questions </b> </font>
 </div>
-<p>Visualize the Webpage generated by MultiQC.</p>
+<p>Visualize the report generated by MultiQC.</p>
+<p>The report should be in <code>Notebooks/results/multiqc_output/fastqc_data/multiqc_report.html</code></p>
 <p>Hint: You can find a <code>Help</code> button that offers additional information about the plots for each panel. Focus on the following panels: “Per base sequence quality”, “Per sequence quality scores”…. (“Per base sequence content” always gives a <code>FAIL</code> for RNA-seq data).</p>
 <ul>
 <li>Look at the sequence quality scores: is there a marked difference between HiFi and illumina data?</li>
 <li>Is there anything off in the GC content? Why?</li>
 </ul>
 </section>
-<section id="hifi-data-mapping" class="level2">
-<h2 class="anchored" data-anchor-id="hifi-data-mapping">Hifi data mapping</h2>
-<p>We map the PacBio Hifi reads (<code>Hifi_reads_white_clover.fastq</code>) to the white clover reference sequence (Contig1&amp;2) using <code>minimap2</code>. We run two mapping rounds, using two different preset options (<code>-x</code> in the command) for the technology: * PacBio Hifi mapping settings: <code>map-hifi</code>. * Short reads maping settings: <code>sr</code>.</p>
+<section id="hifi-data-mapping-long-dna-reads" class="level2">
+<h2 class="anchored" data-anchor-id="hifi-data-mapping-long-dna-reads">Hifi data mapping — long DNA reads</h2>
+<p>We map the PacBio Hifi reads (<code>Hifi_reads_white_clover.fastq</code>) to the white clover reference sequence (Contig1&amp;2) using <code>minimap2</code>.</p>
+<p>To demonstrate how mapping algorithm choice can heavily affect results, we deliberately run the alignment twice with two different preset options (<code>-x</code> flag):</p>
+<ul>
+<li><code>map-hifi</code>: optimized for long reads (PacBio HiFi data)</li>
+<li><code>sr</code>: optimized for short reads (Illumina data)</li>
+</ul>
 <p>The <code>map-hifi</code> setting expects long reads and employ algorithms that <strong>handle large insertions, deletions, and other structural variations more effectively</strong>. The scoring and alignment thresholds are adjusted to account for the longer sequence context. The <code>sr</code> setting xpect shorter reads and optimize for quick, efficient alignment of these short sequences. The <strong>focus is on minimizing mismatches and handling the dense packing of short reads</strong>.</p>
+<p>The <code>map-hifi</code> setting is designed for long reads and is more lenient with gaps and mismatches typical of long-read sequencing. The <code>sr</code> setting assumes short reads and is stricter about matches. By comparing both, you can see how choosing the wrong algorithm/option can affect your results—an important lesson in bioinformatics. <strong>know your options</strong>.</p>
 <p>Next, we create reports of the mapping results by running <code>QualiMap</code> on the two obtained SAM files.</p>
 <p>We first need to index the reference fasta files using <code>samtools faidx</code>. This produces files in <code>.fai</code> format containing informations about length of the reference sequence, offset for the quality scores, name of the reference sequence. <a href="http://www.htslib.org/doc/faidx.html">Click here</a> for a detailed overview.</p>
-<div id="f2f77036-3263-4147-9726-c28608a4ba9b" class="cell" data-tags="[]">
+<div id="8" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#copy the reference data in the folder reference_data, so that you can write the indexing files</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p reference_data</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>cp ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>DNA_Contig1_2.fasta ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>DNA_Contig1.fasta ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>DNA_Contig2.fasta reference_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="7164eaeb-b66c-4ebc-b834-b2788f3430ac" class="cell" data-tags="[]">
+<div id="9" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>samtools faidx reference_data<span class="op">/</span>DNA_Contig1_2.fasta</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>samtools faidx reference_data<span class="op">/</span>DNA_Contig1.fasta</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>samtools faidx reference_data<span class="op">/</span>DNA_Contig2.fasta</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>we create an output folder for the HIFI alignment, and run <code>minimap2</code> with the settings explained before.</p>
-<div id="78f8d72a-ea2a-4540-916b-a3dee7b9df1e" class="cell" data-tags="[]">
+<div id="11" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p results<span class="op">/</span>HIFI_alignment<span class="op">/</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>minimap2 <span class="op">-</span>a <span class="op">-</span>x <span class="bu">map</span><span class="op">-</span>hifi <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_maphifi.sam <span class="op">\</span></span>
@@ -616,7 +630,7 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                            ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>Hifi_reads_white_clover.fastq</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>samtools sort</code> is used to sort the alignment with left-to-right coordinates. The output is in <code>.bam</code> format, with <code>.sam</code> files in input (Note that you could have gotten <code>.bam</code> files from <code>minimap2</code> with a specific option).</p>
-<div id="04fed3e0-2e63-42d3-8a93-4d0dcf99433b" class="cell" data-tags="[]">
+<div id="13" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>samtools sort results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_maphifi.sam <span class="op">\</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_maphifi.sort.bam</span>
@@ -625,13 +639,13 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_sr.sort.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>samtools index</code> creates the index for the <code>bam</code> file, stored in <code>.bai</code> format. The index file lets programs access any position into the aligned data without reading the whole file, which would take too much time.</p>
-<div id="283ca1e5-b973-40c0-9170-552e50a6c73c" class="cell" data-tags="[]">
+<div id="15" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>samtools index results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_maphifi.sort.bam</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>samtools index results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_sr.sort.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Run quality control on both files</p>
-<div id="a715b1d4-91e6-479e-a6db-f63f0494eaeb" class="cell" data-tags="[]">
+<div id="17" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>qualimap bamqc <span class="op">-</span>bam results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1_2_maphifi.sort.bam <span class="op">\</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                 <span class="op">-</span>outdir results<span class="op">/</span>qualimap_output<span class="op">/</span>PacBio_clover_alignment_1_2_maphifi</span>
@@ -640,7 +654,7 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                 <span class="op">-</span>outdir results<span class="op">/</span>qualimap_output<span class="op">/</span>PacBio_clover_alignment_1_2_sr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>For easier comparison, we can again collapse the two reports into a single one using <code>MultiQC</code>, in the same way we did for putting together the other reports from <code>fastQC</code>.</p>
-<div id="12b23703-4a35-4fef-989e-5d9f9eba02e4" class="cell" data-tags="[]">
+<div id="19" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#run multiqc</span></span>
@@ -648,40 +662,40 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 </div>
 <p>Now you can visualize the report generated, which is in <code>results/qualimap_output/multiqc_report.html</code>.</p>
 <p>Next, we map the white clover PacBio Hifi reads to contig1 and contig2 separately, using the setting you selected at the previous step (let’s say <code>map-hifi</code> was chosen, but you are free to change this setting in the commands). As the two contigs represent the two white clover subgenomes, this mapping will allow you to see the two subgenome haplotypes and call subgenome SNPs.</p>
-<div id="aa14c53f-56ea-4216-929d-1678eea2eaf5" class="cell" data-tags="[]">
+<div id="22" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>minimap2 <span class="op">-</span>a <span class="op">-</span>x <span class="bu">map</span><span class="op">-</span>hifi <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1.sam <span class="op">\</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                            reference_data<span class="op">/</span>DNA_Contig1.fasta <span class="op">\</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                            ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>Hifi_reads_white_clover.fastq</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="bf1882ee-41e5-4413-9c48-b35a5821bc34" class="cell" data-tags="[]">
+<div id="23" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>minimap2 <span class="op">-</span>a <span class="op">-</span>x <span class="bu">map</span><span class="op">-</span>hifi <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_2.sam <span class="op">\</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                            reference_data<span class="op">/</span>DNA_Contig2.fasta <span class="op">\</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                            ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>Hifi_reads_white_clover.fastq</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Sort the bam files and create their index using <code>samtools</code></p>
-<div id="123965ae-5548-41a5-b115-82d8a4cff9ef" class="cell" data-tags="[]">
+<div id="25" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>samtools sort results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1.sam <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1.sort.bam</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>samtools sort results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_2.sam <span class="op">-</span>o results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_2.sort.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="644c4f48-c07e-4a3e-8a5f-ab563ff47638" class="cell" data-tags="[]">
+<div id="26" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>samtools index results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1.sort.bam</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>samtools index results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_2.sort.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Perform quality control</p>
-<div id="5fc4abe2-f4b9-474e-9cbb-c83afa67a79a" class="cell" data-tags="[]">
+<div id="28" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p results<span class="op">/</span>qualimap_output</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>qualimap bamqc <span class="op">-</span>bam results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_1.sort.bam <span class="op">-</span>outdir results<span class="op">/</span>qualimap_output<span class="op">/</span>PacBio_clover_alignment_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="37e138ff-099e-4706-9db6-3bf93d0cac07" class="cell" data-tags="[]">
+<div id="29" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>qualimap bamqc <span class="op">-</span>bam results<span class="op">/</span>HIFI_alignment<span class="op">/</span>PacBio_clover_alignment_2.sort.bam <span class="op">-</span>outdir results<span class="op">/</span>qualimap_output<span class="op">/</span>PacBio_clover_alignment_2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="1f6fcb18-6e88-4f5f-b0aa-5fd3461f4ad6" class="cell" data-tags="[]">
+<div id="30" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#run multiqc</span></span>
@@ -716,15 +730,21 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 </div>
 <hr>
 </section>
-<section id="rna-seq-mapping" class="level2">
-<h2 class="anchored" data-anchor-id="rna-seq-mapping">RNA-seq mapping</h2>
-<p>In the <code>../Data</code> folder you will find 24 RNA-seq libraries, 12 <code>S10</code> libraries and 12 <code>Tienshan</code> libraries. Each library is paired-end, which is denoted by <code>R1</code> and <code>R2</code> at the end of two files having the same name, such as <code>S10_1_1.R1.fastq</code> and <code>S10_1_1.R2.fastq</code>. We will align each library separately and then merge the alignments to create two final samples for <code>S10</code> and <code>Tienshan</code>.</p>
-<p>First, we need to create a genome file for the reference fasta file of contigs <code>1</code> and <code>2</code>. This is done with <code>STAR</code>, using the option <code>--runMode genomeGenerate</code>. We also need to convert the gene annotation from <code>gff</code> to <code>gtf</code> format with <code>gffread</code> to allow counting gene transcripts. <code>STAR</code> is a very complex tool with many options, so it is always useful to <a href="https://physiology.med.cornell.edu/faculty/skrabanek/lab/angsd/lecture_notes/STARmanual.pdf">have a reference manual</a>.</p>
-<div id="f92315a0-5f7d-4884-8140-75101dd430c8" class="cell" data-tags="[]">
+<section id="rna-seq-mapping-short-rna-reads" class="level2">
+<h2 class="anchored" data-anchor-id="rna-seq-mapping-short-rna-reads">RNA-seq mapping — short RNA reads</h2>
+<p>In the <code>../Data</code> folder you will find 24 RNA-seq libraries: 12 from the <code>S10</code> line and 12 from <code>Tienshan</code>. Each library is <strong>paired-end</strong>, which means that each library is split into two files—one for forward reads (R1) and one for reverse reads (R2). For example: <code>S10_1_1.R1.fastq</code> and <code>S10_1_1.R2.fastq</code>.</p>
+<p>We align each library separately, then merge the 12 S10 alignments into one sample and the 12 Tienshan alignments into another. This gives us two final samples for comparison.</p>
+<p>Before aligning reads, we need to prepare the reference genome for STAR. This involves two steps:</p>
+<ol type="1">
+<li><p><strong>Build a genome index</strong> using <code>STAR --runMode genomeGenerate</code>. This creates a searchable index of the reference genome, allowing STAR to align reads quickly without scanning the whole sequence every time.</p></li>
+<li><p><strong>Convert gene annotations</strong> from <code>gff</code> to <code>gtf</code> format using <code>gffread</code>. STAR needs annotations in GTF format to count gene-level expression (how many reads map to each gene).</p></li>
+</ol>
+<p><code>STAR</code> is a very complex tool with many options, so it is always useful to <a href="https://physiology.med.cornell.edu/faculty/skrabanek/lab/angsd/lecture_notes/STARmanual.pdf">have a reference manual</a>.</p>
+<div id="34" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>gffread <span class="op">-</span>T <span class="op">-</span>o reference_data<span class="op">/</span>white_clover_genes.gtf ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>white_clover_genes.gff</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="468e6500-fcfd-4901-93fd-987d41b8073b" class="cell" data-tags="[]">
+<div id="35" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>STAR <span class="op">--</span>runThreadN <span class="dv">8</span> <span class="op">\</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>runMode genomeGenerate <span class="op">\</span></span>
@@ -734,8 +754,8 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 </div>
 <p>We got a warning saying</p>
 <pre><code>!!!!! WARNING: --genomeSAindexNbases 14 is too large for the genome size=2089554, which may cause seg-fault at the mapping step. Re-run genome generation with recommended --genomeSAindexNbases 9</code></pre>
-<p>meaning we need shorter strings of bases (9 bases instead of 14) to be indexed, as our reference genome is very short, and too long strings would cause many alignment errors. So we rerun the command with the suggested option.</p>
-<div id="655aa9f2-aa9b-4515-b6cd-72464bcc9dfc" class="cell" data-tags="[]">
+<p>meaning we need shorter strings of bases (9 bases instead of 14) to be indexed, as our reference genome is very short, and too long strings would cause many alignment errors. So we rerun the command with the suggested option (down below).</p>
+<div id="37" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>STAR <span class="op">--</span>runThreadN <span class="dv">8</span> <span class="op">\</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>runMode genomeGenerate <span class="op">\</span></span>
@@ -745,7 +765,7 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>genomeSAindexNbases <span class="dv">9</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We use again <code>STAR</code> to align every single library for <code>S10</code>. We extract the library name of each file and run STAR through each pair of files. Note that plant introns are very rarely more than <code>5000 bp</code> and that you are mapping to two homoeologous contigs that show high similarity, especially in genic regions. We set the maximum size to 5000 using <code>--alignIntronMax 5000</code>.</p>
-<div id="e5f384d0-125b-4a1d-91ac-ee90a5797fae" class="cell" data-tags="[]">
+<div id="39" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> `ls ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>S10<span class="op">*</span>.R1.fastq`</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>do</span>
@@ -767,7 +787,7 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 <span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>done</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Do the same alignment for <code>Tienshan</code> libraries</p>
-<div id="74b1d9c2-a7f2-490b-88a3-a7ba2a23f383" class="cell" data-tags="[]">
+<div id="41" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> `ls ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/</span>TI<span class="op">*</span>.R1.fastq`</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>do</span>
@@ -788,37 +808,37 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 <span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>done</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Run quality control on each aligned library with <code>MultiQC</code>. In this way there will be a whole report to compare <code>S10</code> files and <code>Tienshan</code> files.</p>
-<div id="4d0ede5e-f8c4-4d79-8f13-246102b92b53" class="cell" data-tags="[]">
+<div id="43" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>multiqc <span class="op">--</span>outdir results<span class="op">/</span>multiqc_output<span class="op">/</span>TI_STAR_align_1_2 <span class="op">\</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>            results<span class="op">/</span>STAR_output<span class="op">/</span>TI_align_contigs_1_2<span class="op">/</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="3e9b79a9-1973-45ee-b127-febdbce6e691" class="cell" data-tags="[]">
+<div id="44" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>multiqc <span class="op">--</span>outdir results<span class="op">/</span>multiqc_output<span class="op">/</span>S10_STAR_align_1_2 <span class="op">\</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>            results<span class="op">/</span>STAR_output<span class="op">/</span>S10_align_contigs_1_2<span class="op">/</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We merge the outputs of each group of aligned libraries. Here is how the files look like for the <code>Tienshan</code>.</p>
-<div id="fe8a7519-0700-47cd-98b1-39c2ae72488b" class="cell" data-tags="[]">
+<div id="46" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>ls <span class="op">-</span>lh  results<span class="op">/</span>STAR_output<span class="op">/</span>TI_align_contigs_1_2<span class="op">/</span>TI_<span class="op">*</span>.sortedByCoord.out.bam </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Apply <code>samtools merge</code></p>
-<div id="07296157-f886-494a-97cc-6b65329c0a82" class="cell" data-tags="[]">
+<p>Apply <code>samtools merge</code> to combine the individual per-library BAM files</p>
+<div id="48" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p results<span class="op">/</span>STAR_output<span class="op">/</span>TI_align_contigs_1_2_merge<span class="op">/</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>samtools merge <span class="op">-</span>f results<span class="op">/</span>STAR_output<span class="op">/</span>TI_align_contigs_1_2_merge<span class="op">/</span>TI.<span class="bu">sorted</span>.bam results<span class="op">/</span>STAR_output<span class="op">/</span>TI_align_contigs_1_2<span class="op">/</span>TI_<span class="op">*</span>.sortedByCoord.out.bam </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="55384ddb-d3c7-4fac-bfea-f9cc430c3475" class="cell" data-tags="[]">
+<div id="49" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p results<span class="op">/</span>STAR_output<span class="op">/</span>S10_align_contigs_1_2_merge<span class="op">/</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>samtools merge <span class="op">-</span>f results<span class="op">/</span>STAR_output<span class="op">/</span>S10_align_contigs_1_2_merge<span class="op">/</span>S10.<span class="bu">sorted</span>.bam results<span class="op">/</span>STAR_output<span class="op">/</span>S10_align_contigs_1_2<span class="op">/</span>S10_<span class="op">*</span>.sortedByCoord.out.bam </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Index both merging outputs. A file in format <code>bam.bai</code> will appear in their respective folders.</p>
-<div id="f987b7a4-fd16-43be-b475-6855322049b9" class="cell" data-tags="[]">
+<div id="51" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>samtools index results<span class="op">/</span>STAR_output<span class="op">/</span>S10_align_contigs_1_2_merge<span class="op">/</span>S10.<span class="bu">sorted</span>.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="d8966008-bcd8-4fdd-87db-683b8a9b5c95" class="cell" data-tags="[]">
+<div id="52" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>samtools index results<span class="op">/</span>STAR_output<span class="op">/</span>TI_align_contigs_1_2_merge<span class="op">/</span>TI.<span class="bu">sorted</span>.bam</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
