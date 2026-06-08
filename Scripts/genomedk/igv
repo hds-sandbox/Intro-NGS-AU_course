@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./IGV_Linux_2.19.4/igv.sh --igvDirectory=$(pwd)

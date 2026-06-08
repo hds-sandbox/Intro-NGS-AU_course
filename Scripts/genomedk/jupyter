@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# This script is used to run the Jupyter notebook in the current directory.
+# It will start the Jupyter notebook server and open the notebook in the default web browser.
+apptainer exec --fakeroot ngs-summer-course.sif jupyter lab --port=$UID --ip=$(hostname) --allow-root
