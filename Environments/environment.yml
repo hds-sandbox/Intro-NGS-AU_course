@@ -76,3 +76,4 @@ dependencies:
   - plotly
   - nbformat
   - jupyterlab-plotly-extension
+  - matplotlib-venn
