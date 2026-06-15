@@ -13,3 +13,4 @@ site_libs
 .ipynb_checkpoints
 .tmp_*
 *.sif
+results/
