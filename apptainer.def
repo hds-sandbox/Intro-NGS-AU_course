@@ -49,6 +49,9 @@ From: debian:bookworm-slim
     # Install R kernel for jupyterlab and bash kernel for jupyterlab
     pixi run R -e 'IRkernel::installspec(prefix = "/opt/course/.pixi/envs/default", name = "courser", displayname = "Course (R)")'
     pixi run python -m bash_kernel.install
+    # Install jupyterlab addon for quarto rendering
+    pixi run pip install --no-cache-dir --no-deps jupyterlab-quarto
+
     
 ######### Adding executables not installable as packages to the container
     # An example of executables that can be added to the container, and then used in the notebooks. You can add any executable you want, 

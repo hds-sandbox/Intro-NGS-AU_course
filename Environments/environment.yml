@@ -61,19 +61,21 @@ dependencies:
   - bbknn
   - scrublet
   - scvelo
-  - nbconvert    ### Extensions for jupyterlab
-  - nteract_on_jupyter
+  - pip
+  - nbconvert-webpdf
+  - jupyterlab-nbconvert-nocode
   - jupyter-resource-usage
   - jupyterlab-topbar-text
   - autopep8
   - isort
   - yapf
   - black
-  - jupyterlab_code_formatter
   - jupyterlab-git
   - jupyterlab-lsp
   - jupyter_bokeh
-  - plotly
-  - nbformat
-  - jupyterlab-plotly-extension
-  - matplotlib-venn
+  - jupyter-lsp
+  - jupyter-lsp-r
+  - jupyter-lsp-python
+  - jupyter-lsp-latex
+  - jupyter-lsp-python-plugins
+  - anaconda-toolbox
