@@ -14,3 +14,7 @@ site_libs
 .tmp_*
 *.sif
 results/
+anaconda_projects/
+.virtual_documents/
+.mypy_cache/
+reference_data/

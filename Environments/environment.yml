@@ -10,28 +10,29 @@ dependencies:
   - jupyterlab
   - bcftools
   - samtools[version='1.6']
-  - r-base>=4.0.0
-  - r-ggplot2
-  - r-dplyr
-  - r-irkernel
+#  - r-base>=4.0.0
+#  - r-ggplot2
+#  - r-dplyr
+#  - r-irkernel
   - certifi
   - ipykernel
   - ipywidgets
   - minimap2
   - pandas
-  - r-vcfr
+#  - r-vcfr
   - vcftools
-  - r-tidyr
-  - ghostscript
-  - gnuplot
+#  - r-tidyr
+  - matplotlib-venn
+#  - ghostscript
+#  - gnuplot
   - bash_kernel
-  - r-data.table
-  - r-gridextra
-  - r-cowplot
+#  - r-data.table
+#  - r-gridextra
+#  - r-cowplot
   - numpy
   - matplotlib
   - bioconductor-deseq2
-  - gsl
+#  - gsl
   - scanpy
   - python-igraph
   - leidenalg
@@ -44,10 +45,10 @@ dependencies:
   - multiqc
   - qualimap
   - minimap2
-  - r-formattable
-  - r-venndiagram
-  - r-pheatmap
-  - r-mixomics
+#  - r-formattable
+#  - r-venndiagram
+#  - r-pheatmap
+#  - r-mixomics
   - gffread
   - cython
   - scikit-image

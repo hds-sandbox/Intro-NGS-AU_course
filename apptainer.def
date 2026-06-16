@@ -47,7 +47,7 @@ From: debian:bookworm-slim
     pixi install -v
 
     # Install R kernel for jupyterlab and bash kernel for jupyterlab
-    pixi run R -e 'IRkernel::installspec(prefix = "/opt/course/.pixi/envs/default", name = "courser", displayname = "Course (R)")'
+    #pixi run R -e 'IRkernel::installspec(prefix = "/opt/course/.pixi/envs/default", name = "courser", displayname = "Course (R)")'
     pixi run python -m bash_kernel.install
     # Install jupyterlab addon for quarto rendering
     pixi run pip install --no-cache-dir --no-deps jupyterlab-quarto
