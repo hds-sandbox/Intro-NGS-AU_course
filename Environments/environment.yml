@@ -31,7 +31,7 @@ dependencies:
 #  - r-cowplot
   - numpy
   - matplotlib
-  - bioconductor-deseq2
+#  - bioconductor-deseq2
 #  - gsl
   - scanpy
   - python-igraph
@@ -57,13 +57,12 @@ dependencies:
   - charset-normalizer
   - colorama
   - idna
-  - igv
+#  - igv
   - pydeseq2
   - bbknn
   - scrublet
   - scvelo
   - pip
-  - nbconvert-webpdf
   - jupyterlab-nbconvert-nocode
   - jupyter-resource-usage
   - jupyterlab-topbar-text

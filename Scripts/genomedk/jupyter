@@ -1,5 +1,20 @@
 #!/bin/bash
+set -euo pipefail
 
-# This script is used to run the Jupyter notebook in the current directory.
-# It will start the Jupyter notebook server and open the notebook in the default web browser.
-apptainer exec --writable-tmpfs  ngs-summer-course.sif jupyter lab --port=$UID --ip=$(hostname) --allow-root
+# Start JupyterLab from the pixi environment inside the container and avoid
+# inheriting host Jupyter config/kernels from the user's home directory.
+apptainer exec --cleanenv --writable-tmpfs  ngs-summer-course.sif /bin/bash -lc '
+
+	export PATH=/opt/course/.pixi/envs/default/bin:/opt/pixi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+	export JUPYTER_PREFER_ENV_PATH=1
+	export HOME=/tmp/$UID/jupyter-home
+	export JUPYTER_CONFIG_DIR=/tmp/$UID/jupyter-config
+	export JUPYTER_RUNTIME_DIR=/tmp/$UID/jupyter-runtime
+	export IPYTHONDIR=/tmp/$UID/ipython
+	export JUPYTER_PATH=/opt/course/.pixi/envs/default/share/jupyter
+	export JUPYTER_DATA_DIR=/opt/course/.pixi/envs/default/share/jupyter
+	umask 077
+	mkdir -p -m 700 "$HOME" "$JUPYTER_CONFIG_DIR" "$JUPYTER_RUNTIME_DIR" "$IPYTHONDIR"
+
+	exec /opt/course/.pixi/envs/default/bin/jupyter lab --port="'$UID'" --ip="'$(hostname)'" --allow-root
+'
