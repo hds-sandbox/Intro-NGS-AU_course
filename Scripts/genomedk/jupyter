@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Start JupyterLab from the pixi environment inside the container and avoid
 # inheriting host Jupyter config/kernels from the user's home directory.
-apptainer exec --cleanenv --writable-tmpfs  ngs-summer-course.sif /bin/bash -lc '
+apptainer exec --fakeroot --writable-tmpfs  ngs-summer-course.sif /bin/bash -lc '
 
 	export PATH=/opt/course/.pixi/envs/default/bin:/opt/pixi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 	export JUPYTER_PREFER_ENV_PATH=1
