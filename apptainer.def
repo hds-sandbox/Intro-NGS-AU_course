@@ -57,19 +57,20 @@ From: debian:bookworm-slim
     # An example of executables that can be added to the container, and then used in the notebooks. You can add any executable you want, 
     # but make sure to add it to the PATH and to give it the right permissions (done in %environments). Here we add some of the tools used in the post GWAS course.
 
-    cat > /usr/local/bin/igv <<'EOF'
-#!/bin/sh
-exec /opt/course/.pixi/envs/default/bin/igv "$@"
-EOF
-
     cat > /usr/local/bin/jupyter <<'EOF'
 #!/bin/sh
+umask 077
+mkdir -p -m 700 \
+    "$HOME" \
+    "$JUPYTER_CONFIG_DIR" \
+    "$JUPYTER_RUNTIME_DIR" \
+    "$IPYTHONDIR"
+
 exec /opt/course/.pixi/envs/default/bin/jupyter "$@"
 EOF
 
 
     # Give execute permissions to the executables and read permissions to the folders
-    chmod +x /usr/local/bin/igv
     chmod +x /usr/local/bin/jupyter
     #chmod -R a+rX /opt/gwas /opt/ldsc /opt/FLAMES /opt/pops
 
@@ -77,15 +78,22 @@ EOF
 
 %environment
     export PIXI_HOME=/opt/pixi
-    export PATH=/opt/pixi/bin:/usr/local/bin:$PATH
+    export PATH=/opt/course/.pixi/envs/default/bin:/opt/pixi/bin:/usr/local/bin:$PATH
+    export JUPYTER_PREFER_ENV_PATH=1
+    runtime_uid="$(id -u)"
+    export HOME="/tmp/${runtime_uid}/jupyter-home"
+    export JUPYTER_CONFIG_DIR="/tmp/${runtime_uid}/jupyter-config"
+    export JUPYTER_RUNTIME_DIR="/tmp/${runtime_uid}/jupyter-runtime"
+    export IPYTHONDIR="/tmp/${runtime_uid}/ipython"
+    export JUPYTER_PATH=/opt/course/.pixi/envs/default/share/jupyter
+    export JUPYTER_DATA_DIR=/opt/course/.pixi/envs/default/share/jupyter
 
 %runscript
-    echo "Available commands: igv jupyter"
+    echo "Available commands: jupyter"
 
 %help
     Build:
       apptainer build --fakeroot ngs-summer-school.sif apptainer.def
 
     Commands:
-      igv
       jupyter
