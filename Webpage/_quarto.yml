@@ -26,13 +26,11 @@ website:
             text: GenomeDK
       - text: Tutorials
         menu:
-          - href: galaxy/galaxy.qmd
-            text: Alignment with Galaxy
           - href: Notebooks/01_raw_data_alignment.ipynb
-            text: Alignment with bash
+            text: Sequenced data alignment
           - href: Notebooks/02_VCF_variant_calling_analysis.ipynb
             text: Variant analysis
-          - href: Notebooks/03_bulk_RNA_analysis_edgeR.ipynb
+          - href: Notebooks/03_bulk_RNA_analysis_pydeseq2.ipynb
             text: bulkRNA analysis
           - href: Notebooks/04_scRNAseq_analysis.ipynb
             text: scRNA analysis
