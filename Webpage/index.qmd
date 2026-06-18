@@ -25,19 +25,13 @@ This course introduces you to NGS data (short-reads and long-reads) alignment, v
 
 ## Course material
 
-The material for this course is organized in four separated jupyter notebooks in both `bash`, `python` and `R` where you will benefit of an interactive coding setup on `jupyterlab`.
+The material for this course is organized in four separated jupyter notebooks in both `bash` and `python` where you will benefit of an interactive coding setup on `jupyterlab`.
 
-### First exercise: alignment on Galaxy
-
-The first exercise lesson is executed with the web interface [usegalaxy.org](https://usegalaxy.org/). Click on `1.Galaxy Exercise` in the menu `Exercises` to get started)
-
-### Following exercises
-
-The following exercise lessons will work on a computing environment with `jupyterlab`. Use the menu `Access` and the drop-down menu selecting the computing environment you need (danish clusters `uCloud` and `GenomeDK`, your PC, or another cluster).
+The exercise lessons will work on a computing environment with `jupyterlab`. Use the menu `Access` and the drop-down menu selecting the computing environment you need (danish clusters `uCloud` and `GenomeDK`, your PC, or another cluster).
 
 ## Compiled exercises
 
-if you need to have a look at the exercises as a reference, then the menu `Exercises` contains all the compiled exercises on `jupyterlab` in a document format, from which you can also copy-paste the code.
+if you need to have a look at the exercises as a reference, then the menu `Tutorials` contains all the compiled exercises on `jupyterlab` in a document format, from which you can also copy-paste the code.
 
 &nbsp;
 
@@ -63,7 +57,7 @@ if you need to have a look at the exercises as a reference, then the menu `Exerc
 
     - Apply bioinformatics tools within the selected application areas and reflect on the results, formulating your own conclusion in the proposed tasks
 
-- **Time:** 20 hours (for reading through the code, executing it, answering questions). The material fits 4-5 days of lessons.
+- **Time:** 20 hours (for reading through the code, executing it, answering questions). The material fits 4-5 days of intensive whole-day lessons.
 
 - **Supporting Materials:**
 
