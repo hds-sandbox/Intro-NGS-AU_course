@@ -1,0 +1,2846 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Lavinia I Fechete, Stig U Andersen, Mikkel H Schierup, Samuele Soraggi">
+
+<title>Bulk RNA Analysis – Introduction to NGS data analysis</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-2d157fdac37be11daea1055f1708193b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ef329cdfec84d61f1b09d4029da25417.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-2d157fdac37be11daea1055f1708193b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-EXW13D5861"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "TrainingMaterial",
+    "@id": "https://hds-sandbox.github.io/NGS_summer_course_Aarhus/",
+    "dct:conformsTo": {
+      "http://purl.org/dc/terms/conformsTo": {
+        "@id": "https://bioschemas.org/profiles/TrainingMaterial/1.0-RELEASE",
+        "@type": "CreativeWork"
+      }
+    },
+    "name": "Introduction to NGS data analysis",
+    "description": "A one-week summer school which provides an overview of current NGS technologies and directions in which these are currently progressing. Methods for assembling genomes from NGS data using either a reference genome or de novo assembly will be presented together with some emphasis on assessing NGS data quality (Quality control, accuracy of base calling). The course includes notebooks for the analysis of short- and long-read sequencing data, bulkRNA data and single-cell RNA sequencing data.",
+    "keywords": [
+      "single cell RNA",
+      "NGS data",
+      "genomics",
+      "transcriptomics",
+      "bulk RNA",
+      "bioinformatics"
+    ],
+    "about": [
+      {
+        "@type": "DefinedTerm",
+        "@id": "http://edamontology.org/topic_0091",
+        "inDefinedTermSet": "http://edamontology.org",
+        "termCode": "topic_0091",
+        "name": "bioinformatics",
+        "url": "https://bioportal.bioontology.org/ontologies/EDAM/?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Ftopic_0091"
+      },
+      {
+        "@type": "DefinedTerm",
+        "@id": "http://edamontology.org/data_3670",
+        "inDefinedTermSet": "http://edamontology.org",
+        "termCode": "data_3670",
+        "name": "Online course",
+        "url": "https://bioportal.bioontology.org/ontologies/EDAM/?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Fdata_3670"
+      },
+      {
+        "@type": "DefinedTerm",
+        "@id": "http://edamontology.org/topic_0622",
+        "inDefinedTermSet": "http://edamontology.org",
+        "termCode": "topic_0622",
+        "name": "Genomics",
+        "url": "https://www.ebi.ac.uk/ols4/ontologies/edam/classes/http%253A%252F%252Fedamontology.org%252Ftopic_0622"
+      },
+      {
+        "@type": "DefinedTerm",
+        "@id": "http://edamontology.org/topic_3308",
+        "inDefinedTermSet": "http://edamontology.org",
+        "termCode": "topic_3308",
+        "name": "Transcriptomics",
+        "url": "https://www.ebi.ac.uk/ols4/ontologies/edam/classes/http%253A%252F%252Fedamontology.org%252Ftopic_3308"
+      }
+    ],
+    "abstract": "NGS technologies are fundamental in genomics and transcriptomics studies. In this course we set the foundations for the analysis of NGS data with various interactive exercises for genome alignment, genomics and transcriptome analysis. open source code, Slides and access information can be found at the webpage https://hds-sandbox.github.io/NGS_summer_course_Aarhus/.",
+    "audience": [
+      {
+        "@type": "Audience",
+        "audienceType": "Students"
+      },
+      {
+        "@type": "Audience",
+        "audienceType": "PhD students"
+      },
+      {
+        "@type": "Audience",
+        "audienceType": "Postdoctoral researchers"
+      }
+    ],
+    "competencyRequired": [
+      "Basic biology programming",
+      "Basic python/R/bash programming (an advantage but not mandatory)",
+      "Machine learning basics for bioinformatics (PCA, statistical testing)"
+    ],
+    "inLanguage": ["en-US"],
+    "learningResourceType": ["tutorials"],
+    "license": "https://spdx.org/licenses/CC-BY-4.0.html",
+    "url": "https://hds-sandbox.github.io/NGS_summer_course_Aarhus/",
+    "citation": [
+        {
+            "@type": "CreativeWork",
+            "@id": "https://doi.org/10.5281/zenodo.8074603"
+        } ],
+     "funding":[
+     	  {
+            "@type": "Grant",
+            "@id": "NNF grant number NNF20OC0063268"        	
+        }
+     ]
+  }
+</script>
+
+
+<meta property="og:title" content="Bulk RNA Analysis – Introduction to NGS data analysis">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://hds-sandbox.github.io/Intro-NGS-AU_course/Notebooks/03_bulk_RNA_analysis_pydeseq2_files/figure-html/cell-14-output-1.png">
+<meta property="og:site_name" content="Introduction to NGS data analysis">
+<meta property="og:locale" content="en_US">
+<meta property="og:image:height" content="590">
+<meta property="og:image:width" content="790">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/NGSlogo.png" alt="" class="navbar-logo light-content">
+    <img src="../images/NGSlogo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Introduction to NGS data analysis</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../slides.html"> 
+<span class="menu-text">Slides</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-access" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Access</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-access">    
+        <li>
+    <a class="dropdown-item" href="../access/ngssummer.html">
+ <span class="dropdown-text">Summer School</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../access/UCloud.html">
+ <span class="dropdown-text">UCloud</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../access/genomedk.html">
+ <span class="dropdown-text">GenomeDK</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tutorials" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tutorials</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tutorials">    
+        <li>
+    <a class="dropdown-item" href="../galaxy/galaxy.html">
+ <span class="dropdown-text">Alignment with Galaxy</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Notebooks/01_raw_data_alignment.html">
+ <span class="dropdown-text">Alignment with bash</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Notebooks/02_VCF_variant_calling_analysis.html">
+ <span class="dropdown-text">Variant analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Notebooks/03_bulk_RNA_analysis_edgeR.ipynb">
+ <span class="dropdown-text">bulkRNA analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Notebooks/04_scRNAseq_analysis.html">
+ <span class="dropdown-text">scRNA analysis</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/hds-sandbox"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Bulk RNA Analysis</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Lavinia I Fechete, Stig U Andersen, Mikkel H Schierup, Samuele Soraggi </p>
+            </div>
+    </div>
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#pydeseq2---data-filtering-and-normalization" id="toc-pydeseq2---data-filtering-and-normalization" class="nav-link active" data-scroll-target="#pydeseq2---data-filtering-and-normalization">PyDESeq2 - Data filtering and Normalization</a>
+  <ul class="collapse">
+  <li><a href="#file-processing" id="toc-file-processing" class="nav-link" data-scroll-target="#file-processing">File processing</a></li>
+  <li><a href="#create-the-annotated-data-object-for-pydeseq2" id="toc-create-the-annotated-data-object-for-pydeseq2" class="nav-link" data-scroll-target="#create-the-annotated-data-object-for-pydeseq2">Create the annotated data object for pydeseq2</a></li>
+  <li><a href="#preliminary-data-analysis" id="toc-preliminary-data-analysis" class="nav-link" data-scroll-target="#preliminary-data-analysis">Preliminary data analysis</a></li>
+  <li><a href="#filtering-the-lowly-expressed-genes" id="toc-filtering-the-lowly-expressed-genes" class="nav-link" data-scroll-target="#filtering-the-lowly-expressed-genes">Filtering the lowly expressed genes</a></li>
+  <li><a href="#normalized-counts---exploratory-data-analysis" id="toc-normalized-counts---exploratory-data-analysis" class="nav-link" data-scroll-target="#normalized-counts---exploratory-data-analysis">Normalized counts - Exploratory Data analysis</a></li>
+  </ul></li>
+  <li><a href="#pydeseq2---testing-for-differentially-expressed-genes-degs" id="toc-pydeseq2---testing-for-differentially-expressed-genes-degs" class="nav-link" data-scroll-target="#pydeseq2---testing-for-differentially-expressed-genes-degs">PyDESeq2 - Testing for Differentially expressed genes (DEGs)</a>
+  <ul class="collapse">
+  <li><a href="#degs-for-white-clover-s10-plants-treatment-vs-control" id="toc-degs-for-white-clover-s10-plants-treatment-vs-control" class="nav-link" data-scroll-target="#degs-for-white-clover-s10-plants-treatment-vs-control">DEGs for White clover S10 plants Treatment vs Control</a></li>
+  <li><a href="#degs-for-white-clover-tienshan-treatment-vs-control" id="toc-degs-for-white-clover-tienshan-treatment-vs-control" class="nav-link" data-scroll-target="#degs-for-white-clover-tienshan-treatment-vs-control">DEGs for White clover Tienshan Treatment vs Control</a></li>
+  <li><a href="#degs-for-s10tienshan-treatment-vs-control-wo-genotype-effects" id="toc-degs-for-s10tienshan-treatment-vs-control-wo-genotype-effects" class="nav-link" data-scroll-target="#degs-for-s10tienshan-treatment-vs-control-wo-genotype-effects">DEGs for S10+Tienshan Treatment vs Control w/o genotype effects</a></li>
+  <li><a href="#explore-dge-results" id="toc-explore-dge-results" class="nav-link" data-scroll-target="#explore-dge-results">Explore DGE results</a>
+  <ul class="collapse">
+  <li><a href="#select-the-genes-which-appear-only-in-the-analysis-using-both-genotypes-for-further-examination." id="toc-select-the-genes-which-appear-only-in-the-analysis-using-both-genotypes-for-further-examination." class="nav-link" data-scroll-target="#select-the-genes-which-appear-only-in-the-analysis-using-both-genotypes-for-further-examination.">Select the genes which appear only in the analysis using both genotypes for further examination.</a></li>
+  <li><a href="#functional-annotations" id="toc-functional-annotations" class="nav-link" data-scroll-target="#functional-annotations">Functional annotations</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<div class="callout callout-style-default callout-note callout-titled" title="Tutorial description">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Tutorial description
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This tutorial will cover the steps for performing Differential Gene Expression on the RNA-seq data obtained from the alignment session. At the end of this tutorial you will be able to use <code>Python</code> to</p>
+<ul>
+<li>Perform preliminary analyses of the RNA-seq results</li>
+<li>Find differentially expressed genes between two conditions using <code>pydeseq2</code></li>
+<li>Produce relevant data visualizations</li>
+</ul>
+</div>
+</div>
+<p><strong>Load the necessary Python libraries</strong></p>
+<div id="cell-3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;executionInfo&quot;,&quot;value&quot;:{&quot;elapsed&quot;:9,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1654592586765,&quot;user&quot;:{&quot;displayName&quot;:&quot;Lavinia Fechete&quot;,&quot;userId&quot;:&quot;03683080993527566677&quot;},&quot;user_tz&quot;:-120}}" data-tags="[]" data-execution_count="71">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydeseq2.ds <span class="im">import</span> DeseqStats</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydeseq2.default_inference <span class="im">import</span> DefaultInference</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> glob</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rich.pretty <span class="im">import</span> pprint</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pydeseq2 <span class="im">as</span> pds</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydeseq2.dds <span class="im">import</span> DeseqDataSet</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydeseq2.utils <span class="im">import</span> load_example_data  <span class="co"># Optional: example data\</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib_venn <span class="im">import</span> venn3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="pydeseq2---data-filtering-and-normalization" class="level1">
+<h1>PyDESeq2 - Data filtering and Normalization</h1>
+<p>We will use the <code>pydeseq2</code> package to test for differentially expressed genes between our Control and Treatment Samples - this package is based on the very popular DeSeq2 software <span class="citation" data-cites="Love_Huber_Anders_2014">(<a href="#ref-Love_Huber_Anders_2014" role="doc-biblioref">Love et al. 2014</a>)</span>. You can read more about the pydeseq2 package and its functionalities <a href="https://pydeseq2.readthedocs.io/en/latest/">here</a>. This exercise largely follows their documentation.</p>
+<section id="file-processing" class="level2">
+<h2 class="anchored" data-anchor-id="file-processing">File processing</h2>
+<p>The data for this exercise comes from the 12 tabular files with Reads per Gene counts generated by STAR Mapping in the <code>raw-data alignment</code> part of this course. We want to create a table where each column is a sample, and the content of the table are the read counts from STAR. We must merge the 12 files with Reads per Gene information into a single file.</p>
+<ul>
+<li>If you aligned datasets in the first notebook with jupyterlab, then you will find the files - 12 files precisely - using the following command:</li>
+</ul>
+<div id="cell-7" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the list of sample files and sort them</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>samples <span class="op">=</span> <span class="bu">sorted</span>(glob.glob(<span class="st">"results/STAR_output/*_align_contigs_1_2/*ReadsPerGene.out.tab"</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pprint(samples)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Read and combine counts</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>read_counts_list <span class="op">=</span> []</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sample <span class="kw">in</span> samples:</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_csv(sample, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, header<span class="op">=</span><span class="va">None</span>, skiprows<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    read_counts_list.append(df[[<span class="dv">1</span>]])  <span class="co"># index 1 = unstranded counts (column 2 in STAR's 1-indexed output)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenate all counts side by side (cbind equivalent)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>read_counts <span class="op">=</span> pd.concat(read_counts_list, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally: set gene names from the first column of the first file</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>genes <span class="op">=</span> <span class="bu">list</span>(pd.read_csv(samples[<span class="dv">0</span>], sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, header<span class="op">=</span><span class="va">None</span>, skiprows<span class="op">=</span><span class="dv">4</span>)[<span class="dv">0</span>])</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>read_counts.index <span class="op">=</span> genes</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally: assign sample names to columns</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>sample_names <span class="op">=</span> [os.path.basename(path).replace(<span class="st">"ReadsPerGene.out.tab"</span>, <span class="st">""</span>) <span class="cf">for</span> path <span class="kw">in</span> samples]</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>read_counts.columns <span class="op">=</span> sample_names</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">[</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'results/STAR_output/S10_align_contigs_1_2/S10_1_1ReadsPerGene.out.tab'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'results/STAR_output/S10_align_contigs_1_2/S10_1_2ReadsPerGene.out.tab'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'results/STAR_output/S10_align_contigs_1_2/S10_1_3ReadsPerGene.out.tab'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'results/STAR_output/S10_align_contigs_1_2/S10_2_1ReadsPerGene.out.tab'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'results/STAR_output/S10_align_contigs_1_2/S10_2_2ReadsPerGene.out.tab'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'results/STAR_output/S10_align_contigs_1_2/S10_2_3ReadsPerGene.out.tab'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'results/STAR_output/TI_align_contigs_1_2/TI_1_1ReadsPerGene.out.tab'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'results/STAR_output/TI_align_contigs_1_2/TI_1_2ReadsPerGene.out.tab'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'results/STAR_output/TI_align_contigs_1_2/TI_1_3ReadsPerGene.out.tab'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'results/STAR_output/TI_align_contigs_1_2/TI_2_1ReadsPerGene.out.tab'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'results/STAR_output/TI_align_contigs_1_2/TI_2_2ReadsPerGene.out.tab'</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'results/STAR_output/TI_align_contigs_1_2/TI_2_3ReadsPerGene.out.tab'</span>
+<span style="font-weight: bold">]</span>
+</pre>
+</div>
+</div>
+<p>The resulting table has genes as rows and samples as columns and stores the gene expression counts (value representing the total number of sequence reads that originated from a particular gene in a sample) for each of the 12 samples. This data frame should have 12 columns and 366 rows.</p>
+<div id="cell-9" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>read_counts.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">S10_1_1</th>
+<th data-quarto-table-cell-role="th">S10_1_2</th>
+<th data-quarto-table-cell-role="th">S10_1_3</th>
+<th data-quarto-table-cell-role="th">S10_2_1</th>
+<th data-quarto-table-cell-role="th">S10_2_2</th>
+<th data-quarto-table-cell-role="th">S10_2_3</th>
+<th data-quarto-table-cell-role="th">TI_1_1</th>
+<th data-quarto-table-cell-role="th">TI_1_2</th>
+<th data-quarto-table-cell-role="th">TI_1_3</th>
+<th data-quarto-table-cell-role="th">TI_2_1</th>
+<th data-quarto-table-cell-role="th">TI_2_2</th>
+<th data-quarto-table-cell-role="th">TI_2_3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">g175</th>
+<td>143</td>
+<td>226</td>
+<td>227</td>
+<td>218</td>
+<td>206</td>
+<td>191</td>
+<td>234</td>
+<td>204</td>
+<td>198</td>
+<td>220</td>
+<td>206</td>
+<td>164</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">g176</th>
+<td>17</td>
+<td>12</td>
+<td>15</td>
+<td>8</td>
+<td>14</td>
+<td>18</td>
+<td>29</td>
+<td>19</td>
+<td>30</td>
+<td>6</td>
+<td>11</td>
+<td>23</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">g177</th>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">g178</th>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">g179</th>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-10" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Size of the table: </span><span class="sc">{</span>read_counts<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Size of the table: (366, 12)</code></pre>
+</div>
+</div>
+<p>Load the metadata table, which contains information about each of the 12 RNA-seq samples: treatment (<code>Condition</code>), genotype, and replicate.</p>
+<p>Note that the order of the rows in the Metadata table should be the same as the columns in the Read_counts file generated above — <code>pydeseq2</code> uses these to align the expression table with the correct sample information.</p>
+<p>In order to aid the analysis, we will create a Group for each sample (a new column in the metadata) in the format <code>Genotype_Condition</code> of each sample and assign the three replicates to this group.</p>
+<div id="cell-12" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the metadata CSV, using ";" as separator and first column as index</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>metadata <span class="op">=</span> pd.read_csv(<span class="st">"../Data/Clover_Data/metadata.csv"</span>, sep<span class="op">=</span><span class="st">";"</span>, index_col<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create 'Group' column by combining 'Genotype' and 'Condition' columns</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>metadata[<span class="st">"Group"</span>] <span class="op">=</span> metadata[<span class="st">"Genotype"</span>].astype(<span class="bu">str</span>) <span class="op">+</span> <span class="st">"_"</span> <span class="op">+</span> metadata[<span class="st">"Condition"</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Display updated metadata</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>pprint(<span class="st">"Metadata after adding group"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>metadata</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #008000; text-decoration-color: #008000">'Metadata after adding group'</span>
+</pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Condition</th>
+<th data-quarto-table-cell-role="th">Genotype</th>
+<th data-quarto-table-cell-role="th">Replicate</th>
+<th data-quarto-table-cell-role="th">Group</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Sample</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_1_1</th>
+<td>Control</td>
+<td>S10</td>
+<td>1</td>
+<td>S10_Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_1_2</th>
+<td>Control</td>
+<td>S10</td>
+<td>2</td>
+<td>S10_Control</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_1_3</th>
+<td>Control</td>
+<td>S10</td>
+<td>3</td>
+<td>S10_Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_2_1</th>
+<td>Treatment</td>
+<td>S10</td>
+<td>1</td>
+<td>S10_Treatment</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_2_2</th>
+<td>Treatment</td>
+<td>S10</td>
+<td>2</td>
+<td>S10_Treatment</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_2_3</th>
+<td>Treatment</td>
+<td>S10</td>
+<td>3</td>
+<td>S10_Treatment</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_1_1</th>
+<td>Control</td>
+<td>Tienshan</td>
+<td>1</td>
+<td>Tienshan_Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_1_2</th>
+<td>Control</td>
+<td>Tienshan</td>
+<td>2</td>
+<td>Tienshan_Control</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_1_3</th>
+<td>Control</td>
+<td>Tienshan</td>
+<td>3</td>
+<td>Tienshan_Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_2_1</th>
+<td>Treatment</td>
+<td>Tienshan</td>
+<td>1</td>
+<td>Tienshan_Treatment</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_2_2</th>
+<td>Treatment</td>
+<td>Tienshan</td>
+<td>2</td>
+<td>Tienshan_Treatment</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_2_3</th>
+<td>Treatment</td>
+<td>Tienshan</td>
+<td>3</td>
+<td>Tienshan_Treatment</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="create-the-annotated-data-object-for-pydeseq2" class="level2">
+<h2 class="anchored" data-anchor-id="create-the-annotated-data-object-for-pydeseq2">Create the annotated data object for pydeseq2</h2>
+<p>We combine the read counts and the metadata into a <code>DeseqDataSet</code> object, which stores the count matrix together with sample metadata and is used for all downstream analysis steps in <code>pydeseq2</code>.</p>
+<p>Note that genes with zero counts across all samples are removed before creating the object.</p>
+<div id="cell-14" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: remove genes with all zero counts (as remove.zeros=TRUE in edgeR)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>read_counts_filtered <span class="op">=</span> read_counts[(read_counts <span class="op">&gt;</span> <span class="dv">0</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>) <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Relevel condition so that 'Control' is the reference level</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>metadata[<span class="st">"Condition"</span>] <span class="op">=</span> pd.Categorical(metadata[<span class="st">"Condition"</span>], categories<span class="op">=</span>[<span class="st">"Control"</span>] <span class="op">+</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                                       [c <span class="cf">for</span> c <span class="kw">in</span> metadata[<span class="st">"Condition"</span>].unique() <span class="cf">if</span> c <span class="op">!=</span> <span class="st">"Control"</span>],</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                                       ordered<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>inference <span class="op">=</span> DefaultInference(n_cpus<span class="op">=</span><span class="dv">2</span>) <span class="co">#just some compute settings</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create DESeq2 dataset</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>dds <span class="op">=</span> DeseqDataSet(</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    counts<span class="op">=</span>read_counts_filtered.astype(<span class="bu">int</span>).T,    <span class="co"># DESeq2 expects integer counts</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    metadata<span class="op">=</span>metadata[[<span class="st">"Condition"</span>, <span class="st">"Genotype"</span>, <span class="st">"Group"</span>]],  <span class="co"># include relevant columns</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    design<span class="op">=</span><span class="st">"~Group"</span>,  <span class="co"># use Group as main design factor</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    inference<span class="op">=</span>inference</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the object</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>dds</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>AnnData object with n_obs × n_vars = 12 × 270
+    obs: 'Condition', 'Genotype', 'Group'
+    obsm: 'design_matrix'</code></pre>
+</div>
+</div>
+<p>The object created is an <strong>annotated dataset</strong>, which we will encounter also in single cell RNA analysis. It contains a matrix and can store metadata for both rows and columns. All can be accessed directly from the object as you see below:</p>
+<div id="cell-16" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count matrix (samples × genes)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dds.X</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>array([[143,  17,   0, ...,   0,   1,  80],
+       [226,  12,   0, ...,   5,   2, 107],
+       [227,  15,   0, ...,   0,   2, 120],
+       ...,
+       [220,   6,   2, ...,   1,   3,  96],
+       [206,  11,   1, ...,   0,   3, 103],
+       [164,  23,   2, ...,   0,   0, 105]])</code></pre>
+</div>
+</div>
+<div id="cell-17" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#metadata for the samples</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dds.obs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Condition</th>
+<th data-quarto-table-cell-role="th">Genotype</th>
+<th data-quarto-table-cell-role="th">Group</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Sample</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_1_1</th>
+<td>Control</td>
+<td>S10</td>
+<td>S10_Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_1_2</th>
+<td>Control</td>
+<td>S10</td>
+<td>S10_Control</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_1_3</th>
+<td>Control</td>
+<td>S10</td>
+<td>S10_Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_2_1</th>
+<td>Treatment</td>
+<td>S10</td>
+<td>S10_Treatment</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_2_2</th>
+<td>Treatment</td>
+<td>S10</td>
+<td>S10_Treatment</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_2_3</th>
+<td>Treatment</td>
+<td>S10</td>
+<td>S10_Treatment</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_1_1</th>
+<td>Control</td>
+<td>Tienshan</td>
+<td>Tienshan_Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_1_2</th>
+<td>Control</td>
+<td>Tienshan</td>
+<td>Tienshan_Control</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_1_3</th>
+<td>Control</td>
+<td>Tienshan</td>
+<td>Tienshan_Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_2_1</th>
+<td>Treatment</td>
+<td>Tienshan</td>
+<td>Tienshan_Treatment</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_2_2</th>
+<td>Treatment</td>
+<td>Tienshan</td>
+<td>Tienshan_Treatment</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_2_3</th>
+<td>Treatment</td>
+<td>Tienshan</td>
+<td>Tienshan_Treatment</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-18" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#metadata for the genes (right now empty)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>dds.var</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">g175</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">g176</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">g178</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">g180</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">g181</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">...</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">g169</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">g170</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">g171</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">g172</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">g173</th>
+</tr>
+</tbody>
+</table>
+
+<p>270 rows × 0 columns</p>
+</div>
+</div>
+</div>
+<div id="cell-19" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># metadata matrices for the samples. In this case we have the design matrix only.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dds.obsm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>AxisArrays with keys: design_matrix</code></pre>
+</div>
+</div>
+<div id="cell-20" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the actual matrix — rows=samples, cols=groups</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>dds.obsm[<span class="st">'design_matrix'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Intercept</th>
+<th data-quarto-table-cell-role="th">Group[T.S10_Treatment]</th>
+<th data-quarto-table-cell-role="th">Group[T.Tienshan_Control]</th>
+<th data-quarto-table-cell-role="th">Group[T.Tienshan_Treatment]</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Sample</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_1_1</th>
+<td>1.0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_1_2</th>
+<td>1.0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_1_3</th>
+<td>1.0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_2_1</th>
+<td>1.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_2_2</th>
+<td>1.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_2_3</th>
+<td>1.0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_1_1</th>
+<td>1.0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_1_2</th>
+<td>1.0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_1_3</th>
+<td>1.0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_2_1</th>
+<td>1.0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_2_2</th>
+<td>1.0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_2_3</th>
+<td>1.0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-21" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gene-level matrices — stores per-gene model coefficients (LFC) after fitting (no gene-level matrices have been computed yet)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>dds.varm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>AxisArrays with keys: </code></pre>
+</div>
+</div>
+</section>
+<section id="preliminary-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="preliminary-data-analysis">Preliminary data analysis</h2>
+<p>This is not part of the actual differential gene expression analysis but is helpful for data exploration and quality assessment.</p>
+<p>We will create a PCA plot of the samples to assess differences between genotypes and conditions, and to check that replicates cluster together. The counts are log-transformed (log(x+1)) before PCA to reduce the influence of highly expressed genes.</p>
+<div id="cell-23" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>X_reduced <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">2</span>).fit_transform(np.log1p(dds.X))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>groups <span class="op">=</span> dds.obs[<span class="st">"Group"</span>].unique()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> plt.cm.tab10.colors</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, group <span class="kw">in</span> <span class="bu">enumerate</span>(groups):</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    mask <span class="op">=</span> dds.obs[<span class="st">"Group"</span>] <span class="op">==</span> group</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    plt.scatter(X_reduced[mask, <span class="dv">0</span>], X_reduced[mask, <span class="dv">1</span>],</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>                color<span class="op">=</span>colors[i], label<span class="op">=</span>group, alpha<span class="op">=</span><span class="fl">0.8</span>, s<span class="op">=</span><span class="dv">80</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">"upper right"</span>, shadow<span class="op">=</span><span class="va">False</span>, scatterpoints<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"PC1"</span>)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"PC2"</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"PCA of log-transformed counts"</span>)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_bulk_RNA_analysis_pydeseq2_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You can store the PCA matrix inside the annotated data object. The matrix for the PCA has two columns</p>
+<div id="cell-25" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>X_reduced</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>array([[  7.70717941,  -7.72982   ],
+       [  7.22436745,  -7.62822705],
+       [  8.41462382,  -6.63198754],
+       [ 11.87119167,   4.44603053],
+       [ 11.23186623,   5.40858616],
+       [ 10.64812719,   5.18561154],
+       [-11.99686215,  -5.51210109],
+       [-10.37053286,  -3.32337739],
+       [-11.65944922,  -3.61266337],
+       [ -7.0535725 ,   8.44372972],
+       [ -9.18313011,   2.78915611],
+       [ -6.83380895,   8.16506238]])</code></pre>
+</div>
+</div>
+<p>so it is saved in <code>dds.obsm</code></p>
+<div id="cell-27" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dds.obsm[<span class="st">'X_reduced'</span>] <span class="op">=</span> X_reduced.copy()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cell-28" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dds</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>AnnData object with n_obs × n_vars = 12 × 270
+    obs: 'Condition', 'Genotype', 'Group'
+    obsm: 'design_matrix', 'X_reduced'</code></pre>
+</div>
+</div>
+</section>
+<section id="filtering-the-lowly-expressed-genes" class="level2">
+<h2 class="anchored" data-anchor-id="filtering-the-lowly-expressed-genes">Filtering the lowly expressed genes</h2>
+<p>As seen previously, many genes have a low number of read counts in our samples. The genes with very low counts across all libraries provide little evidence for differential expression, thus we should eliminate these genes before the analysis. <br> In <code>pydeseq2</code>, low-count filtering is applied internally during model fitting. The basic pre-filtering step already performed above removes genes with zero counts across all samples. Additional filtering (e.g.&nbsp;keeping only genes with at least 10 reads in any group) can be applied manually before creating the <code>DeseqDataSet</code>.</p>
+</section>
+<section id="normalized-counts---exploratory-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="normalized-counts---exploratory-data-analysis">Normalized counts - Exploratory Data analysis</h2>
+<p>For data analysis purposes normalized log2 counts can be extracted from the DGEList object using the “Median of Ration” method - it calculates a per-sample linear scaling factor to correct for differences in sequencing depth and library composition. Ideally, remaining data will account for biological variation only <span class="citation" data-cites="Love_Huber_Anders_2014">(see more on normalization: <a href="#ref-Love_Huber_Anders_2014" role="doc-biblioref">Love et al. 2014</a>)</span>.</p>
+<p>We will generate the same plots as for the raw counts in order to compare the data before and after normalization. Sorry for the long code - most of it is to write text on the plots.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Do the plots for normalized counts look much different compared with the plots computed before data filtering and normalization?</li>
+<li>Does it make sense when you look at the group separation in the PCA plot?</li>
+</ul>
+</div>
+</div>
+<div id="cell-31" class="cell" data-execution_count="45">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute normalized counts using DESeq2's median-of-ratios method</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>norm_counts <span class="op">=</span> pds.preprocessing.deseq2_norm(dds.X)[<span class="dv">0</span>]</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>log_norm <span class="op">=</span> np.log1p(norm_counts)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>log_raw <span class="op">=</span> np.log1p(dds.X)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram: raw vs normalized for one sample (S10_1_2)</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].hist(log_raw[<span class="dv">1</span>][log_raw[<span class="dv">1</span>]<span class="op">&gt;</span><span class="dv">0</span>], bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'steelblue'</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'log(counts + 1)'</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Raw counts — S10_1_2'</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].hist(log_norm[<span class="dv">1</span>][log_norm[<span class="dv">1</span>]<span class="op">&gt;</span><span class="dv">0</span>], bins<span class="op">=</span><span class="dv">50</span>, color<span class="op">=</span><span class="st">'coral'</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'log(normalized counts + 1)'</span>)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Normalized counts — S10_1_2'</span>)</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot: all 12 samples side by side</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>sample_names <span class="op">=</span> <span class="bu">list</span>(dds.obs_names)</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].boxplot(log_raw.T, notch<span class="op">=</span>sample_names)</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xticklabels(sample_names, rotation<span class="op">=</span><span class="dv">45</span>, ha<span class="op">=</span><span class="st">'right'</span>)</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'log(counts + 1)'</span>)</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Raw counts'</span>)</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].boxplot(log_norm.T, notch<span class="op">=</span>sample_names)</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xticklabels(sample_names, rotation<span class="op">=</span><span class="dv">45</span>, ha<span class="op">=</span><span class="st">'right'</span>)</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'log(normalized counts + 1)'</span>)</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Normalized counts'</span>)</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a><span class="co"># PCA of normalized counts — compare with the raw-counts PCA above</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>X_reduced_norm <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">2</span>).fit_transform(log_norm)</span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>groups <span class="op">=</span> dds.obs[<span class="st">'Group'</span>].unique()</span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> plt.cm.tab10.colors</span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, group <span class="kw">in</span> <span class="bu">enumerate</span>(groups):</span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>    mask <span class="op">=</span> dds.obs[<span class="st">'Group'</span>] <span class="op">==</span> group</span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>    plt.scatter(X_reduced_norm[mask, <span class="dv">0</span>], X_reduced_norm[mask, <span class="dv">1</span>],</span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>                color<span class="op">=</span>colors[i], label<span class="op">=</span>group, alpha<span class="op">=</span><span class="fl">0.8</span>, s<span class="op">=</span><span class="dv">80</span>)</span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'upper right'</span>, shadow<span class="op">=</span><span class="va">False</span>, scatterpoints<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'PC1'</span>)</span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'PC2'</span>)</span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'PCA of log-normalized counts'</span>)</span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_bulk_RNA_analysis_pydeseq2_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_bulk_RNA_analysis_pydeseq2_files/figure-html/cell-18-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_bulk_RNA_analysis_pydeseq2_files/figure-html/cell-18-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="pydeseq2---testing-for-differentially-expressed-genes-degs" class="level1">
+<h1>PyDESeq2 - Testing for Differentially expressed genes (DEGs)</h1>
+<p>We now test for differentially expressed genes using <code>pydeseq2</code>, which fits a Generalized Linear Model (GLM) with a negative binomial distribution. Normalization, dispersion estimation, and model fitting are all handled automatically by <code>dds.deseq2()</code>.</p>
+<p>In <code>pydeseq2</code>, the design matrix is constructed automatically from the <code>design</code> formula specified when creating the <code>DeseqDataSet</code> (e.g.&nbsp;<code>"~Group"</code>). You can inspect it via <code>dds.obsm['design_matrix']</code>. The samples belonging to each group are assigned indicator values in this matrix.</p>
+<p>For pairwise comparisons between groups, <code>pydeseq2</code> uses the <code>contrast</code> parameter in <code>DeseqStats</code>, which directly specifies the factor name, numerator level, and denominator level. For example:</p>
+<ul>
+<li><code>contrast=["Group", "S10_Treatment", "S10_Control"]</code> tests S10 Treatment vs S10 Control<br>
+</li>
+<li><code>contrast=["Group", "Tienshan_Treatment", "Tienshan_Control"]</code> tests Tienshan Treatment vs Tienshan Control</li>
+</ul>
+<p>The combined analysis across both genotypes is done with a separate <code>DeseqDataSet</code> using <code>design="~Condition"</code>.</p>
+<div id="cell-35" class="cell" data-execution_count="46">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the DESeq2 model — estimates dispersions and LFC for all genes</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Must be run before any DeseqStats call</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>dds.deseq2()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Using None as control genes, passed at DeseqDataSet initialization</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Fitting size factors...
+... done in 0.00 seconds.
+
+Fitting dispersions...
+... done in 0.08 seconds.
+
+Fitting dispersion trend curve...
+... done in 0.02 seconds.
+
+Fitting MAP dispersions...
+... done in 0.11 seconds.
+
+Fitting LFCs...
+... done in 0.11 seconds.
+
+Calculating cook's distance...
+... done in 0.01 seconds.
+
+Replacing 0 outlier genes.
+</code></pre>
+</div>
+</div>
+<p>Look again at the <code>dds</code> object. It is now populated with a lot of data. This will be used to produce the differential gene expression results.</p>
+<div id="cell-37" class="cell" data-execution_count="47">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>dds</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="47">
+<pre><code>AnnData object with n_obs × n_vars = 12 × 270
+    obs: 'Condition', 'Genotype', 'Group', 'size_factors', 'replaceable'
+    var: '_normed_means', 'non_zero', '_MoM_dispersions', 'genewise_dispersions', '_genewise_converged', 'fitted_dispersions', 'MAP_dispersions', '_MAP_converged', 'dispersions', '_outlier_genes', '_LFC_converged', 'replaced', 'refitted', '_pvalue_cooks_outlier'
+    uns: 'trend_coeffs', 'disp_function_type', '_squared_logres', 'prior_disp_var'
+    obsm: 'design_matrix', 'X_reduced', '_mu_LFC', '_hat_diagonals'
+    varm: 'LFC'
+    layers: 'normed_counts', '_mu_hat', 'cooks'</code></pre>
+</div>
+</div>
+<section id="degs-for-white-clover-s10-plants-treatment-vs-control" class="level2">
+<h2 class="anchored" data-anchor-id="degs-for-white-clover-s10-plants-treatment-vs-control">DEGs for White clover S10 plants Treatment vs Control</h2>
+<p>Find DEGs for White clover S10 plants in Treatment condition compared with the Control condition. We test for differentially expressed genes using <code>DeseqStats</code> from <code>pydeseq2</code>, which applies a Wald test on the negative binomial GLM coefficients. We specify the contrast of interest and call <code>summary()</code> to extract results for all genes.</p>
+<div id="cell-39" class="cell" data-execution_count="48">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform statistical test for S10_Treatment vs S10_Control</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>stat_S10 <span class="op">=</span> DeseqStats(dds, contrast<span class="op">=</span>[<span class="st">"Group"</span>, <span class="st">"S10_Treatment"</span>, <span class="st">"S10_Control"</span>], n_cpus<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>stat_S10.summary()</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract results sorted by adjusted p-value (like topTags)</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>deg_S10 <span class="op">=</span> stat_S10.results_df.sort_values(<span class="st">"padj"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Log2 fold change &amp; Wald test p-value: Group S10_Treatment vs S10_Control
+         baseMean  log2FoldChange     lfcSE      stat    pvalue      padj
+g175   202.325510        0.167305  0.145376  1.150841  0.249798  0.393200
+g176    17.542125       -0.045418  0.578150 -0.078558  0.937384  0.978053
+g178     0.645813        0.099434  3.879734  0.025629  0.979553       NaN
+g180  2628.596257        0.081310  0.322491  0.252132  0.800939  0.856350
+g181   542.253274       -0.339750  0.156649 -2.168865  0.030093  0.066439
+...           ...             ...       ...       ...       ...       ...
+g169     0.222692        1.052918  4.427290  0.237824  0.812017       NaN
+g170     0.101566        0.099434  4.920498  0.020208  0.983877       NaN
+g171     0.788217        0.165912  4.063903  0.040826  0.967435       NaN
+g172     2.412618        1.493109  1.050888  1.420807  0.155373       NaN
+g173    96.418736        0.276085  0.283291  0.974564  0.329777  0.471110
+
+[270 rows x 6 columns]</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Running Wald tests...
+... done in 0.04 seconds.
+</code></pre>
+</div>
+</div>
+<p>We have now created a table with certain parameters calculated for each of the genes analysed. Those are:</p>
+<ul>
+<li><p><strong>log2FoldChange</strong> represents the base 2 logarithm of the fold change and shows how much the expression of the gene has changed between the two conditions. A log2FoldChange of 1 means a doubling in the read count between control and treatment samples. Genes with a log2FoldChange higher than 0 are upregulated while genes with a log2FoldChange lower than 0 are downregulated.</p></li>
+<li><p><strong>baseMean</strong> represents the average normalized count across all samples, reflecting the overall expression level of the gene.</p></li>
+<li><p><strong>stat</strong> - the Wald test statistic.</p></li>
+<li><p><strong>pvalue</strong> is the raw p-value.</p></li>
+<li><p><strong>padj</strong> (The adjusted p-value) is calculated using Benjamini and Hochberg’s algorithm. It controls the rate of false positive values under multiple testing. Usually, a threshold of under 5% is set for the adjusted p-value.</p></li>
+</ul>
+<p>The important information for us in this table is stored in the <strong>log2FoldChange</strong> and <strong>padj</strong> columns. The top DE genes have small padj values and large fold changes. We choose some typical thresholds in the filtering below:</p>
+<div id="cell-41" class="cell" data-execution_count="50">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter by adjusted p-value and log2 fold change</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>deg_S10_filtered <span class="op">=</span> deg_S10[(deg_S10[<span class="st">"padj"</span>] <span class="op">&lt;</span> <span class="fl">0.05</span>) <span class="op">&amp;</span> (deg_S10[<span class="st">"log2FoldChange"</span>].<span class="bu">abs</span>() <span class="op">&gt;</span> <span class="dv">1</span>)].copy()</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add gene_ID column from index (like rownames_to_column)</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>deg_S10_filtered.reset_index(inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>deg_S10_filtered.rename(columns<span class="op">=</span>{<span class="st">"index"</span>: <span class="st">"gene_ID"</span>}, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>pprint(<span class="st">"Preview of filtered table"</span>)</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview top genes</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(deg_S10_filtered.head())</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>pprint(<span class="st">"Number of (significantly) differentially expressed genes"</span>)</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of genes that passed the filter</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(deg_S10_filtered))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #008000; text-decoration-color: #008000">'Preview of filtered table'</span>
+</pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  gene_ID     baseMean  log2FoldChange     lfcSE       stat        pvalue  \
+0     g39   877.890622        3.602312  0.199468  18.059601  6.629965e-73   
+1    g232   192.523135        4.074923  0.321700  12.666850  9.026655e-37   
+2      g6   400.531797        2.343831  0.207191  11.312434  1.138863e-29   
+3    g350   500.560508        2.073565  0.236033   8.785074  1.562614e-18   
+4    g240  1312.596919        1.375930  0.166241   8.276734  1.266000e-16   
+
+           padj  
+0  1.127094e-70  
+1  7.672657e-35  
+2  6.453558e-28  
+3  6.641108e-17  
+4  4.304402e-15  </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #008000; text-decoration-color: #008000">'Number of (significantly) differentially expressed genes'</span>
+</pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>53</code></pre>
+</div>
+</div>
+<p>We can also visualize the selected genes by plotting a Smear plot or a Volcano plot. The Genes that passed the filter are coloured in red, and the top 10 genes with the lowest <code>padj</code> value are labelled with their gene ID.</p>
+<p>We can see that the majority of the genes analysed are either not statistically significant or have a very small log2-fold change.</p>
+<div id="cell-43" class="cell" data-execution_count="52">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot of all genes: logCPM vs log2FC</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(deg_S10[<span class="st">"baseMean"</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: np.log2(x <span class="op">+</span> <span class="dv">1</span>)), </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>            deg_S10[<span class="st">"log2FoldChange"</span>], </span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>            color<span class="op">=</span><span class="st">"grey"</span>, alpha<span class="op">=</span><span class="fl">0.4</span>, label<span class="op">=</span><span class="st">"All genes"</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Highlight filtered DEGs in red</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>plt.scatter(deg_S10_filtered[<span class="st">"baseMean"</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: np.log2(x <span class="op">+</span> <span class="dv">1</span>)), </span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>            deg_S10_filtered[<span class="st">"log2FoldChange"</span>], </span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>            color<span class="op">=</span><span class="st">"red"</span>, alpha<span class="op">=</span><span class="fl">0.8</span>, label<span class="op">=</span><span class="st">"DEGs (FDR &lt; 0.05, |LFC| &gt; 1)"</span>)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Label top 10 DEGs</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">min</span>(<span class="dv">10</span>, <span class="bu">len</span>(deg_S10_filtered))):</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.log2(deg_S10_filtered.loc[i, <span class="st">"baseMean"</span>] <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> deg_S10_filtered.loc[i, <span class="st">"log2FoldChange"</span>]</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    label <span class="op">=</span> deg_S10_filtered.iloc[i, <span class="dv">0</span>]</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>    plt.text(x, y, label, fontsize<span class="op">=</span><span class="dv">8</span>, ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'bottom'</span>)</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Add horizontal lines at logFC ±1</span></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">1</span>, color<span class="op">=</span><span class="st">"blue"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=-</span><span class="dv">1</span>, color<span class="op">=</span><span class="st">"blue"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"log2(baseMean + 1)"</span>)</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"log2 Fold Change"</span>)</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Smear Plot of S10 DEGs"</span>)</span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_bulk_RNA_analysis_pydeseq2_files/figure-html/cell-23-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The same plot but interactive</p>
+<div id="cell-45" class="cell" data-execution_count="53">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data for plotting</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>deg_S10[<span class="st">"logCPM"</span>] <span class="op">=</span> np.log2(deg_S10[<span class="st">"baseMean"</span>] <span class="op">+</span> <span class="dv">1</span>)  <span class="co"># Approximate logCPM</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>deg_S10_filtered[<span class="st">"logCPM"</span>] <span class="op">=</span> np.log2(deg_S10_filtered[<span class="st">"baseMean"</span>] <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Plotly scatter plot</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.scatter(</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    deg_S10, </span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"logCPM"</span>, </span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"log2FoldChange"</span>, </span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span>(deg_S10[<span class="st">"padj"</span>] <span class="op">&lt;</span> <span class="fl">0.05</span>) <span class="op">&amp;</span> (deg_S10[<span class="st">"log2FoldChange"</span>].<span class="bu">abs</span>() <span class="op">&gt;</span> <span class="dv">1</span>),</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"Smear Plot of S10 DEGs"</span>,</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>    labels<span class="op">=</span>{<span class="st">"logCPM"</span>: <span class="st">"log2(baseMean + 1)"</span>, <span class="st">"log2FoldChange"</span>: <span class="st">"log2 Fold Change"</span>},</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    color_continuous_scale<span class="op">=</span>[<span class="st">"grey"</span>, <span class="st">"red"</span>],</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>    opacity<span class="op">=</span><span class="fl">0.7</span></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the top 10 gene labels</span></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">min</span>(<span class="dv">10</span>, <span class="bu">len</span>(deg_S10_filtered))):</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>    fig.add_annotation(</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>deg_S10_filtered.iloc[i][<span class="st">"logCPM"</span>],</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>deg_S10_filtered.iloc[i][<span class="st">"log2FoldChange"</span>],</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>        text<span class="op">=</span>deg_S10_filtered.iloc[i][<span class="dv">0</span>],</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>        showarrow<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>        arrowhead<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>        ay<span class="op">=-</span><span class="dv">40</span>,</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>        font<span class="op">=</span><span class="bu">dict</span>(size<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Add horizontal lines at logFC ±1</span></span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>fig.add_hline(y<span class="op">=</span><span class="dv">1</span>, line_dash<span class="op">=</span><span class="st">"dash"</span>, line_color<span class="op">=</span><span class="st">"blue"</span>)</span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>fig.add_hline(y<span class="op">=-</span><span class="dv">1</span>, line_dash<span class="op">=</span><span class="st">"dash"</span>, line_color<span class="op">=</span><span class="st">"blue"</span>)</span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the figure</span></span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_bulk_RNA_analysis_pydeseq2_files/figure-html/cell-24-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="degs-for-white-clover-tienshan-treatment-vs-control" class="level2">
+<h2 class="anchored" data-anchor-id="degs-for-white-clover-tienshan-treatment-vs-control">DEGs for White clover Tienshan Treatment vs Control</h2>
+<p>We can do this using the same functions as above and changing the contrast.</p>
+<p>This time we will directly filter the differentially expressed genes using the same parameters as for the S10 samples.</p>
+<p>We can now plot a Venn diagram with the DEGs for the two genotypes in order to observe the number of common and specific differentially expressed genes between the two genotypes as response to the cold exposure. You can see that a high percentage of the identified genes are common for the two genotypes, while each genotype has also specific genes.</p>
+<div id="cell-48" class="cell" data-execution_count="62">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform statistical test for Tienshan_Treatment vs Tienshan_Control</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>stat_Ti <span class="op">=</span> DeseqStats(dds, contrast<span class="op">=</span>[<span class="st">"Group"</span>, <span class="st">"Tienshan_Treatment"</span>, <span class="st">"Tienshan_Control"</span>], n_cpus<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>stat_Ti.summary()</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract results sorted by adjusted p-value</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>deg_Ti <span class="op">=</span> stat_Ti.results_df.sort_values(<span class="st">"padj"</span>)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter by adjusted p-value and log2 fold change</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>DEG_Ti_filtered <span class="op">=</span> deg_Ti[(deg_Ti[<span class="st">"padj"</span>] <span class="op">&lt;</span> <span class="fl">0.05</span>) <span class="op">&amp;</span> (deg_Ti[<span class="st">"log2FoldChange"</span>].<span class="bu">abs</span>() <span class="op">&gt;</span> <span class="dv">1</span>)].copy()</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>DEG_Ti_filtered.reset_index(inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>DEG_Ti_filtered.rename(columns<span class="op">=</span>{<span class="st">"index"</span>: <span class="st">"gene_ID"</span>}, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>DEG_Ti_filtered.head()</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>pprint(<span class="ss">f"Nr of DEGs (Tienshan): </span><span class="sc">{</span><span class="bu">len</span>(DEG_Ti_filtered)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Log2 fold change &amp; Wald test p-value: Group Tienshan_Treatment vs Tienshan_Control
+         baseMean  log2FoldChange     lfcSE      stat    pvalue      padj
+g175   202.325510       -0.243799  0.144983 -1.681571  0.092652  0.184286
+g176    17.542125       -1.054188  0.559737 -1.883364  0.059651  0.130083
+g178     0.645813        1.130199  2.988306  0.378207  0.705277       NaN
+g180  2628.596257        0.823007  0.323475  2.544268  0.010951  0.034174
+g181   542.253274       -0.575490  0.155263 -3.706551  0.000210  0.001188
+...           ...             ...       ...       ...       ...       ...
+g169     0.222692       -0.132776  4.919529 -0.026990  0.978468       NaN
+g170     0.101566       -1.094569  4.729271 -0.231446  0.816969       NaN
+g171     0.788217        0.829016  4.621494  0.179383  0.857637       NaN
+g172     2.412618       -0.142774  1.106279 -0.129058  0.897312       NaN
+g173    96.418736        0.333877  0.288993  1.155312  0.247963  0.377153
+
+[270 rows x 6 columns]</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Running Wald tests...
+... done in 0.03 seconds.
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #008000; text-decoration-color: #008000">'Nr of DEGs (Tienshan): 41'</span>
+</pre>
+</div>
+</div>
+</section>
+<section id="degs-for-s10tienshan-treatment-vs-control-wo-genotype-effects" class="level2">
+<h2 class="anchored" data-anchor-id="degs-for-s10tienshan-treatment-vs-control-wo-genotype-effects">DEGs for S10+Tienshan Treatment vs Control w/o genotype effects</h2>
+<p>Until now we tested for DEGs specific for each of the two genotypes under cold treatment. We can also run a test where we ignore the genotype and just test for the differences in the cold response.</p>
+<p>Consider the counts for both genotypes as a single dataset using the previously created contrast “S10_Tienshan”.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Do the results look different compared with the previous tests?</li>
+</ul>
+</div>
+</div>
+<div id="cell-50" class="cell" data-execution_count="63">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Second DeseqDataSet ignoring genotype — tests Treatment vs Control across both genotypes</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>dds2 <span class="op">=</span> DeseqDataSet(</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    counts<span class="op">=</span>read_counts_filtered.astype(<span class="bu">int</span>).T,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    metadata<span class="op">=</span>metadata[[<span class="st">"Condition"</span>, <span class="st">"Genotype"</span>, <span class="st">"Group"</span>]],</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    design<span class="op">=</span><span class="st">"~Condition"</span>,</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    inference<span class="op">=</span>inference</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>dds2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="63">
+<pre><code>AnnData object with n_obs × n_vars = 12 × 270
+    obs: 'Condition', 'Genotype', 'Group'
+    obsm: 'design_matrix'</code></pre>
+</div>
+</div>
+<div id="cell-51" class="cell" data-execution_count="64">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>dds2.obs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="64">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Condition</th>
+<th data-quarto-table-cell-role="th">Genotype</th>
+<th data-quarto-table-cell-role="th">Group</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Sample</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_1_1</th>
+<td>Control</td>
+<td>S10</td>
+<td>S10_Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_1_2</th>
+<td>Control</td>
+<td>S10</td>
+<td>S10_Control</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_1_3</th>
+<td>Control</td>
+<td>S10</td>
+<td>S10_Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_2_1</th>
+<td>Treatment</td>
+<td>S10</td>
+<td>S10_Treatment</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_2_2</th>
+<td>Treatment</td>
+<td>S10</td>
+<td>S10_Treatment</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_2_3</th>
+<td>Treatment</td>
+<td>S10</td>
+<td>S10_Treatment</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_1_1</th>
+<td>Control</td>
+<td>Tienshan</td>
+<td>Tienshan_Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_1_2</th>
+<td>Control</td>
+<td>Tienshan</td>
+<td>Tienshan_Control</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_1_3</th>
+<td>Control</td>
+<td>Tienshan</td>
+<td>Tienshan_Control</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_2_1</th>
+<td>Treatment</td>
+<td>Tienshan</td>
+<td>Tienshan_Treatment</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_2_2</th>
+<td>Treatment</td>
+<td>Tienshan</td>
+<td>Tienshan_Treatment</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_2_3</th>
+<td>Treatment</td>
+<td>Tienshan</td>
+<td>Tienshan_Treatment</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-52" class="cell" data-execution_count="65">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>dds2.obsm[<span class="st">'design_matrix'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="65">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Intercept</th>
+<th data-quarto-table-cell-role="th">Condition[T.Treatment]</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Sample</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_1_1</th>
+<td>1.0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_1_2</th>
+<td>1.0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_1_3</th>
+<td>1.0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_2_1</th>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">S10_2_2</th>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">S10_2_3</th>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_1_1</th>
+<td>1.0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_1_2</th>
+<td>1.0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_1_3</th>
+<td>1.0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_2_1</th>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TI_2_2</th>
+<td>1.0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TI_2_3</th>
+<td>1.0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-53" class="cell" data-execution_count="66">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>dds2.deseq2()</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform statistical test for S10_Treatment vs S10_Control</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>stat_genotype <span class="op">=</span> DeseqStats(dds2, contrast<span class="op">=</span>[<span class="st">"Condition"</span>, <span class="st">"Treatment"</span>, <span class="st">"Control"</span>], n_cpus<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>stat_genotype.summary()</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract results sorted by adjusted p-value (like topTags)</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>deg_genotype <span class="op">=</span> stat_genotype.results_df.sort_values(<span class="st">"padj"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Fitting size factors...
+... done in 0.00 seconds.
+
+Fitting dispersions...
+... done in 0.10 seconds.
+
+Fitting dispersion trend curve...</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Using None as control genes, passed at DeseqDataSet initialization</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>... done in 0.03 seconds.
+
+Fitting MAP dispersions...</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Log2 fold change &amp; Wald test p-value: Condition Treatment vs Control
+         baseMean  log2FoldChange     lfcSE      stat    pvalue      padj
+g175   202.325510       -0.057171  0.174375 -0.327864  0.743015  0.889356
+g176    17.542125       -0.663139  0.481820 -1.376321  0.168722  0.422693
+g178     0.645813        1.286093  2.269292  0.566738  0.570892  0.801431
+g180  2628.596257        0.318542  0.418039  0.761990  0.446066  0.707758
+g181   542.253274       -0.480479  0.222708 -2.157434  0.030972  0.118892
+...           ...             ...       ...       ...       ...       ...
+g169     0.222692        0.464231  3.265068  0.142181  0.886937       NaN
+g170     0.101566       -0.497561  3.402781 -0.146222  0.883746       NaN
+g171     0.788217        0.422446  2.909097  0.145216  0.884541  0.944055
+g172     2.412618        0.749018  0.752199  0.995771  0.319361  0.633400
+g173    96.418736        0.304886  0.207065  1.472416  0.140908  0.381603
+
+[270 rows x 6 columns]</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>... done in 0.20 seconds.
+
+Fitting LFCs...
+... done in 0.07 seconds.
+
+Calculating cook's distance...
+... done in 0.00 seconds.
+
+Replacing 0 outlier genes.
+
+Running Wald tests...
+... done in 0.03 seconds.
+</code></pre>
+</div>
+</div>
+<div id="cell-54" class="cell" data-execution_count="68">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter by FDR &lt; 0.05 and absolute log2FC &gt; 1</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>DEG_cond_filtered <span class="op">=</span> deg_genotype[( deg_genotype[<span class="st">"padj"</span>] <span class="op">&lt;</span> <span class="fl">0.05</span>) <span class="op">&amp;</span> ( deg_genotype[<span class="st">"log2FoldChange"</span>].<span class="bu">abs</span>() <span class="op">&gt;</span> <span class="dv">1</span>)].copy()</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Reset index to expose gene IDs as a column</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>DEG_cond_filtered <span class="op">=</span> DEG_cond_filtered.reset_index().rename(columns<span class="op">=</span>{<span class="st">"index"</span>: <span class="st">"gene_ID"</span>})</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Show first few rows</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>pprint(<span class="st">"Preview of the genes"</span>)</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DEG_cond_filtered.head())</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print number of DEGs</span></span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>pprint(<span class="st">"Nr of differentially expressed genes:"</span>)</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>pprint(<span class="bu">len</span>(DEG_cond_filtered))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #008000; text-decoration-color: #008000">'Preview of the genes'</span>
+</pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  gene_ID    baseMean  log2FoldChange     lfcSE       stat        pvalue  \
+0    g272  726.653122        3.262628  0.310557  10.505712  8.130655e-26   
+1    g269  178.234494       -1.670421  0.175838  -9.499755  2.103853e-21   
+2    g157   60.155732        4.745711  0.536811   8.840555  9.524447e-19   
+3    g232  192.523135        3.495961  0.447407   7.813832  5.547482e-15   
+4    g101  452.972749        3.533504  0.460210   7.678021  1.615648e-14   
+
+           padj  
+0  1.935096e-23  
+1  2.503585e-19  
+2  7.556061e-17  
+3  3.300752e-13  
+4  7.690482e-13  </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #008000; text-decoration-color: #008000">'Nr of differentially expressed genes:'</span>
+</pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #008080; text-decoration-color: #008080; font-weight: bold">43</span>
+</pre>
+</div>
+</div>
+<p>Plot the results from the 3 tests in a Venn diagram to visualize the number of common and unique genes</p>
+<div id="cell-56" class="cell" data-execution_count="72">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>set_S10 <span class="op">=</span> <span class="bu">set</span>(deg_S10_filtered[<span class="st">'gene_ID'</span>])</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>set_Ti <span class="op">=</span> <span class="bu">set</span>(DEG_Ti_filtered[<span class="st">'gene_ID'</span>])</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>set_cond <span class="op">=</span> <span class="bu">set</span>(DEG_cond_filtered[<span class="st">'gene_ID'</span>])</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">7</span>))</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>venn <span class="op">=</span> venn3(</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    [set_S10, set_Ti, set_cond],</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>    set_labels<span class="op">=</span>(<span class="st">'S10'</span>, <span class="st">'Tienshan'</span>, <span class="st">'S10+Tienshan'</span>),</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>    set_colors<span class="op">=</span>(<span class="st">'cornflowerblue'</span>, <span class="st">'yellowgreen'</span>, <span class="st">'thistle'</span>),</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.7</span></span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> text <span class="kw">in</span> venn.set_labels:</span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>    text.set_fontweight(<span class="st">'bold'</span>)</span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>    text.set_fontsize(<span class="dv">12</span>)</span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Venn Diagram of DEG overlap (3 contrasts)"</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_bulk_RNA_analysis_pydeseq2_files/figure-html/cell-31-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="explore-dge-results" class="level2">
+<h2 class="anchored" data-anchor-id="explore-dge-results">Explore DGE results</h2>
+<section id="select-the-genes-which-appear-only-in-the-analysis-using-both-genotypes-for-further-examination." class="level3">
+<h3 class="anchored" data-anchor-id="select-the-genes-which-appear-only-in-the-analysis-using-both-genotypes-for-further-examination.">Select the genes which appear only in the analysis using both genotypes for further examination.</h3>
+<p>We use pandas boolean indexing to keep only the genes that are unique to the combined analysis — i.e., not present in either the S10-only or Tienshan-only results.</p>
+<div id="cell-59" class="cell" data-execution_count="73">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep only genes unique to the combined analysis (not found in S10-only or Ti-only results)</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique <span class="op">=</span> DEG_cond_filtered[</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">~</span>DEG_cond_filtered[<span class="st">'gene_ID'</span>].isin(deg_S10_filtered[<span class="st">'gene_ID'</span>]) <span class="op">&amp;</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">~</span>DEG_cond_filtered[<span class="st">'gene_ID'</span>].isin(DEG_Ti_filtered[<span class="st">'gene_ID'</span>])</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>].copy()</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="73">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">gene_ID</th>
+<th data-quarto-table-cell-role="th">baseMean</th>
+<th data-quarto-table-cell-role="th">log2FoldChange</th>
+<th data-quarto-table-cell-role="th">lfcSE</th>
+<th data-quarto-table-cell-role="th">stat</th>
+<th data-quarto-table-cell-role="th">pvalue</th>
+<th data-quarto-table-cell-role="th">padj</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">30</th>
+<td>g43</td>
+<td>2.732051</td>
+<td>-3.837514</td>
+<td>1.193922</td>
+<td>-3.214208</td>
+<td>0.001308</td>
+<td>0.009156</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">37</th>
+<td>g34</td>
+<td>3.094280</td>
+<td>-2.188078</td>
+<td>0.775568</td>
+<td>-2.821259</td>
+<td>0.004784</td>
+<td>0.025875</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">41</th>
+<td>g273</td>
+<td>7.806727</td>
+<td>1.987711</td>
+<td>0.752760</td>
+<td>2.640565</td>
+<td>0.008277</td>
+<td>0.038625</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Now we can get their counts from the original expression matrix</p>
+<div id="cell-61" class="cell" data-execution_count="81">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>read_counts_reset <span class="op">=</span> read_counts.reset_index().rename(columns<span class="op">=</span>{<span class="st">"index"</span>: <span class="st">"gene_ID"</span>})</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique_counts <span class="op">=</span> S10_Ti_unique[[<span class="st">'gene_ID'</span>, <span class="st">'log2FoldChange'</span>, <span class="st">'padj'</span>]].merge(</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>    read_counts_reset, on<span class="op">=</span><span class="st">'gene_ID'</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique_counts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="81">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">gene_ID</th>
+<th data-quarto-table-cell-role="th">log2FoldChange</th>
+<th data-quarto-table-cell-role="th">padj</th>
+<th data-quarto-table-cell-role="th">S10_1_1</th>
+<th data-quarto-table-cell-role="th">S10_1_2</th>
+<th data-quarto-table-cell-role="th">S10_1_3</th>
+<th data-quarto-table-cell-role="th">S10_2_1</th>
+<th data-quarto-table-cell-role="th">S10_2_2</th>
+<th data-quarto-table-cell-role="th">S10_2_3</th>
+<th data-quarto-table-cell-role="th">TI_1_1</th>
+<th data-quarto-table-cell-role="th">TI_1_2</th>
+<th data-quarto-table-cell-role="th">TI_1_3</th>
+<th data-quarto-table-cell-role="th">TI_2_1</th>
+<th data-quarto-table-cell-role="th">TI_2_2</th>
+<th data-quarto-table-cell-role="th">TI_2_3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>g43</td>
+<td>-3.837514</td>
+<td>0.009156</td>
+<td>5</td>
+<td>5</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>7</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>g34</td>
+<td>-2.188078</td>
+<td>0.025875</td>
+<td>6</td>
+<td>6</td>
+<td>5</td>
+<td>3</td>
+<td>0</td>
+<td>2</td>
+<td>7</td>
+<td>5</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>g273</td>
+<td>1.987711</td>
+<td>0.038625</td>
+<td>0</td>
+<td>4</td>
+<td>1</td>
+<td>11</td>
+<td>6</td>
+<td>5</td>
+<td>4</td>
+<td>2</td>
+<td>7</td>
+<td>12</td>
+<td>9</td>
+<td>29</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>How do the counts look for these genes, does it make sense that they are differentially expressed only when using the two genotypes?</li>
+</ul>
+<p>It can help to calculate the average expression of each sample.</p>
+</div>
+</div>
+</section>
+<section id="functional-annotations" class="level3">
+<h3 class="anchored" data-anchor-id="functional-annotations">Functional annotations</h3>
+<p>For the selected genes, we find some functional annotations for the related proteins. We have them in a table, but can be also found on dedicated online archives which can be explored directly in your browser.</p>
+<div id="cell-64" class="cell" data-execution_count="75">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>Functional_annotations <span class="op">=</span> pd.read_csv(<span class="st">"../Data/Clover_Data/Functional_Annotations.txt"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique_FA <span class="op">=</span> S10_Ti_unique[[<span class="st">'gene_ID'</span>, <span class="st">'log2FoldChange'</span>, <span class="st">'padj'</span>]].merge(</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>    Functional_annotations, on<span class="op">=</span><span class="st">'gene_ID'</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>S10_Ti_unique_FA</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="75">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">gene_ID</th>
+<th data-quarto-table-cell-role="th">log2FoldChange</th>
+<th data-quarto-table-cell-role="th">padj</th>
+<th data-quarto-table-cell-role="th">Human-Readable-Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>g43</td>
+<td>-3.837514</td>
+<td>0.009156</td>
+<td>Protein RADIALIS-like 6</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>g34</td>
+<td>-2.188078</td>
+<td>0.025875</td>
+<td>Basic endochitinase A</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>g273</td>
+<td>1.987711</td>
+<td>0.038625</td>
+<td>Stachyose synthase</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>We can also get a table for the Ti treatment vs control test. In this case we save it as a csv tabular file in <code>Deg_Output_tables</code></p>
+<div id="cell-66" class="cell" data-execution_count="79">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p DEG_Output_tables</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cell-67" class="cell" data-execution_count="82">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>read_counts_reset <span class="op">=</span> read_counts.reset_index().rename(columns<span class="op">=</span>{<span class="st">"index"</span>: <span class="st">"gene_ID"</span>})</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>ti_cols <span class="op">=</span> [<span class="st">'gene_ID'</span>] <span class="op">+</span> <span class="bu">list</span>(read_counts.columns[<span class="dv">6</span>:<span class="dv">12</span>])  <span class="co"># Ti samples: TI_1_1 through TI_2_3</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>DEG_Ti_counts_FA <span class="op">=</span> (</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>    DEG_Ti_filtered[[<span class="st">'gene_ID'</span>, <span class="st">'log2FoldChange'</span>, <span class="st">'padj'</span>]]</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>    .merge(read_counts_reset[ti_cols], on<span class="op">=</span><span class="st">'gene_ID'</span>)</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>    .merge(Functional_annotations, on<span class="op">=</span><span class="st">'gene_ID'</span>)</span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>DEG_Ti_counts_FA.to_csv(</span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"DEG_Output_tables/Ti_Treatment_Control_DGE.txt"</span>,</span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>    sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, index<span class="op">=</span><span class="va">False</span></span>
+<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a>DEG_Ti_counts_FA.head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="82">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">gene_ID</th>
+<th data-quarto-table-cell-role="th">log2FoldChange</th>
+<th data-quarto-table-cell-role="th">padj</th>
+<th data-quarto-table-cell-role="th">TI_1_1</th>
+<th data-quarto-table-cell-role="th">TI_1_2</th>
+<th data-quarto-table-cell-role="th">TI_1_3</th>
+<th data-quarto-table-cell-role="th">TI_2_1</th>
+<th data-quarto-table-cell-role="th">TI_2_2</th>
+<th data-quarto-table-cell-role="th">TI_2_3</th>
+<th data-quarto-table-cell-role="th">Human-Readable-Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>g234</td>
+<td>-3.384042</td>
+<td>8.307833e-49</td>
+<td>1186</td>
+<td>1512</td>
+<td>1079</td>
+<td>130</td>
+<td>124</td>
+<td>143</td>
+<td>Polysaccharide lyase family 4, domain III</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>g269</td>
+<td>-1.940195</td>
+<td>1.224915e-20</td>
+<td>287</td>
+<td>239</td>
+<td>259</td>
+<td>79</td>
+<td>71</td>
+<td>74</td>
+<td>zinc finger</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>g101</td>
+<td>4.256964</td>
+<td>6.377719e-18</td>
+<td>17</td>
+<td>39</td>
+<td>39</td>
+<td>1136</td>
+<td>279</td>
+<td>665</td>
+<td>WRKY transcription factor 23</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>g272</td>
+<td>3.344247</td>
+<td>4.432714e-15</td>
+<td>87</td>
+<td>133</td>
+<td>145</td>
+<td>2115</td>
+<td>701</td>
+<td>1384</td>
+<td>WRKY transcription factor 23</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>g26</td>
+<td>2.399538</td>
+<td>7.657050e-13</td>
+<td>22</td>
+<td>23</td>
+<td>33</td>
+<td>200</td>
+<td>160</td>
+<td>100</td>
+<td>Transcription factor PIF3</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>g232</td>
+<td>2.447492</td>
+<td>1.415977e-11</td>
+<td>26</td>
+<td>40</td>
+<td>13</td>
+<td>164</td>
+<td>187</td>
+<td>123</td>
+<td>Retrovirus-related Pol polyprotein from transp...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>g90</td>
+<td>4.480292</td>
+<td>4.380351e-11</td>
+<td>22</td>
+<td>40</td>
+<td>72</td>
+<td>1835</td>
+<td>366</td>
+<td>1229</td>
+<td>Galactinol synthase 1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>g99</td>
+<td>-1.477837</td>
+<td>4.779864e-11</td>
+<td>160</td>
+<td>135</td>
+<td>144</td>
+<td>75</td>
+<td>56</td>
+<td>43</td>
+<td>zinc finger</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>g240</td>
+<td>1.072229</td>
+<td>1.565696e-09</td>
+<td>779</td>
+<td>880</td>
+<td>961</td>
+<td>2537</td>
+<td>1738</td>
+<td>1859</td>
+<td>Shaggy-related protein kinase alpha</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>g92</td>
+<td>-1.358121</td>
+<td>2.387098e-09</td>
+<td>215</td>
+<td>183</td>
+<td>190</td>
+<td>86</td>
+<td>85</td>
+<td>80</td>
+<td>F-box/LRR-repeat protein At3g26922</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Task">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Separate the upregulated and downregulated genes for each genotype and append functional annotations to them.</li>
+<li>Identify the genes that are commonly upregulated in S10 and Tienshan samples and the uniquely upregulated genes for each genotype.</li>
+<li>Why do you think some of the proteins appear in duplicates?</li>
+</ul>
+</div>
+</div>
+<div id="cell-69" class="cell" data-execution_count="84">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co">#your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+
+
+
+</section>
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Love_Huber_Anders_2014" class="csl-entry" role="listitem">
+Love, Michael I., Wolfgang Huber, and Simon Anders. 2014. <span>“Moderated Estimation of Fold Change and Dispersion for RNA-Seq Data with DESeq2.”</span> <em>Genome Biology</em> 15 (12): 550. <a href="https://doi.org/10.1186/s13059-014-0550-8">https://doi.org/10.1186/s13059-014-0550-8</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/hds-sandbox\.github\.io\/Intro-NGS-AU_course\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

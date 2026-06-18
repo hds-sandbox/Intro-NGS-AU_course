@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/galaxy/galaxy.html</loc>
-    <lastmod>2026-06-03T14:09:05.908Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/index.html</loc>
-    <lastmod>2026-06-03T14:09:05.975Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/UCloud.html</loc>
-    <lastmod>2026-06-03T14:09:05.907Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/index.html</loc>
-    <lastmod>2026-06-03T14:09:05.908Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/Notebooks/03_bulk_RNA_analysis_edgeR.html</loc>
-    <lastmod>2026-06-03T14:09:05.756Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/Notebooks/04_scRNAseq_analysis.html</loc>
-    <lastmod>2026-06-03T14:09:05.756Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/Notebooks/00_instructions.html</loc>
-    <lastmod>2026-06-03T14:09:05.755Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/about/about.html</loc>
-    <lastmod>2026-06-03T14:09:05.907Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/slides.html</loc>
-    <lastmod>2026-06-03T14:09:05.976Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/Notebooks/02_VCF_variant_calling_analysis.html</loc>
-    <lastmod>2026-06-03T14:09:05.756Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/Notebooks/03_bulk_RNA_analysis_pydeseq2.html</loc>
+    <lastmod>2026-06-18T12:11:12.572Z</lastmod>
   </url>
   <url>
     <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/Notebooks/01_raw_data_alignment.html</loc>
-    <lastmod>2026-06-03T14:09:05.756Z</lastmod>
+    <lastmod>2026-06-18T12:11:12.570Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/Notebooks/02_VCF_variant_calling_analysis.html</loc>
+    <lastmod>2026-06-18T12:11:12.570Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/UCloud.html</loc>
+    <lastmod>2026-06-18T12:11:12.740Z</lastmod>
   </url>
   <url>
     <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/genomedk.html</loc>
-    <lastmod>2026-06-03T14:09:05.908Z</lastmod>
+    <lastmod>2026-06-18T12:11:12.741Z</lastmod>
   </url>
   <url>
-    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/ngssummer.html</loc>
-    <lastmod>2026-06-03T14:09:05.908Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/otherHPC.html</loc>
-    <lastmod>2026-06-03T14:09:05.908Z</lastmod>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/index.html</loc>
+    <lastmod>2026-06-18T12:11:12.815Z</lastmod>
   </url>
   <url>
     <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/galaxy/images/galaxy.html</loc>
-    <lastmod>2026-06-03T14:09:05.911Z</lastmod>
+    <lastmod>2026-06-18T12:11:12.744Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/about/about.html</loc>
+    <lastmod>2026-06-18T12:11:12.740Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/slides.html</loc>
+    <lastmod>2026-06-18T12:11:12.816Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/galaxy/galaxy.html</loc>
+    <lastmod>2026-06-18T12:11:12.741Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/ngssummer.html</loc>
+    <lastmod>2026-06-18T12:11:12.741Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/otherHPC.html</loc>
+    <lastmod>2026-06-18T12:11:12.741Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/access/index.html</loc>
+    <lastmod>2026-06-18T12:11:12.741Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/Notebooks/04_scRNAseq_analysis.html</loc>
+    <lastmod>2026-06-18T12:11:12.572Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hds-sandbox.github.io/Intro-NGS-AU_course/Notebooks/00_instructions.html</loc>
+    <lastmod>2026-06-18T12:11:12.569Z</lastmod>
   </url>
 </urlset>
