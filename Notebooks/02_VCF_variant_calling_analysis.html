@@ -493,7 +493,7 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">June 18, 2026</p>
+        <p class="date-modified">June 19, 2026</p>
       </div>
     </div>
       
@@ -656,8 +656,8 @@ Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all site
 <div class="callout-body-container callout-body">
 <p>Open the VCF files in IGV alongside the corresponding BAM files. Look for positions where the VCF calls SNPs.</p>
 <ul>
-<li>Are there any problematic positions that may not represent true SNPs?</li>
-<li>How can you use the HiFi reads aligned to Contig1+2 to identify potential problems?</li>
+<li>Q1. Are there any problematic positions that may not represent true SNPs?</li>
+<li>Q2. How can you use the HiFi reads aligned to Contig1+2 to identify potential problems?</li>
 </ul>
 <p><strong>Hint:</strong> Try scrolling to the ends of the contigs.</p>
 </div>
@@ -692,7 +692,7 @@ Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all site
 <div class="callout-body-container callout-body">
 <p>Inspect one of the VCFs and the corresponding alignment files in IGV.</p>
 <ul>
-<li>Is it relevant to filter for false positives in this case, and what parameters would you look further into?</li>
+<li>Q3. Is it relevant to filter for false positives in this case, and what parameters would you look further into?</li>
 </ul>
 </div>
 </div>
@@ -852,13 +852,13 @@ Number of SNPs in Hifi Contig 1 and 2 vcf file: 1433</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Task:">
+<div class="callout callout-style-default callout-tip callout-titled" title="Task T1">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Task:
+<span class="screen-reader-only">Tip</span>Task T1
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -872,13 +872,13 @@ Number of SNPs in Hifi Contig 1 and 2 vcf file: 1433</code></pre>
 <div id="cell-39" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot the metrics for Contig 1 + 2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Task:">
+<div class="callout callout-style-default callout-tip callout-titled" title="Task T2">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Task:
+<span class="screen-reader-only">Tip</span>Task T2
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -950,17 +950,17 @@ Number of SNPs in Hifi Contig 1 and 2 vcf file: 1433</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Task:">
+<div class="callout callout-style-default callout-tip callout-titled" title="Task T3">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Task:
+<span class="screen-reader-only">Tip</span>Task T3
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>This exercise covers the rest of the notebook and contains explanations as well</strong>. The code will work only if you complete correctly the empty cells. Some cells are filled in to help.</p>
+<p><strong>This task covers the rest of the notebook and contains explanations as well</strong>. The code will work only if you complete correctly the empty cells. Some cells are filled in to help.</p>
 <ul>
 <li>In the two cells below generate the same plots as above using the filtered VCF files for Contig 2 and Contig 1 + 2. You will just need to copy the three command lines from the cell above and replace the name of the VCF files.</li>
 </ul>
@@ -1040,9 +1040,21 @@ Number of SNPs in Ti RNA-seq VCF file: 3411</code></pre>
 <div id="cell-67" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
-<li><strong>Question:</strong> Is it relevant to filter for false positives in this case, and what parameters would you look further into?</li>
+<li>Q4. Is it relevant to filter for false positives in this case, and what parameters would you look further into?</li>
 </ul>
+</div>
+</div>
 <section id="genotypes-counting" class="level1">
 <h1>Genotypes counting</h1>
 <p>We want to count the different genotypes in each of the five filtered VCF files generated previously. To make this task easier we can take advantage of the counting functions in the <code>scikit-allel</code> package. We have used those to implement a little function called <code>position_count</code> in the file <code>../Scripts/pythonScripts.sh</code>.</p>
@@ -1139,13 +1151,13 @@ Count homozygous alternate positions: [1349]</code></pre>
 <span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"AA + AA:"</span></span>
 <span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>bcftools <span class="bu">filter</span>  <span class="op">-</span>i <span class="st">'GT[0]="AA" &amp;&amp; GT[1]="AA"'</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf <span class="op">|</span> grep <span class="op">-</span>c <span class="op">-</span>v <span class="st">"^#"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Task:">
+<div class="callout callout-style-default callout-tip callout-titled" title="Task T4">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Task:
+<span class="screen-reader-only">Tip</span>Task T4
 </div>
 </div>
 <div class="callout-body-container callout-body">

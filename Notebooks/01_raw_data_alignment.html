@@ -512,7 +512,7 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">June 18, 2026</p>
+        <p class="date-modified">June 19, 2026</p>
       </div>
     </div>
       
@@ -661,10 +661,10 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 <p>Hint: You can find a Help button that offers additional information about the plots for each panel. Focus on the following panels: “Per base sequence quality”, “Per sequence quality scores”…. (“Per base sequence content” always gives a FAIL for RNA-seq data).</p>
 <p>Look at the sequence quality scores:</p>
 <ul>
-<li>is there a marked difference between HiFi and illumina data?</li>
-<li>What do you notice with respect to the sequence quality scores? And are there any other quality issues worth noting?</li>
-<li>Is there anything off in the GC content? Why?</li>
-<li>Think about why “Per base sequence content” always fails. Can you imagine how the nucleotide content is biased because of priming bias during cDNA synthesis and expressed transcripts in the sample?</li>
+<li>Q1. is there a marked difference between HiFi and illumina data?</li>
+<li>Q2. What do you notice with respect to the sequence quality scores? And are there any other quality issues worth noting?</li>
+<li>Q3. Is there anything off in the GC content? Why?</li>
+<li>Q4. Think about why “Per base sequence content” always fails. Can you imagine how the nucleotide content is biased because of priming bias during cDNA synthesis and expressed transcripts in the sample?</li>
 </ul>
 </div>
 </div>
@@ -761,9 +761,9 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 <ul>
 <li><p>Choose the reference <code>DNA_Contig1_2.fasta</code> and load the two <code>.bam</code> files obtained with the two different alignment settings (<code>results/HIFI_alignment/PacBio_clover_alignment_1_2_sr.sort.bam</code>, <code>results/HIFI_alignment/PacBio_clover_alignment_1_2_maphifi.sort.bam</code>) to show them against the reference. This is done by choosing the <code>.bam</code> files from the <code>File --&gt; Load from file</code> menu.</p>
 <ul>
-<li>What do you notice about them? What is characteristic about the alignment <code>sr</code>?</li>
-<li>Can you link these characteristics to the quality report seen before?</li>
-<li>How did the alignment forced itself to align the reads for <code>sr</code> settings? Do you see a lot of mismatches and indels in the <code>sr</code> alignment?</li>
+<li>Q5. What do you notice about them? What is characteristic about the alignment <code>sr</code>?</li>
+<li>Q6. Can you link these characteristics to the quality report seen before?</li>
+<li>Q7. How did the alignment forced itself to align the reads for <code>sr</code> settings? Do you see a lot of mismatches and indels in the <code>sr</code> alignment?</li>
 </ul></li>
 </ul>
 </div>
@@ -918,8 +918,8 @@ Finished</code></pre>
 <div class="callout-body-container callout-body">
 <p>Now you can visualize the report generated, which is in <code>results/qualimap_output/multiqc_report.html</code></p>
 <ul>
-<li>How do the average coverage of each sample correspond to what you have seen in the alignments using IGV?</li>
-<li>How comes that the GC content remains the same across the different alignments?</li>
+<li>Q8. How do the average coverage of each sample correspond to what you have seen in the alignments using IGV?</li>
+<li>Q9. How comes that the GC content remains the same across the different alignments?</li>
 </ul>
 </div>
 </div>
@@ -989,17 +989,17 @@ Finished</code></pre>
 <ul>
 <li><p>Load the two bam files obtained with the <code>map-hifi</code> settings for <code>contig1</code> and <code>contig2</code> separately (<code>results/HIFI_alignment/PacBio_clover_alignment_1.sort.bam</code> and <code>results/HIFI_alignment/PacBio_clover_alignment_2.sort.bam</code>). Look first at those two files:</p>
 <ul>
-<li>Which differences do you observe?</li>
-<li>Have a look at their polymorphic regions in IGV. Are they true polymorphisms?</li>
+<li>Q10. Which differences do you observe?</li>
+<li>Q11. Have a look at their polymorphic regions in IGV. Are they true polymorphisms?</li>
 </ul></li>
 </ul>
 <p>&nbsp;</p>
 <ul>
 <li><p>Look at the alignment to both contigs:</p>
 <ul>
-<li>Why do you see fluctuations in coverage and large regions without any apparent subgenome SNPs?</li>
-<li>What are the major differences between the stats for the reads mapped to Contigs1&amp;2 versus contig1 and contig2?</li>
-<li>What is your interpretation of the differences?</li>
+<li>Q12. Why do you see fluctuations in coverage and large regions without any apparent subgenome SNPs?</li>
+<li>Q13. What are the major differences between the stats for the reads mapped to Contigs1&amp;2 versus contig1 and contig2?</li>
+<li>Q14. What is your interpretation of the differences?</li>
 </ul></li>
 </ul>
 </div>
@@ -1094,13 +1094,13 @@ Jun 18 08:42:07 ..... finished successfully</code></pre>
 </div>
 </div>
 <p>We use again <code>STAR</code> to align every single library for <code>S10</code>. We extract the library name of each file and run STAR through each pair of files.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="Task">
+<div class="callout callout-style-default callout-tip callout-titled" title="Task T1">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Task
+<span class="screen-reader-only">Tip</span>Task T1
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1338,13 +1338,13 @@ Jun 18 09:06:28 ..... finished successfully</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Task">
+<div class="callout callout-style-default callout-tip callout-titled" title="Task T2">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Task
+<span class="screen-reader-only">Tip</span>Task T2
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1396,11 +1396,11 @@ Jun 18 09:06:28 ..... finished successfully</code></pre>
 <div class="callout-body-container callout-body">
 <p>Look at one of the two merged files just created using IGV and the reference for contigs 1 and 2</p>
 <ul>
-<li>How does the visualization differ from the one used for DNA data?</li>
-<li>Have you noticed some junctions are long and overlap existing junctions? Why do you think that happens?</li>
-<li>Load the gene track file (<code>.gtf</code>) from the folder <code>reference_data</code>. Right-click anywhere in IGV and choose “Sashimi plot”. This will show junctions and gene tracks, with numbers telling how many reads support the junction. Zoom into a very crowded section of the plot.</li>
-<li>Click anywhere and set a threshold for minimum junction coverage, for example 20. What happens? Is it cleaner?</li>
-<li>What can this diagnostic be useful for when aligning data like ours?</li>
+<li>Q15. How does the visualization differ from the one used for DNA data?</li>
+<li>Q16. Have you noticed some junctions are long and overlap existing junctions? Why do you think that happens?</li>
+<li>Q17. Load the gene track file (<code>.gtf</code>) from the folder <code>reference_data</code>. Right-click anywhere in IGV and choose “Sashimi plot”. This will show junctions and gene tracks, with numbers telling how many reads support the junction. Zoom into a very crowded section of the plot.</li>
+<li>Q18. Click anywhere and set a threshold for minimum junction coverage, for example 20. What happens? Is it cleaner?</li>
+<li>Q19. What can this diagnostic be useful for when aligning data like ours?</li>
 </ul>
 </div>
 </div>
