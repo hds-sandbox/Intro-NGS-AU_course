@@ -1,4 +1,5 @@
 #!/bin/bash
 
-# Start JupyterLab with the container's built-in Jupyter configuration.
-apptainer exec --fakeroot --writable-tmpfs ngs-summer-course.sif BROWSER=/usr/bin/firefox jupyter lab --port="'$UID'" --ip="'$(hostname)'" --allow-root
+# Start JupyterLab from the pixi environment inside the container and avoid
+# inheriting host Jupyter config/kernels from the user's home directory.
+apptainer exec --fakeroot --writable-tmpfs ngs-summer-course.sif jupyter lab --port="'$UID'" --ip="'$(hostname)'" --allow-root --no-browser

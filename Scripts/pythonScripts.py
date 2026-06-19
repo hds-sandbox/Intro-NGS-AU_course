@@ -201,12 +201,12 @@ def pseudobulk_matrix(adata, batch_key, condition_key, cluster_key, Nsamples=10,
     
     for BATCH in adata.obs[batch_key].cat.categories:
         #M1 = adata[ adata.obs[batch_key]==BATCH, : ].copy()
-        print(f'{BATCH}')
+        #print(f'{BATCH}')
         for COND in adata.obs[condition_key].cat.categories:
-            print(f'----{COND}')
+            #print(f'----{COND}')
             #M2 = M1[ M1.obs[condition_key]==COND, : ].copy()
             for CLUST in adata.obs[cluster_key].cat.categories:
-                print(f'--------{CLUST}')
+                #print(f'--------{CLUST}')
                 #M3 = M2[ M2.obs[cluster_key]==COND, : ].copy()
                 M = adata[(adata.obs[batch_key]==BATCH)&(adata.obs[condition_key]==COND)&(adata.obs[cluster_key]==CLUST)].layers['raw_counts'].copy()
                 if(M.shape[0]>1):
@@ -217,9 +217,27 @@ def pseudobulk_matrix(adata, batch_key, condition_key, cluster_key, Nsamples=10,
                         matrix_bulk[f'{COND}_{BATCH}_{CLUST}_{i}'] = np.ravel( np.sum( M[integ,:], axis=0 ) )
                         clusters.append(CLUST)
                         conditions.append(COND)
-                else:
-                    print(f'Only {M.shape[0]} cells: skipping')
+                #else:
+                #    print(f'Only {M.shape[0]} cells: skipping {BATCH} - {CLUST} - {COND}')
     return matrix_bulk, clusters, conditions
+    
+def array_and_densify(X):
+    try:
+        X = np.asarray(X.todense())
+        print("densified")
+        return(X)
+    except:
+        X = np.asarray(X)
+        #print("Only arraying, maybe already dense?")
+        return(X)
+        
+
+def sparsify(X):
+    try:
+        X = scipy.sparse.csr_matrix(np.array(X))
+        print("sparsified")
+    except:
+        print("Nothing done, maybe already sparse?")    
     
 def pseudobulk_extract_DEG(pbulk, adata, DE_key='rank_genes_groups'):
     print('---Extracting results')
@@ -235,17 +253,23 @@ def pseudobulk_extract_DEG(pbulk, adata, DE_key='rank_genes_groups'):
     sc.pp.log1p(adata)
 
     mat = adata[:, X['Crypto_NAMES'] ].X.copy()
-
-    #percentage
-    X['Healthy_PCT'] = np.sum( mat[adata.obs['condition']=='Healthy', :]>0, 0) / adata[adata.obs['condition']=='Healthy', :].shape[0] * 100
-    X['Crypto_PCT'] = np.sum( mat[adata.obs['condition']=='Crypto', :]>0, 0) / adata[adata.obs['condition']=='Crypto', :].shape[0] * 100
-
-    #foldchange and log-pvalues
-    X['Crypto_FOLDCHANGES'] = 2**X['Crypto_LOGFOLDCHANGES']
-    X['Crypto_LOGPVALS_ADJ'] = -np.log10(X['Crypto_PVALS_ADJ']+1e-50)
-    X['Crypto_LOGPVALS'] = -np.log10(X['Crypto_PVALS']+1e-50)
+    mat = array_and_densify(mat)
     
-    print('---done')
+    if (mat[adata.obs['condition']=='Healthy', :]>0).any():
+    	if (mat[adata.obs['condition']=='Crypto', :]>0).any():
+
+    		#percentage
+    		X['Healthy_PCT'] = np.sum( mat[adata.obs['condition']=='Healthy', :]>0, 0) / adata[adata.obs['condition']=='Healthy', :].shape[0] * 100
+    		X['Crypto_PCT'] = np.sum( mat[adata.obs['condition']=='Crypto', :]>0, 0) / adata[adata.obs['condition']=='Crypto', :].shape[0] * 100
+
+    		#foldchange and log-pvalues
+    		X['Crypto_FOLDCHANGES'] = 2**X['Crypto_LOGFOLDCHANGES']
+    		X['Crypto_LOGPVALS_ADJ'] = -np.log10(X['Crypto_PVALS_ADJ']+1e-50)
+    		X['Crypto_LOGPVALS'] = -np.log10(X['Crypto_PVALS']+1e-50)
+    
+    		print('---done')
+    	else:
+    		print('Skip - not enough data')
     
     return X
 
@@ -272,7 +296,7 @@ def array_and_densify(X):
         return(X)
     except:
         X = np.asarray(X)
-        print("Only arraying, maybe already dense?")
+        #print("Only arraying, maybe already dense?")
         return(X)
         
 
