@@ -1040,28 +1040,13 @@ Number of SNPs in Ti RNA-seq VCF file: 3411</code></pre>
 <div id="cell-67" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Question">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Question
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Q4. Is it relevant to filter for false positives in this case, and what parameters would you look further into?</li>
-</ul>
-</div>
-</div>
 <section id="genotypes-counting" class="level1">
 <h1>Genotypes counting</h1>
 <p>We want to count the different genotypes in each of the five filtered VCF files generated previously. To make this task easier we can take advantage of the counting functions in the <code>scikit-allel</code> package. We have used those to implement a little function called <code>position_count</code> in the file <code>../Scripts/pythonScripts.sh</code>.</p>
 <ul>
 <li>You can then use the function with each of the 5 filtered VCF files to count the number of positions. You need to fill the names of the VCF files imported in Python.</li>
 </ul>
-<div id="cell-72" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="03c3e06a-8dd3-432f-eb19-95e53d91e167" data-tags="[]" data-execution_count="21">
+<div id="cell-71" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="03c3e06a-8dd3-432f-eb19-95e53d91e167" data-tags="[]" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Contig 1 filtered VCF</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>position_count(Hifi_Contig1_filtered)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -1071,19 +1056,19 @@ Count homozygous reference positions: [0]
 Count homozygous alternate positions: [1349]</code></pre>
 </div>
 </div>
-<div id="cell-73" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:187}}" data-outputid="844c863e-8e3e-4986-e000-70d2e58d52ad">
+<div id="cell-72" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:187}}" data-outputid="844c863e-8e3e-4986-e000-70d2e58d52ad">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Contig 2 filtered VCF</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>position_count()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="cell-74" class="cell">
+<div id="cell-73" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Contig 1 and 2 filtered VCF</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>position_count()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="cell-75" class="cell">
+<div id="cell-74" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#RNAseq S10 filtered VCF</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>position_count()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="cell-76" class="cell">
+<div id="cell-75" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#RNAseq Ti filtered VCF</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>position_count()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1103,7 +1088,7 @@ Count homozygous alternate positions: [1349]</code></pre>
 <li>Hifi Contig 2 VCF + Ti RNAseq VCF</li>
 </ul>
 <p>Once again, we will use <code>bcftools</code> for this task, using the merge function. However, the <code>bcftools merge</code> function works only with compressed and indexed VCF files, so first we will do this.</p>
-<div id="cell-81" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="2397816a-53ea-47fb-8aaa-c199a5ee919d" data-tags="[]">
+<div id="cell-80" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="2397816a-53ea-47fb-8aaa-c199a5ee919d" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>bcftools view results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf <span class="op">-</span>Oz <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf.gz</span>
@@ -1116,19 +1101,19 @@ Count homozygous alternate positions: [1349]</code></pre>
 <span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>bcftools index results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz <span class="op">-</span>f <span class="op">-</span>o results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz.csi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now we can merge Contig 1 VCF with the Ti RNA VCF and keep only positions that match between the two files by filtering out any positions with missing genotypes.</p>
-<div id="cell-83" class="cell" data-tags="[]">
+<div id="cell-82" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>bcftools merge results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_1_filtered.vcf.gz results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz <span class="op">|</span> bcftools <span class="bu">filter</span> <span class="op">-</span>e <span class="st">'GT="./."'</span> <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Merge Contig 2 VCF with the Ti RNA VCF and keep only positions that match between the two files.</p>
-<div id="cell-85" class="cell" data-tags="[]">
+<div id="cell-84" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>bcftools merge results<span class="op">/</span>VCF_Files<span class="op">/</span>HIFI_Contig_2_filtered.vcf.gz results<span class="op">/</span>VCF_Files<span class="op">/</span>RNA_TI_merged_filtered.vcf.gz <span class="op">|</span> bcftools <span class="bu">filter</span> <span class="op">-</span>e <span class="st">'GT="./."'</span> <span class="op">&gt;</span> results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_2_merged.vcf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Take a look at the merged VCF file. <br> You can see that compared with the VCF files for just one sample, there is now a new column in the file, with the corresponding genotype for the second sample that we merged.</p>
-<div id="cell-87" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="0f084879-0d21-43ec-a691-596fd40c4952" data-tags="[]">
+<div id="cell-86" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="0f084879-0d21-43ec-a691-596fd40c4952" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>cat results<span class="op">/</span>VCF_Files<span class="op">/</span>TI_Contig_1_merged.vcf <span class="op">|</span> head <span class="op">-</span><span class="dv">50</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1139,7 +1124,7 @@ Count homozygous alternate positions: [1349]</code></pre>
 <li>AA - homozygous alternate</li>
 </ul>
 <p>For example, the filter <code>GT[0]="AR" &amp;&amp; GT[1]="AR"</code> will keep only position in which both samples have a heterozygous genotype. A quick way to count how many positions are in the VCF file is by suing the simple bash command <code>grep</code>. This will count all the lines in the VCF files that do not start with a <code>#</code>, thus all the data lines.</p>
-<div id="cell-89" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="0e6347cc-1def-4de1-f2d3-e87e54e40277" data-tags="[]">
+<div id="cell-88" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="0e6347cc-1def-4de1-f2d3-e87e54e40277" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash </span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"AR + AR:"</span></span>
@@ -1164,7 +1149,7 @@ Count homozygous alternate positions: [1349]</code></pre>
 <p>Use the same commands as above to count the positions marching the filters in the <code>Contig2_Ti_merged.vcf</code>.</p>
 </div>
 </div>
-<div id="cell-91" class="cell">
+<div id="cell-90" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Wrapping up">
