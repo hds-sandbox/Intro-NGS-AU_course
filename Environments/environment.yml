@@ -9,7 +9,7 @@ channels:
 dependencies:
   - jupyterlab
   - bcftools
-  - samtools[version='1.6']
+  - samtools
 #  - r-base>=4.0.0
 #  - r-ggplot2
 #  - r-dplyr
@@ -62,20 +62,6 @@ dependencies:
   - bbknn
   - scrublet
   - scvelo
+  - pydeseq2
+  - doubletdetection
   - pip
-  - jupyterlab-nbconvert-nocode
-  - jupyter-resource-usage
-  - jupyterlab-topbar-text
-  - autopep8
-  - isort
-  - yapf
-  - black
-  - jupyterlab-git
-  - jupyterlab-lsp
-  - jupyter_bokeh
-  - jupyter-lsp
-  - jupyter-lsp-r
-  - jupyter-lsp-python
-  - jupyter-lsp-latex
-  - jupyter-lsp-python-plugins
-  - anaconda-toolbox
