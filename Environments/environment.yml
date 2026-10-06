@@ -37,7 +37,7 @@ dependencies:
   - python-igraph
   - leidenalg
   - python-annoy
-  - multicore-tsne
+#  - multicore-tsne
   - pytables
   - star==2.7.10a
   - scikit-allel
