@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -97,9 +97,9 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-1496dc2c8ab803d53af91d51433e593d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
@@ -515,7 +515,7 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">October 5, 2026</p>
+        <p class="date-modified">October 6, 2026</p>
       </div>
     </div>
       
@@ -587,11 +587,11 @@ gtag('config', 'G-EXW13D5861', { 'anonymize_ip': true});
 <section id="quality-control" class="level2">
 <h2 class="anchored" data-anchor-id="quality-control">Quality Control</h2>
 <p>We run <code>FastQC</code> on the PacBio Hifi reads and on two of the Illumina RNA-seq libraries. <code>FastQC</code> does quality control of the raw sequence data, providing an overview of the data which can help identify if there are any problems that should be addressed before further analysis. You can find the report for each file into the folder <code>results/fastqc_output/</code>. The output is in HTML format and can be opened in any browser or in <code>jupyterlab</code>. It is however not easy to compare the various libraries by opening separate reports. To aggregate all the results, we apply the <code>MultiQC</code> software to the reports’ folder. The output of MultiQC is in the directory <code>results/multiqc_output/fastqc_data</code>.</p>
-<div id="2" class="cell" data-tags="[]" data-execution_count="1">
+<div id="2" class="cell" data-tags="[]">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#run fastqc</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p results<span class="op">/</span>fastqc_output</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>fastqc <span class="op">-</span>q <span class="op">-</span>o results<span class="op">/</span>fastqc_output ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/*</span>.fastq  <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>fastqc <span class="op">-</span>q <span class="op">--</span>outdir results<span class="op">/</span>fastqc_output ..<span class="op">/</span>Data<span class="op">/</span>Clover_Data<span class="op">/*</span>.fastq  <span class="op">&gt;</span> <span class="op">/</span>dev<span class="op">/</span>null <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"Done </span><span class="ch">\n</span><span class="st"> Files: $(ls ../Data/Clover_Data/*.fastq)"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Done \n Files: ../Data/Clover_Data/Hifi_reads_white_clover.fastq
